@@ -51,4 +51,23 @@ public class CSVTests {
         });
     }
 
+    @Test
+    void testLoadCSVFile() {
+        CSV csv = new CSV.Builder()
+            .fileName("testing/data/test.csv")
+            .build();
+       String expected = "Filename,Title,Full Name,First Name,Last Name\n" +
+                      "image1.jpg,Image One,John Doe,John,Doe\n" +
+                          "image2.jpg,\"Image, Two\",Jane Smith,Jane,Smith\n";
+        assertEquals(expected, csv.toString());
+    }
+
+    @Test
+    void testLoadEmptyCSVFile() {
+        CSV csv = new CSV.Builder()
+            .fileName("testing/data/empty.csv")
+            .build();
+        String expected = "";
+        assertEquals(expected, csv.toString());
+    }
 }

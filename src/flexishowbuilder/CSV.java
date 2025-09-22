@@ -1,6 +1,8 @@
 package flexishowbuilder;
 
 import java.io.File;
+import java.util.List;
+
 import javax.swing.filechooser.FileSystemView;
 
 import javafx.scene.control.Alert;
@@ -22,6 +24,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
  */
 public class CSV {
     private File csvFile = null;
+    private CSVLine[] lines = new CSVLine[0];
 
     /**
      * This constructor is private. Use the Builder class to create a CSV object.
@@ -125,6 +128,47 @@ public class CSV {
      * it can called for testing purposes.
      */
     protected void loadCSVFile() {
-        // TODO: implement this method
+        String dir = getFileDir();
+        java.nio.file.Path path = java.nio.file.Paths.get(dir, getFileName());
+        try {
+            List<String> allLines = java.nio.file.Files.readAllLines(path);
+            lines = new CSVLine[allLines.size()];
+            for (int i = 0; i < allLines.size(); i++) {
+                lines[i] = new ImageAndPersonLine(allLines.get(i));
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("CSV File Error");
+            alert.setHeaderText("Error attempting to read CSV file: " + path.toString());
+            alert.setContentText("See if you can open the file by double-clicking on it.\n" +
+                "If you can open it, check that it is a valid CSV file.\n" +
+                "by double clicking on it.\n" +
+                "If you can, then report a programming error.\n" +
+                "Otherwise, there is a file error. Report it to the person who\n" +
+                "sent you the file.\n" +
+                "Program will now exit.");
+            alert.showAndWait();
+            System.exit(0);
+        }
+      }
+
+    /**
+     * Returns a string representation of the CSV object.
+     * @return a string representation of the CSV object.
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (CSVLine line : lines) {
+            for (int i = 0; i < line.length(); i++) {
+                sb.append(line.field(i));
+                if (i < line.length() - 1) {
+                    sb.append(",");
+                }
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
+    
 }
