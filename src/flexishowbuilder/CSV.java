@@ -217,4 +217,11 @@ public class CSV {
         insertAt(lines.length, line);
     }
 
+    public CSVLine getLine(int index) {
+        if (index < 0 || index >= lines.length) {
+            throw new ArrayIndexOutOfBoundsException("Index out of bounds: " + index);
+        }
+        return lines[index];
+    }
+
 }
