@@ -122,4 +122,45 @@ public class CSVTests {
             csv.insertAt(4, newLine));
     }
 
+        @Test
+    void testAppend() {
+        CSV csv = new CSV.Builder()
+            .fileName("testing/data/test.csv")
+            .build();
+        CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Four,Bob Brown,Bob,Brown");
+        csv.append(newLine);
+        assertEquals(4, csv.getNumberOfLines());
+        assertEquals("image1.jpg", ((ImageAndPersonLine)csv.getLines()[1]).getImageFileName());
+        assertEquals("image2.jpg", ((ImageAndPersonLine)csv.getLines()[2]).getImageFileName());
+        assertEquals("image4.jpg", ((ImageAndPersonLine)csv.getLines()[3]).getImageFileName());
+    }
+
+    @Test
+    void testAppendToEmptyCSV() {
+        CSV csv = new CSV.Builder()
+            .fileName("testing/data/empty.csv")
+            .build();
+        CSVLine newLine = new ImageAndPersonLine("image1.jpg,Image One,John Doe,John,Doe");
+        csv.append(newLine);
+        assertEquals(1, csv.getNumberOfLines());
+        assertEquals("image1.jpg", ((ImageAndPersonLine)csv.getLines()[0]).getImageFileName());
+    }
+
+    @Test
+    void testAppendMultiple() {
+        CSV csv = new CSV.Builder()
+            .fileName("testing/data/empty.csv")
+            .build();
+        CSVLine line1 = new ImageAndPersonLine("image1.jpg,Image One,John Doe,John,Doe");
+        CSVLine line2 = new ImageAndPersonLine("image2.jpg,\"Image, Two\",Jane Smith,Jane,Smith");
+        CSVLine line3 = new ImageAndPersonLine("image3.jpg,Image Three,Bob Brown,Bob,Brown");
+        csv.append(line1);
+        csv.append(line2);
+        csv.append(line3);
+        assertEquals(3, csv.getNumberOfLines());
+        assertEquals("image1.jpg", ((ImageAndPersonLine)csv.getLines()[0]).getImageFileName());
+        assertEquals("image2.jpg", ((ImageAndPersonLine)csv.getLines()[1]).getImageFileName());
+        assertEquals("image3.jpg", ((ImageAndPersonLine)csv.getLines()[2]).getImageFileName());
+    }
+
 }

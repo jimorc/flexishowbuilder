@@ -209,5 +209,12 @@ public class CSV {
         lines = newLines;
     }
 
+   /**
+     * Appends a CSVLine to the end of the CSV object.
+     * @param line - the line to append
+     */
+    public void append(CSVLine line) {
+        insertAt(lines.length, line);
+    }
 
 }
