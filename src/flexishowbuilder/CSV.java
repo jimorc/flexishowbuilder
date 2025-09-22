@@ -16,7 +16,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
  * a FileChooser dialog is displayed to select a CSV file.
  * ```java
  * CSV csv = new CSV.Builder()
- *     .file(File))  // optional, if not provided a file chooser dialog is displayed
+ *     .file(fileName))  // optional, if not provided a file chooser dialog is displayed
  *     .build();
  * ```
  */
@@ -39,8 +39,8 @@ public class CSV {
 
         /**
          * Sets the CSV file.
-         * @param f the CSV file to use.
-         * @return returns the Builder object.
+         * @param fileName the full path to the CSV file.
+         * @return the Builder object.
          */
         public Builder fileName(String fileName) {
             if (fileName == null) {
@@ -82,6 +82,10 @@ public class CSV {
         }
     }
 
+    /**
+     * Returns the directory containing the CSV file.
+     * @return the CSV file directory, or null if no file is loaded.
+     */
     public String getFileDir() {
         if (csvFile != null) {
             return csvFile.getParent();
