@@ -1,7 +1,11 @@
 package flexishowbuilder;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.filechooser.FileSystemView;
 
@@ -9,6 +13,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+
+enum sortOrder {
+    NONE,
+    ALPHABETICAL_BY_FULL_NAME,
+    ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME,
+    ALPHABETICAL_BY_FULL_NAME_REVERSE,
+    ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE
+}
 
 /**
  * The CSV class stores multiple CSVLine objects.
@@ -222,6 +234,71 @@ public class CSV {
             throw new ArrayIndexOutOfBoundsException("Index out of bounds: " + index);
         }
         return lines[index];
+    }
+
+       private HashMap<String, ImageAndPersonLine[]> buildFullNameHashMap() {
+        HashMap<String, ImageAndPersonLine[]> map = new HashMap<>();
+        boolean firstLine = true;
+        for (CSVLine line : lines) {
+            if (firstLine) {
+                firstLine = false;
+                continue; // skip header line
+            }
+            ImageAndPersonLine ipLine = (ImageAndPersonLine) line;
+            String fullName = ipLine.getPersonFullName();
+            if (!map.containsKey(fullName)) {
+                map.put(fullName, new ImageAndPersonLine[] { ipLine });
+            } else {
+                ImageAndPersonLine[] existingLines = map.get(fullName);
+                ImageAndPersonLine[] newLines = new ImageAndPersonLine[existingLines.length + 1];
+                System.arraycopy(existingLines, 0, newLines, 0, existingLines.length);
+                newLines[existingLines.length] = ipLine;
+                map.put(fullName, newLines);
+            }
+        }
+        return map;
+    }
+
+        /**
+     * Sorts the lines in the CSV object according to the specified order.
+     * @param order - the sort order. See the sortOrder enum for possible values.
+     * This file is protected rather than private so that
+     * it can called for testing purposes.
+     */
+    protected void sort(sortOrder order) {
+        HashMap<String, ImageAndPersonLine[]> ipMap = buildFullNameHashMap();
+        switch (order) {
+            case NONE:
+//                sortNone(ipMap);
+                break;
+            case ALPHABETICAL_BY_FULL_NAME:
+                sortLinesAlphabeticallyByFullName(ipMap);
+                break;
+            case ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME:
+//                sortLinesAlphabeticallyByLastNamelFirstName(ipMap);
+                break;
+                case ALPHABETICAL_BY_FULL_NAME_REVERSE:
+//                sortLinesAlphabeticallyByFullNameReverse(ipMap);
+                break;
+                case ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE:
+//                sortLinesAlphabeticallytByLastNamelFirstNameReverse(ipMap);
+                break;
+        }       
+    }
+
+    private void sortLinesAlphabeticallyByFullName(HashMap<String, ImageAndPersonLine[]> ipMap  ) {
+        List<ImageAndPersonLine> entries = new ArrayList<ImageAndPersonLine>();
+        entries.add((ImageAndPersonLine)this.lines[0]);
+        Set<String> fullNamekeys = ipMap.keySet();
+        String[] fullNames = fullNamekeys.toArray(new String[ipMap.size()]);
+        Arrays.sort(fullNames);
+        for (String fName: fullNames) {
+            ImageAndPersonLine[] linesForName = ipMap.get(fName);
+            for (ImageAndPersonLine line: linesForName) {
+                entries.add(line);
+            }
+        }
+        this.lines = entries.toArray(new CSVLine[entries.size()]);
     }
 
 }

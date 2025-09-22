@@ -163,4 +163,18 @@ public class CSVTests {
         assertEquals("image3.jpg", ((ImageAndPersonLine)csv.getLine(2)).getImageFileName());
     }
 
+        @Test
+    void testSortAlphaByFullName() {
+        CSV csv = new CSV.Builder()
+            .fileName("testing/data/sort.csv")
+            .build();
+        csv.sort(sortOrder.ALPHABETICAL_BY_FULL_NAME);
+        assertEquals(7, csv.getNumberOfLines());
+        assertEquals("Barney Rubble", ((ImageAndPersonLine)csv.getLine(1)).getPersonFullName());
+        assertEquals("Fred Flintstone", ((ImageAndPersonLine)csv.getLine(2)).getPersonFullName());
+        assertEquals("Fred Flintstone", ((ImageAndPersonLine)csv.getLine(3)).getPersonFullName());
+        assertEquals("Jane Smith", ((ImageAndPersonLine)csv.getLine(4)).getPersonFullName());
+        assertEquals("John Doe", ((ImageAndPersonLine)csv.getLine(5)).getPersonFullName());
+        assertEquals("Wilma Flintstone", ((ImageAndPersonLine)csv.getLine(6)).getPersonFullName());
+    }
 }
