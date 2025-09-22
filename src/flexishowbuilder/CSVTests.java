@@ -78,7 +78,7 @@ public class CSVTests {
             .build();
         CSVLine newLine = new ImageAndPersonLine("image4.jpg,\"Image, Two\",Bob Brown,Bob,Brown");
         csv.insertAt(1, newLine);
-        assertEquals(4, csv.getLines().length);
+        assertEquals(4, csv.getNumberOfLines());
         assertEquals("image4.jpg", ((ImageAndPersonLine)csv.getLines()[1]).getImageFileName());
         assertEquals("image1.jpg", ((ImageAndPersonLine)csv.getLines()[2]).getImageFileName());
         assertEquals("image2.jpg", ((ImageAndPersonLine)csv.getLines()[3]).getImageFileName());
@@ -91,7 +91,7 @@ public class CSVTests {
             .build();
         CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Four,Bob Brown,Bob,Brown");
         csv.insertAt(0, newLine);
-        assertEquals(4, csv.getLines().length);
+        assertEquals(4, csv.getNumberOfLines());
         assertEquals("image4.jpg", ((ImageAndPersonLine)csv.getLines()[0]).getImageFileName());
         assertEquals("image1.jpg", ((ImageAndPersonLine)csv.getLines()[2]).getImageFileName());
         assertEquals("image2.jpg", ((ImageAndPersonLine)csv.getLines()[3]).getImageFileName());
@@ -104,7 +104,7 @@ public class CSVTests {
             .build();
        CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Three,Bob Brown,Bob,Brown");
         csv.insertAt(3, newLine);
-        assertEquals(4, csv.getLines().length);
+        assertEquals(4, csv.getNumberOfLines());
         assertEquals("image1.jpg", ((ImageAndPersonLine)csv.getLines()[1]).getImageFileName());
         assertEquals("image2.jpg", ((ImageAndPersonLine)csv.getLines()[2]).getImageFileName());
         assertEquals("image4.jpg", ((ImageAndPersonLine)csv.getLines()[3]).getImageFileName());

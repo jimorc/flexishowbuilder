@@ -106,6 +106,14 @@ public class CSV {
     }
 
     /**
+     * Retrieve the number of lines in the CSV.
+     * @return the number of lines in the CSV.
+     */
+    protected int getNumberOfLines() {
+        return lines.length;
+    }
+
+    /**
      * Opens a file chooser dialog to select a CSV file.
      * @return The name of the selected CSV file, or null if no file was selected.
      */
