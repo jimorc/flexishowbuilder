@@ -3,7 +3,7 @@ package flexishowbuilder;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-// Most of these tests read from a file named "testing/data/test.csv"
+// Many of these tests read from a file named "testing/data/test.csv"
 // with the following content:
 // Filename,Title,Full Name,First Name,Last Name
 // image1.jpg,Image One,John Doe,John,Doe
