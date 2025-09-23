@@ -209,7 +209,7 @@ public class CSVTests {
     }
 
 @Test
-    void testSortAlphaByLastNameFirstNameREverseOrder() {
+    void testSortAlphaByLastNameFirstNameReverseOrder() {
         CSV csv = new CSV.Builder()
             .fileName("testing/data/sort.csv")
             .build();
