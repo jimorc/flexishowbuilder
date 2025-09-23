@@ -41,6 +41,11 @@ public class CSV {
 
     /**
      * This constructor is private. Use the Builder class to create a CSV object.
+     */
+    private CSV() {}
+
+    /**
+     * This constructor is private. Use the Builder class to create a CSV object.
      * @param builder - the Builder object used to create the CSV object.
      */
     private CSV(Builder builder) {
