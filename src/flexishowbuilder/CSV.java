@@ -276,7 +276,7 @@ public class CSV {
         HashMap<String, ImageAndPersonLine[]> ipMap = buildFullNameHashMap();
         switch (order) {
             case NONE:
-//                sortNone(ipMap);
+                sortNone(ipMap);
                 break;
             case ALPHABETICAL_BY_FULL_NAME:
                 sortLinesAlphabeticallyByFullName(ipMap);
@@ -380,6 +380,27 @@ private void sortLinesAlphabeticallyByLastNamelFirstName(HashMap<String, ImageAn
             ImageAndPersonLine[] linesForName = ipMap.get(fName);
             for (ImageAndPersonLine line: linesForName) {
                 entries.add(line);
+            }
+        }
+        this.lines = entries.toArray(new CSVLine[entries.size()]);
+    }
+
+   // This actually sorts the lines so that all entries for a given full name are
+    // together, but the order of the names is not changed.
+    private void sortNone(HashMap<String, ImageAndPersonLine[]> ipMap) {
+        List<ImageAndPersonLine> entries = new ArrayList<ImageAndPersonLine>();
+        Set<String> fullNameKeys = ipMap.keySet();
+        entries.add((ImageAndPersonLine)this.lines[0]);
+        for (int i = 1; i < lines.length; i++) {
+            String fullName = ((ImageAndPersonLine)lines[i]).getPersonFullName();
+            if (fullNameKeys.contains(fullName)) {
+                ImageAndPersonLine[] ipLines = ipMap.get(fullName);
+                if (ipLines != null) {
+                    for (ImageAndPersonLine ipLine: ipLines) {
+                        entries.add(ipLine);
+                    }
+                }
+                fullNameKeys.remove(fullName); // so we don't add person entries again
             }
         }
         this.lines = entries.toArray(new CSVLine[entries.size()]);
