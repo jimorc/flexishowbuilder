@@ -207,4 +207,19 @@ public class CSVTests {
         assertEquals("Jane Smith", ((ImageAndPersonLine)csv.getLine(6)).getPersonFullName());
         assertEquals("John Doe", ((ImageAndPersonLine)csv.getLine(1)).getPersonFullName());
     }
+
+@Test
+    void testSortAlphaByLastNameFirstNameREverseOrder() {
+        CSV csv = new CSV.Builder()
+            .fileName("testing/data/sort.csv")
+            .build();
+        csv.sort(sortOrder.ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE);
+        assertEquals(7, csv.getNumberOfLines());
+        assertEquals("Barney Rubble", ((ImageAndPersonLine)csv.getLine(2)).getPersonFullName());
+        assertEquals("Fred Flintstone", ((ImageAndPersonLine)csv.getLine(4)).getPersonFullName());
+        assertEquals("Fred Flintstone", ((ImageAndPersonLine)csv.getLine(5)).getPersonFullName());
+        assertEquals("Wilma Flintstone", ((ImageAndPersonLine)csv.getLine(3)).getPersonFullName());
+        assertEquals("Jane Smith", ((ImageAndPersonLine)csv.getLine(1)).getPersonFullName());
+        assertEquals("John Doe", ((ImageAndPersonLine)csv.getLine(6)).getPersonFullName());
+    }
 }

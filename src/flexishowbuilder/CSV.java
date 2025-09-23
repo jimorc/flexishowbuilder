@@ -288,7 +288,7 @@ public class CSV {
                 sortLinesAlphabeticallyByFullNameReverse(ipMap);
                 break;
             case ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE:
-//                sortLinesAlphabeticallytByLastNamelFirstNameReverse(ipMap);
+                sortLinesAlphabeticallytByLastNamelFirstNameReverse(ipMap);
                 break;
         }       
     }
@@ -342,6 +342,37 @@ private void sortLinesAlphabeticallyByLastNamelFirstName(HashMap<String, ImageAn
                     String firstName1 = parts1[0];
                     String firstName2 = parts2[0];
                     return firstName1.compareTo(firstName2);
+                }
+            }
+        });
+        for (String fName: fullNames) {
+            ImageAndPersonLine[] linesForName = ipMap.get(fName);
+            for (ImageAndPersonLine line: linesForName) {
+                entries.add(line);
+            }
+        }
+        this.lines = entries.toArray(new CSVLine[entries.size()]);
+    }
+
+    private void sortLinesAlphabeticallytByLastNamelFirstNameReverse(HashMap<String, ImageAndPersonLine[]> ipMap  ) {
+        List<ImageAndPersonLine> entries = new ArrayList<ImageAndPersonLine>();
+        entries.add((ImageAndPersonLine)this.lines[0]);
+        Set<String> fullNamekeys = ipMap.keySet();
+        String[] fullNames = fullNamekeys.toArray(new String[ipMap.size()]);
+        Arrays.sort(fullNames, new Comparator<String>() {
+            @Override
+            public int compare(String name1, String name2) {
+                String[] parts1 = name1.split(" ");
+                String[] parts2 = name2.split(" ");
+                String lastName1 = parts1[parts1.length - 1];
+                String lastName2 = parts2[parts2.length - 1];
+                int lastNameComparison = lastName2.compareTo(lastName1);
+                if (lastNameComparison != 0) {
+                    return lastNameComparison;
+                } else {
+                    String firstName1 = parts1[0];
+                    String firstName2 = parts2[0];
+                    return firstName2.compareTo(firstName1);
                 }
             }
         });
