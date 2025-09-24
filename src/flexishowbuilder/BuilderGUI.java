@@ -15,6 +15,7 @@ public class BuilderGUI extends Application {
         if (data != null) {
             System.out.println("Title: " + data.getTitle());
             System.out.println("Sort Order: " + data.getOrder());
+            csv.sort(data.getOrder());
         }
         Platform.exit();
     }
