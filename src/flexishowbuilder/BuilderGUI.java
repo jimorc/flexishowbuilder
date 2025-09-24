@@ -11,6 +11,11 @@ public class BuilderGUI extends Application {
         if (csv != null) {
             System.out.println("CSV File selected " + csv.getFileName() + "..");
         }
+        TitleAndSortData data = new TitleAndSortDialog().showAndWait().orElse(null);
+        if (data != null) {
+            System.out.println("Title: " + data.getTitle());
+            System.out.println("Sort Order: " + data.getOrder());
+        }
         Platform.exit();
     }
 
