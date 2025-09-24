@@ -405,4 +405,26 @@ private void sortLinesAlphabeticallyByLastNamelFirstName(HashMap<String, ImageAn
         }
         this.lines = entries.toArray(new CSVLine[entries.size()]);
     }
+
+    /**
+     * Returns a list of image file names that are referenced in the CSV file
+     * but do not exist in the same directory as the CSV file.
+     * @return a list of missing image file names.
+     * This file is protected rather than private so that
+     * it can called for testing purposes.
+     */
+    protected List<String> getListOfMissingImages() {
+        ArrayList<String> missingImages = new ArrayList<>();
+        String dir = getFileDir();
+        for (int i = 1; i < lines.length; i++) { // skip header line
+            ImageAndPersonLine ipLine = (ImageAndPersonLine) lines[i];
+            String imageFileName = ipLine.getImageFileName();
+            java.nio.file.Path imagePath = java.nio.file.Paths.get(dir, imageFileName);
+            File imageFile = imagePath.toFile();
+            if (!imageFile.isFile()) {
+                missingImages.add(imageFileName);
+            }
+        }
+        return missingImages;
+    }
 }

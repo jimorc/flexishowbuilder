@@ -1,5 +1,6 @@
 package flexishowbuilder;
 
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -236,5 +237,16 @@ public class CSVTests {
         assertEquals("Wilma Flintstone", ((ImageAndPersonLine)csv.getLine(6)).getPersonFullName());
         assertEquals("Jane Smith", ((ImageAndPersonLine)csv.getLine(2)).getPersonFullName());
         assertEquals("John Doe", ((ImageAndPersonLine)csv.getLine(1)).getPersonFullName());
+    }
+
+    @Test
+    void testGetListOfMissingImages() {
+        CSV csv = new CSV.Builder()
+            .fileName("testing/data/test.csv")
+            .build();
+        List<String> missing = csv.getListOfMissingImages();
+        assertEquals(2, missing.size());
+        assertEquals("image1.jpg", missing.get(0)) ;
+        assertEquals("image2.jpg", missing.get(1));
     }
 }
