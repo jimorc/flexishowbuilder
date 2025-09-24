@@ -410,8 +410,6 @@ private void sortLinesAlphabeticallyByLastNamelFirstName(HashMap<String, ImageAn
      * Returns a list of image file names that are referenced in the CSV file
      * but do not exist in the same directory as the CSV file.
      * @return a list of missing image file names.
-     * This file is protected rather than private so that
-     * it can called for testing purposes.
      */
     protected List<String> getListOfMissingImages() {
         ArrayList<String> missingImages = new ArrayList<>();
