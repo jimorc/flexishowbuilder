@@ -8,6 +8,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
     private final TextArea titleArea;
@@ -19,9 +21,12 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
     private final RadioButton alphaLastFirstRevButton;
 
     public TitleAndSortDialog() {
-        Label titleLabel = new Label("Title:");
+        Label titleLabel = new Label("Show Title Text");
+        Label titleHelp = new Label("(2 lines recommended)");
+        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         titleArea = createTextArea();
-        Label sortLabel = new Label("Sort Order:");
+        Label sortLabel = new Label("Sort Order");
+        sortLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         sortGroup = new ToggleGroup();
         noneButton = createRadioButton("As Is", sortGroup, sortOrder.NONE);
         alphaFullButton = createRadioButton("Alphabetical by Full Name", sortGroup, sortOrder.ALPHABETICAL_BY_FULL_NAME);
@@ -30,7 +35,7 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
         alphaLastFirstRevButton = createRadioButton("Alphabetical by Last Name then First Name Reverse", sortGroup, sortOrder.ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE);
         noneButton.setSelected(true);
         VBox vbox = new VBox(10);
-        vbox.getChildren().addAll(titleLabel, titleArea, sortLabel, noneButton,
+        vbox.getChildren().addAll(titleLabel, titleHelp, titleArea, sortLabel, noneButton,
             alphaFullButton, alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton);
         getDialogPane().setContent(vbox);
         setTitle("Set Title and Sort Order");
@@ -54,7 +59,7 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
 
     private TextArea createTextArea() {
         TextArea textArea = new TextArea();
-        textArea.setPromptText("Enter title here (2 lines recommended)");
+        textArea.setPromptText("Enter title text here");
         textArea.setPrefColumnCount(50);
         textArea.setPrefRowCount(2);
         // TODO: centre text
