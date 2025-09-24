@@ -17,7 +17,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 enum sortOrder {
-    NONE,
+    ASIS,
     ALPHABETICAL_BY_FULL_NAME,
     ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME,
     ALPHABETICAL_BY_FULL_NAME_REVERSE,
@@ -275,8 +275,8 @@ public class CSV {
     protected void sort(sortOrder order) {
         HashMap<String, ImageAndPersonLine[]> ipMap = buildFullNameHashMap();
         switch (order) {
-            case NONE:
-                sortNone(ipMap);
+            case ASIS:
+                sortAsIs(ipMap);
                 break;
             case ALPHABETICAL_BY_FULL_NAME:
                 sortLinesAlphabeticallyByFullName(ipMap);
@@ -387,7 +387,7 @@ private void sortLinesAlphabeticallyByLastNamelFirstName(HashMap<String, ImageAn
 
    // This actually sorts the lines so that all entries for a given full name are
     // together, but the order of the names is not changed.
-    private void sortNone(HashMap<String, ImageAndPersonLine[]> ipMap) {
+    private void sortAsIs(HashMap<String, ImageAndPersonLine[]> ipMap) {
         List<ImageAndPersonLine> entries = new ArrayList<ImageAndPersonLine>();
         Set<String> fullNameKeys = ipMap.keySet();
         entries.add((ImageAndPersonLine)this.lines[0]);

@@ -228,7 +228,7 @@ public class CSVTests {
         CSV csv = new CSV.Builder()
             .fileName("testing/data/sort.csv")
             .build();
-        csv.sort(sortOrder.NONE);
+        csv.sort(sortOrder.ASIS);
         assertEquals(7, csv.getNumberOfLines());
         assertEquals("Barney Rubble", ((ImageAndPersonLine)csv.getLine(5)).getPersonFullName());
         assertEquals("Fred Flintstone", ((ImageAndPersonLine)csv.getLine(3)).getPersonFullName());

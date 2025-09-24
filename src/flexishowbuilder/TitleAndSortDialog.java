@@ -28,7 +28,7 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
         Label sortLabel = new Label("Sort Order");
         sortLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         sortGroup = new ToggleGroup();
-        noneButton = createRadioButton("As Is", sortGroup, sortOrder.NONE);
+        noneButton = createRadioButton("As Is", sortGroup, sortOrder.ASIS);
         alphaFullButton = createRadioButton("Alphabetical by Full Name", sortGroup, sortOrder.ALPHABETICAL_BY_FULL_NAME);
         alphaLastFirstButton = createRadioButton("Alphabetical by Last Name then First Name", sortGroup, sortOrder.ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME);
         alphaFullRevButton = createRadioButton("Alphabetical by Full Name Reverse", sortGroup, sortOrder.ALPHABETICAL_BY_FULL_NAME_REVERSE);
