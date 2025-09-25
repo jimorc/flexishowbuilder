@@ -3,7 +3,7 @@ package flexishowbuilder;
 import java.util.List;
 
 enum CSVExceptionType {
-    NOHEADER,
+    NOFILE,
     INVALIDHEADER,
     EMPTY,
     MISSINGIMAGES,
@@ -24,8 +24,8 @@ public class CSVException extends Exception {
     public String getMessage() {
         String message;
         switch (type) {
-            case NOHEADER:
-                message = "CSVException: No header found in CSV file " + fileName;
+            case NOFILE:
+                message = "CSVException: No CSV file selected.";
                 break;
             case INVALIDHEADER:
                 message = "CSVException: Invalid header found in CSV file " + fileName;
@@ -47,4 +47,11 @@ public class CSVException extends Exception {
         return message;
     }
     
+    /*
+     * Returns the type of CSV exception.
+     * @return the type of CSV exception.
+     */
+    public CSVExceptionType getType() {
+        return type;
+    }
 }

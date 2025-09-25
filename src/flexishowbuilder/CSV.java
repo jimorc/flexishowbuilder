@@ -1,6 +1,8 @@
 package flexishowbuilder;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,8 +13,6 @@ import java.util.Set;
 
 import javax.swing.filechooser.FileSystemView;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -78,16 +78,22 @@ public class CSV {
          * @return the CSV object.
          * @throws RuntimeException in junit tests if csvFile is null.
          */
-        public CSV build() throws RuntimeException {
+        public CSV build() throws CSVException, IOException, FileNotFoundException {
+            CSV csv = null;
             if (csvFile == null) {
-                csvFile = CSV.getCSVFile();
+//                try {
+                    csvFile = CSV.getCSVFile();
+//                } catch (CSVException csve) {
+                    // in junit tests, we don't want to display a dialog, so we throw an exception
+//                   throw new RuntimeException("No CSV file selected.");
+//                }
             }
             if (csvFile.isFile()) {
-                CSV csv = new CSV(this);
+                csv = new CSV(this);
                 csv.loadCSVFile();
-                return csv;
+               return csv;
             } else {
-                return null;
+                throw new FileNotFoundException("CSV file does not exist: " + csvFile.getAbsolutePath());
             }
         }
     }
@@ -136,7 +142,7 @@ public class CSV {
      * Opens a file chooser dialog to select a CSV file.
      * @return The name of the selected CSV file, or null if no file was selected.
      */
-    private static File getCSVFile() {
+    private static File getCSVFile() throws CSVException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select CSV File");
         fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getHomeDirectory());
@@ -144,11 +150,7 @@ public class CSV {
 
         File csv = fileChooser.showOpenDialog(null);
         if (csv == null) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("CSV File Selection");
-            alert.setHeaderText("CSV File Not Selected");
-            alert.setContentText("Program will exit.");
-            alert.showAndWait();
+            throw new CSVException(CSVExceptionType.NOFILE, null, null);
         }
         return csv;
     }
@@ -162,7 +164,7 @@ public class CSV {
      * This file is protected rather than private so that
      * it can called for testing purposes.
      */
-    protected void loadCSVFile() {
+    protected void loadCSVFile() throws IOException, CSVException {
         String dir = getFileDir();
         java.nio.file.Path path = java.nio.file.Paths.get(dir, getFileName());
         try {
@@ -171,21 +173,10 @@ public class CSV {
             for (int i = 0; i < allLines.size(); i++) {
                 lines[i] = new ImageAndPersonLine(allLines.get(i));
             }
-        } catch (Exception e) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("CSV File Error");
-            alert.setHeaderText("Error attempting to read CSV file: " + path.toString());
-            alert.setContentText("See if you can open the file by double-clicking on it.\n" +
-                "If you can open it, check that it is a valid CSV file.\n" +
-                "by double clicking on it.\n" +
-                "If you can, then report a programming error.\n" +
-                "Otherwise, there is a file error. Report it to the person who\n" +
-                "sent you the file.\n" +
-                "Program will now exit.");
-            alert.showAndWait();
-            System.exit(0);
-        }
-      }
+        } catch (ArrayIndexOutOfBoundsException aioobe) {
+            throw new CSVException(CSVExceptionType.INVALIDHEADER, path.toString(), null);
+       }
+    }
 
     /**
      * Returns a string representation of the CSV object.
@@ -213,7 +204,7 @@ public class CSV {
      * @throws ArrayIndexOutOfBoundsException if the index is negative, or
      * greater than the number of lines.
      */
-    public void insertAt(int index, CSVLine line) {
+    public void insertAt(int index, CSVLine line) throws ArrayIndexOutOfBoundsException {
         if (index < 0 || index > lines.length) {
             throw new ArrayIndexOutOfBoundsException("Index out of bounds: " + index);
         }
@@ -411,7 +402,7 @@ private void sortLinesAlphabeticallyByLastNamelFirstName(HashMap<String, ImageAn
      * but do not exist in the same directory as the CSV file.
      * @return a list of missing image file names.
      */
-    protected List<String> getListOfMissingImages() {
+    private List<String> getListOfMissingImages() {
         ArrayList<String> missingImages = new ArrayList<>();
         String dir = getFileDir();
         for (int i = 1; i < lines.length; i++) { // skip header line
@@ -424,5 +415,29 @@ private void sortLinesAlphabeticallyByLastNamelFirstName(HashMap<String, ImageAn
             }
         }
         return missingImages;
+    }
+
+    protected Exception validateCSVFile() throws CSVException {
+        if (lines.length == 0) {
+            throw new CSVException(CSVExceptionType.EMPTY, getFileName(), null);
+        }
+        // validate header line
+        CSVLine headerLine = lines[0];
+        if (headerLine.length() != 5) {
+            throw new CSVException(CSVExceptionType.INVALIDHEADER, getFileName(), null);
+        }
+        if (!headerLine.field(0).equalsIgnoreCase("Filename") ||
+            !headerLine.field(1).equalsIgnoreCase("Title") ||
+            !headerLine.field(2).equalsIgnoreCase("Full Name") ||
+            !headerLine.field(3).equalsIgnoreCase("First Name") ||
+            !headerLine.field(4).equalsIgnoreCase("Last Name")) {
+            throw new CSVException(CSVExceptionType.INVALIDHEADER, getFileName(), null);
+        }
+        // check for missing images
+        List<String> missingImages = getListOfMissingImages();
+        if (missingImages.size() > 0) {
+            throw new CSVException(CSVExceptionType.MISSINGIMAGES, getFileName(), missingImages);
+        }
+        return null; // no errors found
     }
 }

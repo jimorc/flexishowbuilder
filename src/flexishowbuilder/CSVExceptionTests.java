@@ -6,12 +6,6 @@ import org.junit.jupiter.api.Test;
 
 public class CSVExceptionTests {
     @Test
-    public void testGetMessageNoHeader() {
-        CSVException ex = new CSVException(CSVExceptionType.NOHEADER, "test.csv", null);
-        assertEquals("CSVException: No header found in CSV file test.csv", ex.getMessage());
-    }
-
-    @Test
     public void testGetMessageInvalidHeader() {
         CSVException ex = new CSVException(CSVExceptionType.INVALIDHEADER, "test.csv", null);
         assertEquals("CSVException: Invalid header found in CSV file test.csv", ex.getMessage());

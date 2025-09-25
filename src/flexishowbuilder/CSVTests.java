@@ -1,6 +1,7 @@
 package flexishowbuilder;
 
-import java.util.List;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -23,22 +24,29 @@ import org.junit.jupiter.api.Test;
 public class CSVTests {
     @Test
     void testBuildFileExists() {
-        CSV csv = new CSV.Builder()
-            .fileName(System.getProperty("user.dir")+"/testing/data/test.csv")
-            .build();
-
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/test.csv")
+                .build();
+        } catch (FileNotFoundException fnfe) {
+            fail("FileNotFoundException thrown: " + fnfe.getMessage());
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         assertNotNull(csv);
-        assertEquals(System.getProperty("user.dir")+"/testing/data", csv.getFileDir());
+        assertEquals("testing/data", csv.getFileDir());
         assertEquals("test.csv", csv.getFileName());
     }
 
     @Test
-    void testBiuldFileDoesntExist() {
-        CSV csv2 = new CSV.Builder()
-            .fileName("nonexistentfile.csv")
-            .build();  
-
-            assertNull(csv2);
+    void testBuildFileDoesntExist() {
+        assertThrows(FileNotFoundException.class, () -> {
+            new CSV.Builder()
+                .fileName("nonexistentfile.csv")
+                .build(); });
     }
 
     @Test
@@ -54,9 +62,17 @@ public class CSVTests {
 
     @Test
     void testLoadCSVFile() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/test.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/test.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        }
+        catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
        String expected = "Filename,Title,Full Name,First Name,Last Name\n" +
                       "image1.jpg,Image One,John Doe,John,Doe\n" +
                           "image2.jpg,\"Image, Two\",Jane Smith,Jane,Smith\n";
@@ -65,18 +81,32 @@ public class CSVTests {
 
     @Test
     void testLoadEmptyCSVFile() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/empty.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/empty.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         String expected = "";
         assertEquals(expected, csv.toString());
     }
 
     @Test
     void testInsertAt() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/test.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/test.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         CSVLine newLine = new ImageAndPersonLine("image4.jpg,\"Image, Two\",Bob Brown,Bob,Brown");
         csv.insertAt(1, newLine);
         assertEquals(4, csv.getNumberOfLines());
@@ -87,9 +117,17 @@ public class CSVTests {
 
     @Test
     void testInsertAtBeginning() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/test.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/test.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
+
         CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Four,Bob Brown,Bob,Brown");
         csv.insertAt(0, newLine);
         assertEquals(4, csv.getNumberOfLines());
@@ -100,9 +138,16 @@ public class CSVTests {
 
     @Test
     void testInsertAtEnd() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/test.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/test.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
        CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Three,Bob Brown,Bob,Brown");
         csv.insertAt(3, newLine);
         assertEquals(4, csv.getNumberOfLines());
@@ -113,21 +158,43 @@ public class CSVTests {
 
     @Test
     void testInsertAtInvalidIndex() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/test.csv")
-            .build();
+       CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/test.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         CSVLine newLine = new ImageAndPersonLine("image3.jpg,Image Three,Bob Brown,Bob,Brown");
-        assertThrows(ArrayIndexOutOfBoundsException.class, () ->
-            csv.insertAt(-1, newLine));
-        assertThrows(ArrayIndexOutOfBoundsException.class, () ->
-            csv.insertAt(4, newLine));
+        try { 
+            csv.insertAt(-1, newLine);
+            fail("ArrayIndexOutOfBoundsException not thrown for negative index");
+        } catch (ArrayIndexOutOfBoundsException aioobe) {
+            // expected
+        }
+        try {
+            csv.insertAt(4, newLine);
+            fail("ArrayIndexOutOfBoundsException not thrown for index greater than number of lines");
+        } catch (ArrayIndexOutOfBoundsException aioobe) {
+            // expected
+        }
     }
 
         @Test
     void testAppend() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/test.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/test.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Four,Bob Brown,Bob,Brown");
         csv.append(newLine);
         assertEquals(4, csv.getNumberOfLines());
@@ -138,9 +205,16 @@ public class CSVTests {
 
     @Test
     void testAppendToEmptyCSV() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/empty.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/empty.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         CSVLine newLine = new ImageAndPersonLine("image1.jpg,Image One,John Doe,John,Doe");
         csv.append(newLine);
         assertEquals(1, csv.getNumberOfLines());
@@ -149,9 +223,16 @@ public class CSVTests {
 
     @Test
     void testAppendMultiple() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/empty.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/empty.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         CSVLine line1 = new ImageAndPersonLine("image1.jpg,Image One,John Doe,John,Doe");
         CSVLine line2 = new ImageAndPersonLine("image2.jpg,\"Image, Two\",Jane Smith,Jane,Smith");
         CSVLine line3 = new ImageAndPersonLine("image3.jpg,Image Three,Bob Brown,Bob,Brown");
@@ -166,9 +247,16 @@ public class CSVTests {
 
         @Test
     void testSortAlphaByFullName() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/sort.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/sort.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         csv.sort(sortOrder.ALPHABETICAL_BY_FULL_NAME);
         assertEquals(7, csv.getNumberOfLines());
         assertEquals("Barney Rubble", ((ImageAndPersonLine)csv.getLine(1)).getPersonFullName());
@@ -181,9 +269,16 @@ public class CSVTests {
 
     @Test
     void testSortAlphaByFullNameReverseOrder() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/sort.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/sort.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         csv.sort(sortOrder.ALPHABETICAL_BY_FULL_NAME_REVERSE);
         assertEquals(7, csv.getNumberOfLines());
         assertEquals("Barney Rubble", ((ImageAndPersonLine)csv.getLine(6)).getPersonFullName());
@@ -196,9 +291,16 @@ public class CSVTests {
 
     @Test
     void testSortAlphaByLastNameFirstName() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/sort.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/sort.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         csv.sort(sortOrder.ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME);
         assertEquals(7, csv.getNumberOfLines());
         assertEquals("Barney Rubble", ((ImageAndPersonLine)csv.getLine(5)).getPersonFullName());
@@ -211,9 +313,16 @@ public class CSVTests {
 
 @Test
     void testSortAlphaByLastNameFirstNameReverseOrder() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/sort.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/sort.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         csv.sort(sortOrder.ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE);
         assertEquals(7, csv.getNumberOfLines());
         assertEquals("Barney Rubble", ((ImageAndPersonLine)csv.getLine(2)).getPersonFullName());
@@ -226,9 +335,16 @@ public class CSVTests {
 
    @Test
     void testSortNone() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/sort.csv")
-            .build();
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/sort.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
         csv.sort(sortOrder.ASIS);
         assertEquals(7, csv.getNumberOfLines());
         assertEquals("Barney Rubble", ((ImageAndPersonLine)csv.getLine(5)).getPersonFullName());
@@ -240,13 +356,40 @@ public class CSVTests {
     }
 
     @Test
-    void testGetListOfMissingImages() {
-        CSV csv = new CSV.Builder()
-            .fileName("testing/data/test.csv")
-            .build();
-        List<String> missing = csv.getListOfMissingImages();
-        assertEquals(2, missing.size());
-        assertEquals("image1.jpg", missing.get(0)) ;
-        assertEquals("image2.jpg", missing.get(1));
+    void testValidateCSVFileEmpty() {
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/empty.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
+        try {
+            csv.validateCSVFile();
+            fail ("CSVException not thrown for empty CSV file");
+        } catch (CSVException csve) {
+                    String expectedMessage = "CSVException: No data found in CSV file empty.csv";
+                String actualMessage = csve.getMessage();
+                assertEquals(expectedMessage, actualMessage);
+        }
+    }  
+
+    @Test
+    void testValidateCSVFileZerodHeaderLength() {
+        CSV csv = null;
+        try {
+            csv = new CSV.Builder()
+                .fileName("testing/data/zeroheaderlength.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            String expectedMessage = "CSVException: Invalid header found in CSV file testing/data/zeroheaderlength.csv";
+            String actualMessage = csve.getMessage();
+            assertEquals(expectedMessage, actualMessage);
+        }
     }
 }

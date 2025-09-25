@@ -22,6 +22,9 @@ public class ImageAndPersonLine extends CSVLine {
         int third = line.lastIndexOf(',', fourth - 1);
         int second = line.lastIndexOf(',', third - 1); 
         String[] fields = new String[5];
+        if (first == -1 || second == -1 || third == -1 || fourth == -1) {
+            throw new ArrayIndexOutOfBoundsException("Line does not contain at least five fields: " + line);
+        }
         fields[0] = line.substring(0, first);
         fields[1] = line.substring(first + 1, second);
         fields[2] = line.substring(second + 1, third);
