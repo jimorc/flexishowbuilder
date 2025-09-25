@@ -1,6 +1,7 @@
 package flexishowbuilder;
 
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
@@ -25,6 +26,7 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
         Label titleHelp = new Label("(2 lines recommended)");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         titleArea = createTextArea();
+
         Label sortLabel = new Label("Sort Order");
         sortLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         sortGroup = new ToggleGroup();
@@ -34,9 +36,15 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
         alphaFullRevButton = createRadioButton("Alphabetical by Full Name Reverse", sortGroup, sortOrder.ALPHABETICAL_BY_FULL_NAME_REVERSE);
         alphaLastFirstRevButton = createRadioButton("Alphabetical by Last Name then First Name Reverse", sortGroup, sortOrder.ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE);
         noneButton.setSelected(true);
+
+        Label lastNameLabel = new Label("Last name in persion slides");
+        lastNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        CheckBox lastNameCheckBox = new CheckBox("Show last name as Initial");
+        lastNameCheckBox.selectedProperty().set(true);
         VBox vbox = new VBox(10);
         vbox.getChildren().addAll(titleLabel, titleHelp, titleArea, sortLabel, noneButton,
-            alphaFullButton, alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton);
+            alphaFullButton, alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton,
+            lastNameLabel, lastNameCheckBox);
         getDialogPane().setContent(vbox);
         setTitle("Set Title and Sort Order");
         setResizable(true);
@@ -50,7 +58,8 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
             if (dialogButton == javafx.scene.control.ButtonType.OK) {
                 String title = titleArea.getText();
                 sortOrder order = (sortOrder)sortGroup.getSelectedToggle().getUserData();
-                return new TitleAndSortData(title, order);
+                boolean lastNameAsInitial = lastNameCheckBox.isSelected();
+                return new TitleAndSortData(title, order, lastNameAsInitial);
             } else {
                 return null;
             }
@@ -77,10 +86,12 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
 class TitleAndSortData {
     private final String title;
     private final sortOrder order;
+    private final boolean lastNameAsInitial;
 
-    public TitleAndSortData(String title, sortOrder order) {
+    public TitleAndSortData(String title, sortOrder order, boolean lastNameAsInitial) {
         this.title = title;
         this.order = order;
+        this.lastNameAsInitial = lastNameAsInitial;
     }
 
     public String getTitle() {
@@ -89,5 +100,9 @@ class TitleAndSortData {
 
     public sortOrder getOrder() {
         return order;
+    }
+
+    public boolean isLastNameAsInitial() {
+        return lastNameAsInitial;
     }
 }
