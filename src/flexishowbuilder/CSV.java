@@ -81,12 +81,12 @@ public class CSV {
         public CSV build() throws CSVException, IOException, FileNotFoundException {
             CSV csv = null;
             if (csvFile == null) {
-//                try {
+                try {
                     csvFile = CSV.getCSVFile();
-//                } catch (CSVException csve) {
+                } catch (CSVException csve) {
                     // in junit tests, we don't want to display a dialog, so we throw an exception
-//                   throw new RuntimeException("No CSV file selected.");
-//                }
+                   throw new RuntimeException("No CSV file selected.");
+                }
             }
             if (csvFile.isFile()) {
                 csv = new CSV(this);
@@ -150,7 +150,7 @@ public class CSV {
 
         File csv = fileChooser.showOpenDialog(null);
         if (csv == null) {
-            throw new CSVException(CSVExceptionType.NOFILE, null, null);
+            throw new CSVException(CSVExceptionType.NOFILE, 0, null, null);
         }
         return csv;
     }
@@ -167,15 +167,19 @@ public class CSV {
     protected void loadCSVFile() throws IOException, CSVException {
         String dir = getFileDir();
         java.nio.file.Path path = java.nio.file.Paths.get(dir, getFileName());
-        try {
-            List<String> allLines = java.nio.file.Files.readAllLines(path);
-            lines = new CSVLine[allLines.size()];
-            for (int i = 0; i < allLines.size(); i++) {
-                lines[i] = new ImageAndPersonLine(allLines.get(i));
+        List<String> allLines = java.nio.file.Files.readAllLines(path);
+        lines = new CSVLine[allLines.size()];
+        for (int i = 0; i < allLines.size(); i++) {
+            try {
+                    lines[i] = new ImageAndPersonLine(allLines.get(i));
+            } catch (ArrayIndexOutOfBoundsException aioobe) {
+                if (i == 0) {
+                    throw new CSVException(CSVExceptionType.INVALIDHEADER, 0, path.toString(), null);
+                } else {
+                    throw new CSVException(CSVExceptionType.INVALIDLINE, i, path.toString(), null);
+                }
             }
-        } catch (ArrayIndexOutOfBoundsException aioobe) {
-            throw new CSVException(CSVExceptionType.INVALIDHEADER, path.toString(), null);
-       }
+        }
     }
 
     /**
@@ -419,24 +423,24 @@ private void sortLinesAlphabeticallyByLastNamelFirstName(HashMap<String, ImageAn
 
     protected Exception validateCSVFile() throws CSVException {
         if (lines.length == 0) {
-            throw new CSVException(CSVExceptionType.EMPTY, getFileName(), null);
+            throw new CSVException(CSVExceptionType.EMPTY, 0, getFileName(), null);
         }
         // validate header line
         CSVLine headerLine = lines[0];
         if (headerLine.length() != 5) {
-            throw new CSVException(CSVExceptionType.INVALIDHEADER, getFileName(), null);
+            throw new CSVException(CSVExceptionType.INVALIDHEADER, 0, getFileName(), null);
         }
         if (!headerLine.field(0).equalsIgnoreCase("Filename") ||
             !headerLine.field(1).equalsIgnoreCase("Title") ||
             !headerLine.field(2).equalsIgnoreCase("Full Name") ||
             !headerLine.field(3).equalsIgnoreCase("First Name") ||
             !headerLine.field(4).equalsIgnoreCase("Last Name")) {
-            throw new CSVException(CSVExceptionType.INVALIDHEADER, getFileName(), null);
+            throw new CSVException(CSVExceptionType.INVALIDHEADER, 0, getFileName(), null);
         }
         // check for missing images
         List<String> missingImages = getListOfMissingImages();
         if (missingImages.size() > 0) {
-            throw new CSVException(CSVExceptionType.MISSINGIMAGES, getFileName(), missingImages);
+            throw new CSVException(CSVExceptionType.MISSINGIMAGES, 0, getFileName(), missingImages);
         }
         return null; // no errors found
     }

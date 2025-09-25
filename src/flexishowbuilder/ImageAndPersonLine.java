@@ -25,6 +25,9 @@ public class ImageAndPersonLine extends CSVLine {
         if (first == -1 || second == -1 || third == -1 || fourth == -1) {
             throw new ArrayIndexOutOfBoundsException("Line does not contain at least five fields: " + line);
         }
+        if (first == second || second == third || third == fourth) {
+            throw new ArrayIndexOutOfBoundsException("Line does not contain at least five fields: " + line);
+        }
         fields[0] = line.substring(0, first);
         fields[1] = line.substring(first + 1, second);
         fields[2] = line.substring(second + 1, third);

@@ -392,4 +392,20 @@ public class CSVTests {
             assertEquals(expectedMessage, actualMessage);
         }
     }
+
+    @Test
+    void testValidateCSVFileInvalidHeader() {
+        try {
+//            CSV csv = 
+            new CSV.Builder()
+                .fileName("testing/data/invalidline.csv")
+                .build();
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            String expectedMessage = "CSVException: Invalid line number 2 found in CSV file testing/data/invalidline.csv";
+            String actualMessage = csve.getMessage();
+            assertEquals(expectedMessage, actualMessage);
+        }
+    }
 }

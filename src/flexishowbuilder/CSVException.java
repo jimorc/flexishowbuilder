@@ -5,6 +5,7 @@ import java.util.List;
 enum CSVExceptionType {
     NOFILE,
     INVALIDHEADER,
+    INVALIDLINE,
     EMPTY,
     MISSINGIMAGES,
     UNKNOWN
@@ -12,10 +13,12 @@ enum CSVExceptionType {
 
 public class CSVException extends Exception {
     private CSVExceptionType type;
+    private int lineNumber;
     private String fileName;
     private List<String> missingImages;
-    public CSVException(CSVExceptionType type, String fileName, List<String> missingImages) {
+    public CSVException(CSVExceptionType type, int line, String fileName, List<String> missingImages) {
         this.type = type;
+        this.lineNumber = line;
         this.fileName = fileName;
         this.missingImages = missingImages;
     }
@@ -29,6 +32,9 @@ public class CSVException extends Exception {
                 break;
             case INVALIDHEADER:
                 message = "CSVException: Invalid header found in CSV file " + fileName;
+                break;
+            case INVALIDLINE:
+                message = "CSVException: Invalid line number " + (lineNumber+1) + " found in CSV file " + fileName;
                 break;
             case EMPTY:
                 message = "CSVException: No data found in CSV file " + fileName;
