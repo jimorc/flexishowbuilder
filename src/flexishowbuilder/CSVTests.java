@@ -371,9 +371,9 @@ public class CSVTests {
             csv.validateCSVFile();
             fail ("CSVException not thrown for empty CSV file");
         } catch (CSVException csve) {
-                    String expectedMessage = "CSVException: No data found in CSV file empty.csv";
-                String actualMessage = csve.getMessage();
-                assertEquals(expectedMessage, actualMessage);
+            String expectedMessage = "No data found in CSV file empty.csv";
+            String actualMessage = csve.getMessage();
+            assertEquals(expectedMessage, actualMessage);
         }
     }  
 
@@ -387,7 +387,7 @@ public class CSVTests {
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
-            String expectedMessage = "CSVException: Invalid header found in CSV file testing/data/zeroheaderlength.csv";
+            String expectedMessage = "Invalid header found in CSV file zeroheaderlength.csv";
             String actualMessage = csve.getMessage();
             assertEquals(expectedMessage, actualMessage);
         }
@@ -403,7 +403,7 @@ public class CSVTests {
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
-            String expectedMessage = "CSVException: Invalid line number 2 found in CSV file testing/data/invalidline.csv";
+            String expectedMessage = "Invalid line number 2 found in CSV file invalidline.csv";
             String actualMessage = csve.getMessage();
             assertEquals(expectedMessage, actualMessage);
         }

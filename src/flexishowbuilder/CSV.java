@@ -150,7 +150,7 @@ public class CSV {
 
         File csv = fileChooser.showOpenDialog(null);
         if (csv == null) {
-            throw new CSVException(CSVExceptionType.NOFILE, 0, null, null);
+            throw new CSVException("No CSV file selected.");
         }
         return csv;
     }
@@ -174,9 +174,9 @@ public class CSV {
                     lines[i] = new ImageAndPersonLine(allLines.get(i));
             } catch (ArrayIndexOutOfBoundsException aioobe) {
                 if (i == 0) {
-                    throw new CSVException(CSVExceptionType.INVALIDHEADER, 0, path.toString(), null);
+                    throw new CSVException("Invalid header found in CSV file " + getFileName());
                 } else {
-                    throw new CSVException(CSVExceptionType.INVALIDLINE, i, path.toString(), null);
+                    throw new CSVException("Invalid line number " + (i+1) + " found in CSV file " + getFileName());
                 }
             }
         }
@@ -423,24 +423,28 @@ private void sortLinesAlphabeticallyByLastNamelFirstName(HashMap<String, ImageAn
 
     protected Exception validateCSVFile() throws CSVException {
         if (lines.length == 0) {
-            throw new CSVException(CSVExceptionType.EMPTY, 0, getFileName(), null);
+            throw new CSVException("No data found in CSV file " + getFileName());
         }
         // validate header line
         CSVLine headerLine = lines[0];
         if (headerLine.length() != 5) {
-            throw new CSVException(CSVExceptionType.INVALIDHEADER, 0, getFileName(), null);
+            throw new CSVException("Invalid header found in CSV file " + getFileName());
         }
         if (!headerLine.field(0).equalsIgnoreCase("Filename") ||
             !headerLine.field(1).equalsIgnoreCase("Title") ||
             !headerLine.field(2).equalsIgnoreCase("Full Name") ||
             !headerLine.field(3).equalsIgnoreCase("First Name") ||
             !headerLine.field(4).equalsIgnoreCase("Last Name")) {
-            throw new CSVException(CSVExceptionType.INVALIDHEADER, 0, getFileName(), null);
+            throw new CSVException("Invalid header found in CSV file " + getFileName());
         }
         // check for missing images
         List<String> missingImages = getListOfMissingImages();
         if (missingImages.size() > 0) {
-            throw new CSVException(CSVExceptionType.MISSINGIMAGES, 0, getFileName(), missingImages);
+            String msg = "Some images listed in CSV file " + getFileName() + " are missing:\n";
+            for (String img : missingImages) {
+                msg += img + "\n";
+            }
+            throw new CSVException(msg);
         }
         return null; // no errors found
     }

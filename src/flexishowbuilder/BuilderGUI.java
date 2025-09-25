@@ -19,44 +19,10 @@ public class BuilderGUI extends Application {
             }
         } catch (CSVException csve) {
             Alert alert = new Alert(null);
-            String msg = "";
-            switch (csve.getType()) {
-                case MISSINGIMAGES:
-                    alert.setAlertType(AlertType.ERROR);
-                    alert.setTitle("Missing Images");
-                    alert.setHeaderText("Some images listed in CSV file " + (csv != null ? csv.getFileName() : "No file") + " are missing:");
-                    msg = csve.getMessage();;
-                    break;
-                case EMPTY:
-                    alert.setAlertType(AlertType.ERROR);
-                    alert.setTitle("CSV File Error");
-                    alert.setHeaderText("CSV file \"" + (csv != null ? csv.getFileName() : "No file") +"\"");
-                    msg = csve.getMessage();
-                    break;
-                case INVALIDHEADER:
-                    alert.setAlertType(AlertType.ERROR);
-                    alert.setTitle("CSV File Error");
-                    alert.setHeaderText("Fatal Error");
-                    msg = csve.getMessage();
-                    break;
-                    case INVALIDLINE:
-                    alert.setAlertType(AlertType.ERROR);
-                    alert.setTitle("CSV File Error");
-                    alert.setHeaderText("CSV File \"" + (csv != null ? csv.getFileName() : "No file") + "\"");
-                    msg = csve.getMessage();
-                    break;
-                case UNKNOWN:
-                    alert.setAlertType(AlertType.ERROR);
-                    alert.setTitle("CSV File");
-                    alert.setHeaderText("Unknown error attempting to read CSV file: " + (csv != null ? csv.getFileName() : "No file"));
-                    msg = csve.getMessage();
-                    break;
-                case NOFILE:
-                    alert.setAlertType(AlertType.INFORMATION);
-                    alert.setTitle("CSV File");
-                    alert.setHeaderText("No CSV file selected");
-                    msg = "";
-            }
+            String msg = csve.getMessage();
+            alert.setAlertType(AlertType.ERROR);
+            alert.setTitle("CSV File Error");
+            alert.setHeaderText("Error processing CSV file");
             alert.setContentText(msg + "\nProgram will now terminate.");
             alert.showAndWait();
             System.exit(1);
