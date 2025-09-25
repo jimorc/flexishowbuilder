@@ -379,9 +379,9 @@ public class CSVTests {
 
     @Test
     void testValidateCSVFileZerodHeaderLength() {
-        CSV csv = null;
         try {
-            csv = new CSV.Builder()
+//            CSV csv = 
+            new CSV.Builder()
                 .fileName("testing/data/zeroheaderlength.csv")
                 .build();
         } catch (IOException ioe) {
