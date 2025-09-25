@@ -6,6 +6,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -31,16 +32,28 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
         sortLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         sortGroup = new ToggleGroup();
         noneButton = createRadioButton("As Is", sortGroup, sortOrder.ASIS);
+        Tooltip noneTooltip = new Tooltip("No sorting - use the order in the CSV file.\nAll images for each person are grouped together.");
+        noneButton.setTooltip(noneTooltip);
         alphaFullButton = createRadioButton("Alphabetical by Full Name", sortGroup, sortOrder.ALPHABETICAL_BY_FULL_NAME);
+        Tooltip alphaFullTooltip = new Tooltip("Sort by person's full name (first name then last name).\nAll images for each person are grouped together.");
+        alphaFullButton.setTooltip(alphaFullTooltip);
         alphaLastFirstButton = createRadioButton("Alphabetical by Last Name then First Name", sortGroup, sortOrder.ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME);
+        Tooltip alphaLastFirstTooltip = new Tooltip("Sort by person's last name then first name.\nAll images for each person are grouped together.");
+        alphaLastFirstButton.setTooltip(alphaLastFirstTooltip);
         alphaFullRevButton = createRadioButton("Alphabetical by Full Name Reverse", sortGroup, sortOrder.ALPHABETICAL_BY_FULL_NAME_REVERSE);
+        Tooltip alphaFullRevTooltip = new Tooltip("Sort by person's full name (first name then last name) in reverse order.\nAll images for each person are grouped together.");
+        alphaFullRevButton.setTooltip(alphaFullRevTooltip);
         alphaLastFirstRevButton = createRadioButton("Alphabetical by Last Name then First Name Reverse", sortGroup, sortOrder.ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE);
+        Tooltip alphaLastFirstRevTooltip = new Tooltip("Sort by person's last name then first name in reverse order.\nAll images for each person are grouped together.");
+        alphaLastFirstRevButton.setTooltip(alphaLastFirstRevTooltip);
         noneButton.setSelected(true);
 
         Label lastNameLabel = new Label("Last name in persion slides");
         lastNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         CheckBox lastNameCheckBox = new CheckBox("Show last name as Initial");
         lastNameCheckBox.selectedProperty().set(true);
+        Tooltip lastNameTooltip = new Tooltip("If checked, the person's last name will be shown as an initial in the\nperson slides. If not selected, the full last name will be shown.");
+        lastNameCheckBox.setTooltip(lastNameTooltip);
         VBox vbox = new VBox(10);
         vbox.getChildren().addAll(titleLabel, titleHelp, titleArea, sortLabel, noneButton,
             alphaFullButton, alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton,
@@ -71,6 +84,8 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
         textArea.setPromptText("Enter title text here");
         textArea.setPrefColumnCount(50);
         textArea.setPrefRowCount(2);
+        Tooltip tTooltip = new Tooltip("Enter the title text to appear on the title slide. Two lines is recommended.");
+        textArea.setTooltip(tTooltip);
         // TODO: centre text
         return textArea;
     }
