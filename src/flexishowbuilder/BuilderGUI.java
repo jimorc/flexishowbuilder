@@ -13,9 +13,7 @@ public class BuilderGUI extends Application {
         try {
             csv = new CSV.Builder().build();
             if (csv != null) {
-                System.out.println("CSV File selected " + csv.getFileName() + "..");
                 csv.validateCSVFile();
-                System.out.println("CSV File validated");
             }
         } catch (CSVException csve) {
             handleCSVException(csve); // no return
@@ -29,8 +27,6 @@ public class BuilderGUI extends Application {
         if (csv != null) {
             TitleAndSortData data = new TitleAndSortDialog().showAndWait().orElse(null);
             if (data != null) {
-                System.out.println("Title: " + data.getTitle());
-                System.out.println("Sort Order: " + data.getOrder());
                 csv.sort(data.getOrder());
             }
         }
