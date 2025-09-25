@@ -24,7 +24,6 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
 
     public TitleAndSortDialog() {
         Label titleLabel = new Label("Show Title Text");
-        Label titleHelp = new Label("(2 lines recommended)");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         titleArea = createTextArea();
 
@@ -55,7 +54,7 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
         Tooltip lastNameTooltip = new Tooltip("If checked, the person's last name will be shown as an initial in the\nperson slides. If not selected, the full last name will be shown.");
         lastNameCheckBox.setTooltip(lastNameTooltip);
         VBox vbox = new VBox(10);
-        vbox.getChildren().addAll(titleLabel, titleHelp, titleArea, sortLabel, noneButton,
+        vbox.getChildren().addAll(titleLabel, titleArea, sortLabel, noneButton,
             alphaFullButton, alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton,
             lastNameLabel, lastNameCheckBox);
         getDialogPane().setContent(vbox);
