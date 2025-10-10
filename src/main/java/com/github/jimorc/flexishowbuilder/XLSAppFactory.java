@@ -1,7 +1,5 @@
 package com.github.jimorc.flexishowbuilder;
 
-package main.java;
-
 /**
  * XLSAppFactory ios a factory class that creates an XLSApp object (eiter LibreOffice or Excel object).
  */
