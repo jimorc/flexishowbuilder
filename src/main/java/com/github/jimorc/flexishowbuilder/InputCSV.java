@@ -87,8 +87,13 @@ public class InputCSV {
                 try {
                     csvFile = InputCSV.getCSVFile();
                 } catch (CSVException csve) {
-                    // in junit tests, we don't want to display a dialog, so we throw an exception
-                   throw new RuntimeException("No CSV file selected.");
+                    // in junit tests, we don't want to display a dialog, so we throw an exception.
+                    // CSVException is thrown when testing in VSCode.
+                    throw new RuntimeException("No CSV file selected.");
+                } catch (UnsatisfiedLinkError ue) {
+                    // in junit tests in maven (mvn test), UnsatisfiedLinkError thrown
+                    // instead of CSVException.
+                    throw new RuntimeException("No CSV file selected.");
                 }
             }
             if (csvFile.isFile()) {

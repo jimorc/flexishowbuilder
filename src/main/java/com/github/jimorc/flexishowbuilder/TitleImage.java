@@ -1,57 +1,42 @@
 package com.github.jimorc.flexishowbuilder;
 
+import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
 import java.io.File;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.lang.ProcessBuilder;
+
+import javax.imageio.ImageIO;
+
+import javafx.scene.Scene;
+import javafx.scene.image.WritableImage;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+
 
 public class TitleImage {
     private TitleImage() {}
 
-    public static void generateTitleImage(String caption, String imageFileName) throws Exception{
-        String imCommand = "convert -size 1400x1050 -stroke yellow -fill yellow -font Helvetica" +
-            " -pointsize 48 -gravity Center caption:\"" + caption;
-        imCommand += "\" -fill black -opaque white " + imageFileName;
-        System.out.println(imCommand);
-        ProcessBuilder builder = new ProcessBuilder();
-        boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
-        if (isWindows) {
-            builder.command("cmd.exe", "/c", imCommand);
-        } else {
-            builder.command("bash", "-c", imCommand);
-        }
+    public static void generateTitleImage(String caption, String imageFileName) throws IOException{
+        Text cap = new Text(caption);
+        cap.setFill(Color.YELLOW);
+        cap.setFont(Font.font("System", FontWeight.BLACK, 48));
+        cap.setTextAlignment(TextAlignment.CENTER);
 
-        File locDirFile = new File(System.getProperty("user.dir"));
-        System.out.println(locDirFile.getName());
-        builder.directory(locDirFile);
+        StackPane root = new StackPane(cap);
+        Scene scene = new Scene(root, 1400, 1050);
+        scene.setFill(Color.BLACK);
 
-        Process process = builder.start();
-        OutputStream outputStream = process.getOutputStream();
-        InputStream inputStream = process.getInputStream();
-        InputStream errorStream = process.getErrorStream();
-
-        printStream(inputStream);
-        printStream(errorStream);
-
-        int exitCode = process.waitFor();
-        outputStream.flush();
-        outputStream.close();
-        if (exitCode != 0) {
-            System.err.println("Error: ImageMagick command failed with exit code " + exitCode);
-            throw new Exception("ImageMagick command failed with exit code " + exitCode);
-        }
-    }
-
-        private static void printStream(InputStream inputStream) throws IOException {
-        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
-            }
-        }
+        WritableImage writableImage = scene.snapshot(null);
+        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
+        BufferedImage imageRGB = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.OPAQUE);
+        Graphics2D graphics = imageRGB.createGraphics();
+        graphics.drawImage(bufferedImage, 0, 0, null);
+        ImageIO.write(imageRGB, "jpg", new File(imageFileName));
     }
 
 }

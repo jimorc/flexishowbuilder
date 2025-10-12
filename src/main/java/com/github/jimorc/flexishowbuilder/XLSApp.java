@@ -23,24 +23,21 @@ public class XLSApp {
         if (isWindows) {
             builder.command("cmd.exe", "/c", exe + " --version");
         } else {
-            builder.command("bash", "-c", exe + " --version");
+            builder.command("/usr/bin/bash", "-c", exe + " --version");
         }
 
         Process process = builder.start();
         InputStream inputStream = process.getInputStream();
         String result = "";
-        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while((line = bufferedReader.readLine()) != null) {
-                result += line;
-            }
-        } catch (Exception e) {
-
-        }
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         int exitCode = process.waitFor();
         if (exitCode != 0 && exitCode != 127) {
             System.err.println("Error: LibreOffice command failed with exit code " + exitCode);
-         }
+        }
+        String line;
+        while((line = bufferedReader.readLine()) != null) {
+            result += line;
+        }
 
         System.out.println(result);
         boolean found = result.contains(exeName);

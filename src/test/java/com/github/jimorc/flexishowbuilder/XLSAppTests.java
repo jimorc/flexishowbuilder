@@ -8,8 +8,8 @@ public class XLSAppTests {
     @Test
     public void testExecutableFound()  {
         boolean found = false;
-        String exe = "bash";
-        String exeName = "bash";
+        String exe = "/usr/bin/bash";
+        String exeName = "GNU bash";
         try {
             boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
             if (isWindows) {

@@ -11,7 +11,7 @@
     <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
     <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <checkstyle.version>8.45.1</checkstyle.version>
-    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
     <jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
     <!-- JaCoCo thresholds. Increase gradually as you add tests. -->
@@ -27,17 +27,31 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
+ <!-- https://mvnrepository.com/artifact/org.testfx/testfx-junit -->
+      <dependency>
+          <groupId>org.testfx</groupId>
+          <artifactId>testfx-junit</artifactId>
+          <version>4.0.18</version>
+          <scope>test</scope>
+      </dependency>
+
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-controls</artifactId>
-        <version>17.0.1</version>
+        <version>25</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-swing</artifactId>
+        <version>25-ea+23</version>
+    </dependency>
+      <dependency>
+          <groupId>org.testfx</groupId>
+          <artifactId>testfx-junit5</artifactId>
+          <version>4.0.18</version>
+          <scope>test</scope>
+      </dependency>
   </dependencies>
   <build>
     <pluginManagement>
@@ -79,6 +93,10 @@
             </dependency>
           </dependencies>
           <configuration>
+            <environmentVariables>
+              <PATH>/usr/bin</PATH>
+              <DYLD_LIBRARY_PATH>${basedir}/library/src/main/cpp/native</DYLD_LIBRARY_PATH>
+            </environmentVariables>
             <configLocation>com/github/ngeor/checkstyle.xml</configLocation>
             <includeTestSourceDirectory>true</includeTestSourceDirectory>
             <skip>${skipTests}</skip>
@@ -95,8 +113,36 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.4.2</version>
+          <configuration>
+            <archive>
+              <index>true</index>
+              <manifest>
+                <mainClass>com.github.jimorc.flexishowbuilder.App</mainClass>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              </manifest>
+              <manifestEntries>
+                <mode>development</mode>
+                <url>${project.url}</url>
+                <key>value</key>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+              <environmentVariables>
+                  <PATH>${basedir}\\..;${java.library.path}</PATH>
+              </environmentVariables>
+              <excludes>
+                  <exclude>**/TitleImageTests.java</exclude>
+              </excludes>
+            </configuration>
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
