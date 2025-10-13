@@ -1,8 +1,13 @@
 package com.github.jimorc.flexishowbuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+/**
+ * TitleImageLineTests contains tests for the TitleImageLine class.
+ */
 public class TitleImageLineTests {
     @Test
     void testConstructorValid() {
@@ -14,11 +19,11 @@ public class TitleImageLineTests {
 
     @Test
     void testConstructorInvalid() {
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(IllegalArgumentException.class, () ->
             new TitleImageLine("My_Title.png"));
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(IllegalArgumentException.class, () ->
             new TitleImageLine("My_Titlejpeg"));
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(IllegalArgumentException.class, () ->
             new TitleImageLine("My_Title.jpgg"));
     }
 }

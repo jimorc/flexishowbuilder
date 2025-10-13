@@ -1,8 +1,13 @@
 package com.github.jimorc.flexishowbuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+/**
+ * CSVLineTests contains tests for the CSVLine class.
+ */
 class CSVLineTests {
     @Test
     void noFieldsConstructor() {
@@ -12,9 +17,10 @@ class CSVLineTests {
 
     @Test
     void fieldsConstructor() {
+        final int fieldLen = 3;
         String[] fields = {"a", "b", "c"};
         CSVLine csvL = new CSVLine(fields);
-        assertEquals(3, csvL.length());
+        assertEquals(fieldLen, csvL.length());
         assertEquals("a", csvL.field(0));
         assertEquals("b", csvL.field(1));
         assertEquals("c", csvL.field(2));
@@ -22,12 +28,13 @@ class CSVLineTests {
 
     @Test
     void fieldOutOfBounds() {
+        final int fieldLen = 3;
         String[] fields = {"a", "b", "c"};
         CSVLine csvL = new CSVLine(fields);
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> 
+        assertThrows(ArrayIndexOutOfBoundsException.class, () ->
             csvL.field(-1));
         assertThrows(ArrayIndexOutOfBoundsException.class, () ->
-            csvL.field(3));
+            csvL.field(fieldLen));
     }
 
     @Test
@@ -44,12 +51,13 @@ class CSVLineTests {
 
     @Test
     void addFields() {
+        final int fieldLen = 3;
         CSVLine csvL = new CSVLine();
         String[] fields = {"a", "b", "c"};
         csvL.addFields(fields);
-        assertEquals(3, csvL.length());
+        assertEquals(fieldLen, csvL.length());
         assertEquals("a", csvL.field(0));
         assertEquals("b", csvL.field(1));
-        assertEquals("c", csvL.field(2)); 
-    } 
+        assertEquals("c", csvL.field(2));
+    }
 }

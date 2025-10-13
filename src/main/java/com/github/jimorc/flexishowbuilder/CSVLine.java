@@ -31,7 +31,7 @@ public class CSVLine {
     }
 
     /**
-     * Returns the field specified by the argument
+     * Returns the field specified by the argument.
      * @param index - the index of the field to return
      * @return the field specified by the index argument
      * @throws ArrayIndexOutOfBoundsException if the index is negative, or

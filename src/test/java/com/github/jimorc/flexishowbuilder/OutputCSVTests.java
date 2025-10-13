@@ -1,8 +1,12 @@
 package com.github.jimorc.flexishowbuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * OutputCSVTests contains tests for the OutputCSV class.
+ */
 public class OutputCSVTests {
     @Test
     void testAppendLine() {
@@ -10,11 +14,11 @@ public class OutputCSVTests {
         CSVLine line = new ImageAndPersonLine(header);
         OutputCSV csv = new OutputCSV();
         csv.appendLine(line);
-        String c = csv.toString(); 
-        assertEquals(header+"\n", c);
+        String c = csv.toString();
+        assertEquals(header + "\n", c);
 
-       csv.appendLine(line);
-        c = csv.toString(); 
-        assertEquals(header+"\n"+header+"\n", c);
+        csv.appendLine(line);
+        c = csv.toString();
+        assertEquals(header + "\n" + header + "\n", c);
     }
 }

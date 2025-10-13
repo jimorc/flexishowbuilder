@@ -1,8 +1,12 @@
 package com.github.jimorc.flexishowbuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * CSVExceptionTests contains tests for the CSVException class.
+ */
 public class CSVExceptionTests {
     @Test
     public void testConstructor() {

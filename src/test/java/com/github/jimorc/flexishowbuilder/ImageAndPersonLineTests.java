@@ -1,13 +1,19 @@
 package com.github.jimorc.flexishowbuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * ImageAndPersonLineTests contains tests for the ImageAndPersonLine class.
+ */
 public class ImageAndPersonLineTests {
+    static final int LINES = 5;
+
     @Test
     void testNoCommaConstructor() {
         ImageAndPersonLine ipl = new ImageAndPersonLine("image.jpg,image title,John Doe,John,Doe");
-        assertEquals(5, ipl.length());
+        assertEquals(LINES, ipl.length());
         assertEquals("image.jpg", ipl.getImageFileName());
         assertEquals("image title", ipl.getImageTitle());
         assertEquals("John Doe", ipl.getPersonFullName());
@@ -18,7 +24,7 @@ public class ImageAndPersonLineTests {
     @Test
     void testCommaInTitleConstructor() {
         ImageAndPersonLine ipl = new ImageAndPersonLine("image.jpg,\"image, title\",John Doe,John,Doe");
-        assertEquals(5, ipl.length());
+        assertEquals(LINES, ipl.length());
         assertEquals("image.jpg", ipl.getImageFileName());
         assertEquals("\"image, title\"", ipl.getImageTitle());
         assertEquals("John Doe", ipl.getPersonFullName());
@@ -33,5 +39,5 @@ public class ImageAndPersonLineTests {
 
         ImageAndPersonLine ipl2 = new ImageAndPersonLine("image.jpg,\"image, title\",John Doe,John,Doe");
         assertEquals("image.jpg,\"image, title\",John Doe,John,Doe", ipl2.toString());
-    }   
+    }
 }

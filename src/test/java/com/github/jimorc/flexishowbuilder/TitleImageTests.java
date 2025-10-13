@@ -1,27 +1,30 @@
 package com.github.jimorc.flexishowbuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.nio.file.Path;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-
+import java.nio.file.Path;
 import javafx.stage.Stage;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
+/**
+ * TitleImageTests contains tests for the TitleImageClass.
+ */
 @ExtendWith(ApplicationExtension.class)
 public class TitleImageTests {
     @Start
     private void start(Stage stage) {
-       try {
+        try {
             TitleImage.generateTitleImage("Test Caption Line1\nLine2", "test.jpg");
-        } catch (Exception e) {
+        } catch (IOException e) {
             fail("Exception thrown: " + e.getMessage());
         }
     }
@@ -35,8 +38,6 @@ public class TitleImageTests {
 
             FileChannel ch1 = randomAccessFile1.getChannel();
             FileChannel ch2 = randomAccessFile2.getChannel();
-            System.out.println(ch1.size());
-            System.out.println(ch2.size());
             if (ch1.size() != ch2.size()) {
                 fail("Files are not identical size");
             }
@@ -47,8 +48,10 @@ public class TitleImageTests {
             if (!m1.equals(m2)) {
                 fail("Files are not identical content");
             }
-        } catch (Exception e) {
-            fail("Exception comparing files: " + e.getMessage());
+        } catch (FileNotFoundException e) {
+            fail("File not found: " + e.getMessage());
+        } catch (IOException e) {
+            fail("IO Error: " + e.getMessage());
         } finally {
             // cleanup
             Path.of("test.jpg").toFile().delete();

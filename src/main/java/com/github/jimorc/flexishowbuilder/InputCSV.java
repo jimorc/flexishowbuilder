@@ -9,24 +9,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
-import javax.swing.filechooser.FileSystemView;
-
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-
-enum sortOrder {
-    ASIS,
-    ALPHABETICAL_BY_FULL_NAME,
-    ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME,
-    ALPHABETICAL_BY_FULL_NAME_REVERSE,
-    ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE
-}
+import javax.swing.filechooser.FileSystemView;
 
 /**
  * The InputCSV class reads the CSV file and stores multiple CSVLine objects.
- * 
+ *
  * It uses the Builder pattern to create an InputCSV object. The only required
  * parameter is the io.File containing the CSV lines to read. If no file is provided,
  * a FileChooser dialog is displayed to select a CSV file.
@@ -36,12 +27,12 @@ enum sortOrder {
  *     .build();
  * ```
  */
-public class InputCSV {
-    private File csvFile = null;
+public final class InputCSV {
+    private File csvFile;
     private CSVLine[] lines = new CSVLine[0];
-    private HashMap<String, ImageAndPersonLine[]> fullNameHashMap = null;
-    private Set<String> fullNameKeys = null;
-    private ArrayList<String> sortedFullNames = null;
+    private Map<String, ImageAndPersonLine[]> fullNameMap;
+    private Set<String> fullNameKeys;
+    private ArrayList<String> sortedFullNames;
 
     /**
      * This constructor is private. Use the Builder class to create a CSV object.
@@ -54,13 +45,13 @@ public class InputCSV {
      */
     private InputCSV(Builder builder) {
         this.csvFile = builder.csvFile;
-     }
+    }
 
     /**
      * The Builder class is used to create a CSV object.
      */
     public static class Builder {
-        private File csvFile = null;
+        private File csvFile;
 
         /**
          * Sets the CSV file.
@@ -100,8 +91,8 @@ public class InputCSV {
                 csv = new InputCSV(this);
                 csv.loadCSVFile();
                 csv.buildFullNameHashMap();
-                csv.fullNameKeys = csv.fullNameHashMap.keySet();
-               return csv;
+                csv.fullNameKeys = csv.fullNameMap.keySet();
+                return csv;
             } else {
                 throw new FileNotFoundException("CSV file does not exist: " + csvFile.getAbsolutePath());
             }
@@ -137,8 +128,8 @@ public class InputCSV {
      * purposes.
      * @return the HashMap containing the CSV file lines
      */
-    protected HashMap<String, ImageAndPersonLine[]> getHashMap() {
-        return fullNameHashMap;
+    protected Map<String, ImageAndPersonLine[]> getHashMap() {
+        return fullNameMap;
     }
 
     /**
@@ -148,6 +139,7 @@ public class InputCSV {
     protected Set<String> getFullNameKeys() {
         return fullNameKeys;
     }
+
     /**
      * Retrieve the lines in the CSV file.
      * @return an array of CSVLine objects.
@@ -165,15 +157,15 @@ public class InputCSV {
     }
 
     /**
-     * Return a Person object if there is one or more lines containing that name in the CSV lines. 
+     * Return a Person object if there is one or more lines containing that name in the CSV lines.
      * @param name - the full name of the person to retrieve a Person object for.
      * @return a Person object for the named person or null if not in CSV object.
      */
     public Person getPerson(String name) throws CSVException {
-        if (fullNameHashMap.containsKey(name)) {
-            ImageAndPersonLine[] lines = fullNameHashMap.get(name);
-            return new Person(lines[0].getPersonFirstName(), lines[0].getPersonLastName());
-        } 
+        if (fullNameMap.containsKey(name)) {
+            ImageAndPersonLine[] personLines = fullNameMap.get(name);
+            return new Person(personLines[0].getPersonFirstName(), personLines[0].getPersonLastName());
+        }
         throw new CSVException("Programming error: Trying to retrieve info for " + name + " but it does not exist.");
     }
 
@@ -202,12 +194,12 @@ public class InputCSV {
         return csv;
     }
 
-   /**
+    /**
      * Loads the CSV file specified by the fileName field.
      * The lines field is populated with CSVLine objects.
      * If there is an error reading the file, an error message is
      * displayed and the program exits.
-     * 
+     *
      * This file is protected rather than private so that
      * it can called for testing purposes.
      */
@@ -218,12 +210,12 @@ public class InputCSV {
         lines = new CSVLine[allLines.size()];
         for (int i = 0; i < allLines.size(); i++) {
             try {
-                    lines[i] = new ImageAndPersonLine(allLines.get(i));
+                lines[i] = new ImageAndPersonLine(allLines.get(i));
             } catch (ArrayIndexOutOfBoundsException aioobe) {
                 if (i == 0) {
                     throw new CSVException("Invalid header found in CSV file " + getFileName());
                 } else {
-                    throw new CSVException("Invalid line number " + (i+1) + " found in CSV file " + getFileName());
+                    throw new CSVException("Invalid line number " + (i + 1) + " found in CSV file " + getFileName());
                 }
             }
         }
@@ -247,9 +239,9 @@ public class InputCSV {
         }
         return sb.toString();
     }
-    
+
     /**
-     * Inserts a CSVLine at the specified index.   
+     * Inserts a CSVLine at the specified index.
      * @param index - the index at which to insert the line
      * @param line  - the line to insert
      * @throws ArrayIndexOutOfBoundsException if the index is negative, or
@@ -270,7 +262,7 @@ public class InputCSV {
         lines = newLines;
     }
 
-   /**
+    /**
      * Appends a CSVLine to the end of the CSV object.
      * @param line - the line to append
      */
@@ -291,21 +283,21 @@ public class InputCSV {
     }
 
     /**
-     * Retrieve the input CSV lines corresponding to the name provided by the argument
+     * Retrieve the input CSV lines corresponding to the name provided by the argument.
      * @param fullName the full name of the person to retrieve the lines for.
      * @return All input CSV lines for the named person
      * @throws CSVException when there are no lines for the specified person.
      */
     public ImageAndPersonLine[] getImageLines(String fullName) throws CSVException {
-        if (fullNameHashMap.containsKey(fullName)) {
-            return fullNameHashMap.get(fullName);
+        if (fullNameMap.containsKey(fullName)) {
+            return fullNameMap.get(fullName);
         } else {
             throw new CSVException("The CSV file does not contain lines for " + fullName);
         }
     }
 
-       private void buildFullNameHashMap() {
-        fullNameHashMap = new HashMap<>();
+    private void buildFullNameHashMap() {
+        fullNameMap = new HashMap<>();
         boolean firstLine = true;
         for (CSVLine line : lines) {
             if (firstLine) {
@@ -314,52 +306,55 @@ public class InputCSV {
             }
             ImageAndPersonLine ipLine = (ImageAndPersonLine) line;
             String fullName = ipLine.getPersonFullName();
-            if (!fullNameHashMap.containsKey(fullName)) {
-                fullNameHashMap.put(fullName, new ImageAndPersonLine[] { ipLine });
+            if (!fullNameMap.containsKey(fullName)) {
+                fullNameMap.put(fullName, new ImageAndPersonLine[] {ipLine});
             } else {
-                ImageAndPersonLine[] existingLines = fullNameHashMap.get(fullName);
+                ImageAndPersonLine[] existingLines = fullNameMap.get(fullName);
                 ImageAndPersonLine[] newLines = new ImageAndPersonLine[existingLines.length + 1];
                 System.arraycopy(existingLines, 0, newLines, 0, existingLines.length);
                 newLines[existingLines.length] = ipLine;
-                fullNameHashMap.put(fullName, newLines);
+                fullNameMap.put(fullName, newLines);
             }
         }
     }
 
-        /**
+    /**
      * Sorts the full names in the CSV object according to the specified order.
      * @param order - the sort order. See the sortOrder enum for possible values.
      * This file is protected rather than private so that
      * it can called for testing purposes.
      */
-    protected void sortNames(sortOrder order) {
+    protected void sortNames(SortOrder order) throws IllegalArgumentException {
         switch (order) {
-            case ASIS:
+            case AsIs:
                 sortNamesAsIs();
                 break;
-            case ALPHABETICAL_BY_FULL_NAME:
+            case AlphabeticalByFullName:
                 sortNamesAlphabeticallyByFullName();
                 break;
-            case ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME:
+            case AlphabeticalByLastNameThenFirstName:
                 sortNamesAlphabeticallyByLastNamelFirstName();
                 break;
-            case ALPHABETICAL_BY_FULL_NAME_REVERSE:
+            case AlphabeticalByFullNameReverse:
                 sortNamesAlphabeticallyByFullNameReverse();
                 break;
-            case ALPHABETICAL_BY_LAST_NAME_THEN_FIRST_NAME_REVERSE:
+            case AlphabeticalByLastNameThenFirstNameReverse:
                 sortNamesAlphabeticallytByLastNamelFirstNameReverse();
                 break;
-        }       
+            default:
+                throw new IllegalArgumentException("Invalid sort order: " + order);
+        }
     }
 
     private void sortNamesAlphabeticallyByFullName() {
+        final int headerLine = 0;
         List<ImageAndPersonLine> entries = new ArrayList<ImageAndPersonLine>();
-        entries.add((ImageAndPersonLine)this.lines[0]);
-        String[] fullNames = fullNameKeys.toArray(new String[fullNameHashMap.size()]);
+        entries.add((ImageAndPersonLine) this.lines[headerLine]);
+        String[] fullNames = fullNameKeys.toArray(new String[fullNameMap.size()]);
         Arrays.sort(fullNames);
         sortedFullNames = new ArrayList<>(Arrays.asList(fullNames));
         for (String fName: fullNames) {
-            ImageAndPersonLine[] linesForName = fullNameHashMap.get(fName);
+            ImageAndPersonLine[] linesForName = fullNameMap.get(fName);
             for (ImageAndPersonLine line: linesForName) {
                 entries.add(line);
             }
@@ -368,13 +363,14 @@ public class InputCSV {
     }
 
     private void sortNamesAlphabeticallyByFullNameReverse() {
+        final int headerLine = 0;
         List<ImageAndPersonLine> entries = new ArrayList<ImageAndPersonLine>();
-        entries.add((ImageAndPersonLine)this.lines[0]);
-        String[] fullNames = fullNameKeys.toArray(new String[fullNameHashMap.size()]);
+        entries.add((ImageAndPersonLine) this.lines[headerLine]);
+        String[] fullNames = fullNameKeys.toArray(new String[fullNameMap.size()]);
         Arrays.sort(fullNames, Collections.reverseOrder());
         sortedFullNames = new ArrayList<>(Arrays.asList(fullNames));
         for (String fName: fullNames) {
-            ImageAndPersonLine[] linesForName = fullNameHashMap.get(fName);
+            ImageAndPersonLine[] linesForName = fullNameMap.get(fName);
             for (ImageAndPersonLine line: linesForName) {
                 entries.add(line);
             }
@@ -382,10 +378,11 @@ public class InputCSV {
         this.lines = entries.toArray(new CSVLine[entries.size()]);
     }
 
-private void sortNamesAlphabeticallyByLastNamelFirstName() {
+    private void sortNamesAlphabeticallyByLastNamelFirstName() {
+        final int headerLine = 0;
         List<ImageAndPersonLine> entries = new ArrayList<ImageAndPersonLine>();
-        entries.add((ImageAndPersonLine)this.lines[0]);
-        String[] fullNames = fullNameKeys.toArray(new String[fullNameHashMap.size()]);
+        entries.add((ImageAndPersonLine) this.lines[headerLine]);
+        String[] fullNames = fullNameKeys.toArray(new String[fullNameMap.size()]);
         Arrays.sort(fullNames, new Comparator<String>() {
             @Override
             public int compare(String name1, String name2) {
@@ -405,7 +402,7 @@ private void sortNamesAlphabeticallyByLastNamelFirstName() {
         });
         sortedFullNames = new ArrayList<>(Arrays.asList(fullNames));
         for (String fName: fullNames) {
-            ImageAndPersonLine[] linesForName = fullNameHashMap.get(fName);
+            ImageAndPersonLine[] linesForName = fullNameMap.get(fName);
             for (ImageAndPersonLine line: linesForName) {
                 entries.add(line);
             }
@@ -415,8 +412,8 @@ private void sortNamesAlphabeticallyByLastNamelFirstName() {
 
     private void sortNamesAlphabeticallytByLastNamelFirstNameReverse() {
         List<ImageAndPersonLine> entries = new ArrayList<ImageAndPersonLine>();
-        entries.add((ImageAndPersonLine)this.lines[0]);
-        String[] fullNames = fullNameKeys.toArray(new String[fullNameHashMap.size()]);
+        entries.add((ImageAndPersonLine) this.lines[0]);
+        String[] fullNames = fullNameKeys.toArray(new String[fullNameMap.size()]);
         Arrays.sort(fullNames, new Comparator<String>() {
             @Override
             public int compare(String name1, String name2) {
@@ -436,7 +433,7 @@ private void sortNamesAlphabeticallyByLastNamelFirstName() {
         });
         sortedFullNames = new ArrayList<>(Arrays.asList(fullNames));
         for (String fName: fullNames) {
-            ImageAndPersonLine[] linesForName = fullNameHashMap.get(fName);
+            ImageAndPersonLine[] linesForName = fullNameMap.get(fName);
             for (ImageAndPersonLine line: linesForName) {
                 entries.add(line);
             }
@@ -444,19 +441,20 @@ private void sortNamesAlphabeticallyByLastNamelFirstName() {
         this.lines = entries.toArray(new CSVLine[entries.size()]);
     }
 
-   // This actually sorts the names so that all entries for a given full name are
+    // This actually sorts the names so that all entries for a given full name are
     // together, but the order of the names is not changed.
     private void sortNamesAsIs() {
+        final int headerLine = 0;
         List<ImageAndPersonLine> entries = new ArrayList<ImageAndPersonLine>();
-        entries.add((ImageAndPersonLine)this.lines[0]);
+        entries.add((ImageAndPersonLine) this.lines[headerLine]);
         sortedFullNames = new ArrayList<>();
         for (int i = 1; i < lines.length; i++) {
-            String fullName = ((ImageAndPersonLine)lines[i]).getPersonFullName();
+            String fullName = ((ImageAndPersonLine) lines[i]).getPersonFullName();
             if (sortedFullNames.contains(fullName)) {
                 continue;
             }
             sortedFullNames.add(fullName);
-            ImageAndPersonLine[] ipLines = fullNameHashMap.get(fullName);
+            ImageAndPersonLine[] ipLines = fullNameMap.get(fullName);
             if (ipLines != null) {
                 for (ImageAndPersonLine ipLine: ipLines) {
                     entries.add(ipLine);
@@ -486,20 +484,31 @@ private void sortNamesAlphabeticallyByLastNamelFirstName() {
         return missingImages;
     }
 
+    /**
+     * validateCSVFile validates the contents of the InputCSV file.
+     * @return
+     * @throws CSVException
+     */
     protected Exception validateCSVFile() throws CSVException {
+        final int headerLineSize = 5;
+        final int fileNameLine = 0;
+        final int titleLine = 1;
+        final int fullNameLine = 2;
+        final int firstNameLine = 3;
+        final int lastNameLine = 4;
         if (lines.length == 0) {
             throw new CSVException("No data found in CSV file " + getFileName());
         }
         // validate header line
         CSVLine headerLine = lines[0];
-        if (headerLine.length() != 5) {
+        if (headerLine.length() != headerLineSize) {
             throw new CSVException("Invalid header found in CSV file " + getFileName());
         }
-        if (!headerLine.field(0).equalsIgnoreCase("Filename") ||
-            !headerLine.field(1).equalsIgnoreCase("Title") ||
-            !headerLine.field(2).equalsIgnoreCase("Full Name") ||
-            !headerLine.field(3).equalsIgnoreCase("First Name") ||
-            !headerLine.field(4).equalsIgnoreCase("Last Name")) {
+        if (!headerLine.field(fileNameLine).equalsIgnoreCase("Filename")
+            || !headerLine.field(titleLine).equalsIgnoreCase("Title")
+            || headerLine.field(fullNameLine).equalsIgnoreCase("Full Name")
+            || !headerLine.field(firstNameLine).equalsIgnoreCase("First Name")
+            || !headerLine.field(lastNameLine).equalsIgnoreCase("Last Name")) {
             throw new CSVException("Invalid header found in CSV file " + getFileName());
         }
         // check for missing images

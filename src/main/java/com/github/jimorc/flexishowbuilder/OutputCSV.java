@@ -13,7 +13,7 @@ public class OutputCSV {
     public OutputCSV() {
         lines = new CSVLine[0];
     }
-    
+
     /**
      * Appends a CSVLine from the original InputCSV object or an ImageLine for a generated
      * image file.

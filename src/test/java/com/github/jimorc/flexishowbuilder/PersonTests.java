@@ -1,8 +1,12 @@
 package com.github.jimorc.flexishowbuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * PersonTests contains tests for the Person class.
+ */
 public class PersonTests {
     @Test
     void testPerson() {
