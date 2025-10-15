@@ -4,8 +4,9 @@
   <artifactId>flexishowbuilder</artifactId>
   <version>0.1-alpha</version>
   <properties>
-    <maven.compiler.source>25</maven.compiler.source>
-    <maven.compiler.target>25</maven.compiler.target>
+  <java.version>25</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>6.0.0</junit.version>
     <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
@@ -34,19 +35,18 @@
           <version>4.0.18</version>
           <scope>test</scope>
       </dependency>
-
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>25</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-swing</artifactId>
-        <version>25-ea+23</version>
-    </dependency>
       <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-controls</artifactId>
+          <version>${java.version}</version>
+      </dependency>
+     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
+      <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-swing</artifactId>
+          <version>${java.version}</version>
+      </dependency>
+     <dependency>
           <groupId>org.testfx</groupId>
           <artifactId>testfx-junit5</artifactId>
           <version>4.0.18</version>
@@ -106,26 +106,6 @@
               </goals>
             </execution>
           </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.4.2</version>
-          <configuration>
-            <archive>
-              <index>true</index>
-              <manifest>
-                <mainClass>com.github.jimorc.flexishowbuilder.App</mainClass>
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-              </manifest>
-              <manifestEntries>
-                <mode>development</mode>
-                <url>${project.url}</url>
-                <key>value</key>
-              </manifestEntries>
-            </archive>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
