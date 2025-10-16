@@ -25,17 +25,14 @@ public class ImageAndPersonLine extends CSVLine {
      * @throws ArrayIndexOutOfBoundsException if the line does not contain at least
      * five fields.
      */
-    public ImageAndPersonLine(String line) {
+    public ImageAndPersonLine(String line) throws ArrayIndexOutOfBoundsException {
         super();
         int first = line.indexOf(',');
         int fourth = line.lastIndexOf(',');
         int third = line.lastIndexOf(',', fourth - 1);
         int second = line.lastIndexOf(',', third - 1);
         String[] fields = new String[personLastNamePosition + 1];
-        if (first == -1 || second == -1 || third == -1 || fourth == -1) {
-            throw new ArrayIndexOutOfBoundsException("Line does not contain at least five fields: " + line);
-        }
-        if (first == second || second == third || third == fourth) {
+        if (!validateFieldCount(first, second, third, fourth)) {
             throw new ArrayIndexOutOfBoundsException("Line does not contain at least five fields: " + line);
         }
         fields[imageFilePosition] = line.substring(0, first);
@@ -96,5 +93,12 @@ public class ImageAndPersonLine extends CSVLine {
     public String toString() {
         return getImageFileName() + "," + getImageTitle() + "," + getPersonFullName() + ","
             + getPersonFirstName() + "," + getPersonLastName();
+    }
+
+    private boolean validateFieldCount(int first, int second, int third, int fourth) {
+        if (first == -1 || second == -1 || third == -1 || fourth == -1) {
+            return false;
+        }
+        return !(first == second) && !(second == third) && !(third == fourth);
     }
 }
