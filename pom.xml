@@ -77,7 +77,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>${java.version}</release>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         <plugin>
@@ -211,6 +212,26 @@
             </execution>
           </executions>
         </plugin>
+<plugin>
+    <groupId>org.panteleyev</groupId>
+    <artifactId>jpackage-maven-plugin</artifactId>
+    <version>1.7.0</version>
+    <configuration>
+      <jpackage.dryRun>true</jpackage.dryRun>
+      <name>flexishowbuilder</name>
+      <type>DEB</type>
+      <input>target</input>
+      <mainJar>${project.artifactId}-${project.version}-jar-with-dependencies.jar</mainJar>
+      <destination>target/dist</destination>
+    </configuration>
+    <executions>
+      <execution>
+        <goals>
+          <goal>jpackage</goal>
+        </goals>
+      </execution>
+    </executions>
+   </plugin>
         </plugins>
     </build>
 </project>
