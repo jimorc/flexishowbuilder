@@ -69,6 +69,11 @@ java -version
 mvn -version
 ```
 
+#### Install Other Tools
+```bash
+sudo apt install dpkg-dev
+```
+
 #### Download JavaFX
 Follow the JavaFX Getting Started instructions.
 Add the following to ~/.bashrc
