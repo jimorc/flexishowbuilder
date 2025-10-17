@@ -8,9 +8,27 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
+      <junit.version>6.0.0</junit.version>
+      <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+      <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+      <checkstyle.version>8.45.1</checkstyle.version>
+      <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
+      <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+      <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
+      <!-- JaCoCo thresholds. Increase gradually as you add tests. -->
+      <jacoco.unit-tests.limit.instruction-ratio>0%</jacoco.unit-tests.limit.instruction-ratio>
+      <jacoco.unit-tests.limit.branch-ratio>0%</jacoco.unit-tests.limit.branch-ratio>
+      <jacoco.unit-tests.limit.class-complexity>100</jacoco.unit-tests.limit.class-complexity>
+      <jacoco.unit-tests.limit.method-complexity>10</jacoco.unit-tests.limit.method-complexity>
     </properties>
     <dependencies>
         <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>13</version>
@@ -20,6 +38,12 @@
           <groupId>org.openjfx</groupId>
           <artifactId>javafx-swing</artifactId>
           <version>${java.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.testfx</groupId>
+          <artifactId>testfx-junit5</artifactId>
+          <version>4.0.18</version>
+          <scope>test</scope>
       </dependency>
     </dependencies>
     <build>
@@ -70,6 +94,157 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${maven-enforcer-plugin.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <requireMavenVersion>
+                    <version>3.6.3</version>
+                  </requireMavenVersion>
+                </rules>
+                <fail>true</fail>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>            
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${maven-checkstyle-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${checkstyle.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.github.ngeor</groupId>
+              <artifactId>checkstyle-rules</artifactId>
+              <version>4.9.3</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <configLocation>com/github/ngeor/checkstyle.xml</configLocation>
+            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+            <skip>${skipTests}</skip>
+          </configuration>
+          <executions>
+            <execution>
+              <id>checkstyle</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+              <environmentVariables>
+                  <PATH>${basedir}\\..;${java.library.path}</PATH>
+              </environmentVariables>
+              <excludes>
+                  <exclude>**/TitleImageTests.java</exclude>
+              </excludes>
+            </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco-maven-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>pre-unit-test</id>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>post-unit-test</id>
+              <phase>test</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>check-unit-test</id>
+              <phase>test</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+                <rules>
+                  <rule>
+                    <element>BUNDLE</element>
+                    <limits>
+                      <limit>
+                        <counter>INSTRUCTION</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>${jacoco.unit-tests.limit.instruction-ratio}</minimum>
+                      </limit>
+                      <limit>
+                        <counter>BRANCH</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>${jacoco.unit-tests.limit.branch-ratio}</minimum>
+                      </limit>
+                    </limits>
+                  </rule>
+                  <rule>
+                    <element>CLASS</element>
+                    <limits>
+                      <limit>
+                        <counter>COMPLEXITY</counter>
+                        <value>TOTALCOUNT</value>
+                        <maximum>${jacoco.unit-tests.limit.class-complexity}</maximum>
+                      </limit>
+                    </limits>
+                  </rule>
+                  <rule>
+                    <element>METHOD</element>
+                    <limits>
+                      <limit>
+                        <counter>COMPLEXITY</counter>
+                        <value>TOTALCOUNT</value>
+                        <maximum>${jacoco.unit-tests.limit.method-complexity}</maximum>
+                      </limit>
+                    </limits>
+                  </rule>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+<plugin>
+    <groupId>org.panteleyev</groupId>
+    <artifactId>jpackage-maven-plugin</artifactId>
+    <version>1.7.0</version>
+    <configuration>
+      <jpackage.dryRun>true</jpackage.dryRun>
+      <name>flexishowbuilder</name>
+      <type>DEB</type>
+      <input>target</input>
+      <mainJar>${project.artifactId}-${project.version}-jar-with-dependencies.jar</mainJar>
+      <destination>target/dist</destination>
+    </configuration>
+    <executions>
+      <execution>
+        <goals>
+          <goal>jpackage</goal>
+        </goals>
+      </execution>
+    </executions>
+   </plugin>
+         </plugins>
     </build>
 </project>
