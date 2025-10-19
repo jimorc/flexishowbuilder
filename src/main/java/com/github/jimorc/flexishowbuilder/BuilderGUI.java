@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * BuilderGUI is the main App.
@@ -30,8 +29,8 @@ public class BuilderGUI extends Application {
             if (data != null) {
                 OutputCSV out = generateOutputCSV(csv, data);
                 System.out.println(out);
-                Workbook workbook = XLS.convertCSVToXLS(out);
-                XLS.writeXLSFile(workbook, "/home/jim/output.xls");
+                XLSWorkbook workbook = new XLSWorkbook(out);
+                workbook.writeToFile("/home/jim/output.xls");
             }
         }
         System.exit(0);

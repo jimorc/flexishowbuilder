@@ -9,18 +9,17 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
- * XLS is final class that contains a single method to create an XLS file from am OutptCSV object.
+ * XLSWorkbook generates an Apache POI workbook that can then be saved as an XLS file.
  */
-public final class XLS {
-    private XLS() {}
+public final class XLSWorkbook {
+    private Workbook workbook;
 
     /**
-     * createXLS creates an XLS file from the input CSV file.
-     * @param csv OutputCSV object to create XLS file from.
-     * @throws Exception because this method is not yet implemented.
-     */
-    public static Workbook convertCSVToXLS(final OutputCSV csv) throws Exception {
-        Workbook workbook = new HSSFWorkbook();
+     * Constructor builds a POI workbook from the input CSV object.
+     * @param csv the OutputCSV object used to create the workbook content.
+     * */
+    public XLSWorkbook(final OutputCSV csv) {
+        workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet("CSVToXLS");
         CSVLine[] lines = csv.getLines();
         int rowIndex = 0;
@@ -48,16 +47,14 @@ public final class XLS {
                     break;
             }
         }
-        return workbook;
     }
 
     /**
      * Write the workbook to the specified XLS file.
-     * @param workbook the POI workbook containing the XLS data.
      * @param fileName the file to write the XLS data to.
      * @throws IOException thrown when the file write fails.
      */
-    public static void writeXLSFile(Workbook workbook, String fileName) throws IOException {
+    public void writeToFile(String fileName) throws IOException {
         FileOutputStream fos = new FileOutputStream(fileName);
         workbook.write(fos);
         fos.close();
