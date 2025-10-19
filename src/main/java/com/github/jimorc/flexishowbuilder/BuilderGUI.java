@@ -30,7 +30,7 @@ public class BuilderGUI extends Application {
                 OutputCSV out = generateOutputCSV(csv, data);
                 System.out.println(out);
                 XLSWorkbook workbook = new XLSWorkbook(out);
-                workbook.writeToFile("/home/jim/output.xls");
+                workbook.writeToFile(csv.getFileDir() + "/output.xls");
             }
         }
         System.exit(0);
