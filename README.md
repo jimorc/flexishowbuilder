@@ -47,20 +47,12 @@ You might also want:
 * Print - from PD Consulting
 
 #### Install Java
-I use openjdk from the snap store. This is newer than the version in the Linux Mint (actually
-Ubuntu) repository.
+I use openjdk from the repository.
 To install openjdk from the snap store, enter the following in a terminal:
 ```bash
-sudo snap install openjdk
-sudo snap install strictly-maven
+sudo snap apt install openjdk
+sudo snap apt maven
 nano ~/.bashrc
-```
-
-Add the following lines to .bashrc:
-```
-# Java aliases
-alias java=openjdk.java
-alias mvn=/snap/bin/strictly-maven
 ```
 
 Test that everything is correct:
@@ -71,7 +63,7 @@ mvn -version
 
 #### Install Other Tools
 ```bash
-sudo apt install dpkg-dev
+sudo apt install rpm
 ```
 
 #### Download JavaFX
@@ -94,12 +86,14 @@ In VSCode press Ctrl-F5.
 To build flexishowbuilder at the command line, open a terminal and enter:
 ```bash
 cd <your java folder>/flexishowbuilder
-mvn clean install
+mvn clean
 mvn checkstyle:check
 mvn package
+mvn jpackage:jpackage
 ```
 The generated jar file is located at `<your java folder>/flexishowbuilder/target/flexishowbuilder-<version>.jar` where `<version>` is similar to `0.1-alpha`.
-
+The generated deb package is located at `<your java folder>/flexishowbuilder/target/dist/flexishowbuilder-<version>_amd64.deb` where `<version>` is similar to `0.1-alpha`.
+The generated rpm file is located at `<your java folder>/flexishowbuilder/target/rpm/flexishowbuilder/RPMS/noarch/flexishowbuilder-<version>.1.njoarch.rpm' where <version>` is similar to `0.1-alpha`.
 
 ### Windows
 To be added
