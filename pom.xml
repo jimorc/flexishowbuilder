@@ -263,7 +263,8 @@
         </mappings>
         <!-- Define preinstall, postinstall, preremove, postremove scripts if needed -->
     </configuration>
-</plugin><plugin>
+</plugin>
+<plugin>
     <groupId>org.panteleyev</groupId>
     <artifactId>jpackage-maven-plugin</artifactId>
     <version>1.7.0</version>
@@ -283,7 +284,28 @@
         </goals>
       </execution>
     </executions>
+  </plugin>
+  <plugin>
+    <groupId>org.panteleyev</groupId>
+    <artifactId>jpackage-maven-plugin</artifactId>
+    <version>1.7.0</version>
+    <configuration>
+      <linuxShortcut>true</linuxShortcut>
+      <linuxMenuGroup>Office</linuxMenuGroup>
+      <name>flexishowbuilder</name>
+      <type>DEB</type>
+      <input>target</input>
+      <mainJar>${project.artifactId}-${project.version}-jar-with-dependencies.jar</mainJar>
+      <destination>target/dist</destination>
+    </configuration>
+    <executions>
+      <execution>
+        <goals>
+          <goal>jpackage</goal>
+        </goals>
+      </execution>
+    </executions>
    </plugin>
-         </plugins>
-    </build>
+  </plugins>
+  </build>
 </project>
