@@ -506,7 +506,7 @@ public final class InputCSV {
         }
         if (!headerLine.field(fileNameLine).equalsIgnoreCase("Filename")
             || !headerLine.field(titleLine).equalsIgnoreCase("Title")
-            || headerLine.field(fullNameLine).equalsIgnoreCase("Full Name")
+            || !headerLine.field(fullNameLine).equalsIgnoreCase("Full Name")
             || !headerLine.field(firstNameLine).equalsIgnoreCase("First Name")
             || !headerLine.field(lastNameLine).equalsIgnoreCase("Last Name")) {
             throw new CSVException("Invalid header found in CSV file " + getFileName());

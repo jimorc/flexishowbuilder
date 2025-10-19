@@ -29,6 +29,14 @@ public class OutputCSV {
     }
 
     /**
+     * Retrieves the CSVLine objects in this object.
+     * @return the CSVLine objects
+     */
+    public CSVLine[] getLines() {
+        return lines;
+    }
+
+    /**
      * Returns a string representation of the OutputCSV object.
      * @return string representation of the object.
      */

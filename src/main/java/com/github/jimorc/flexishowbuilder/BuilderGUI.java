@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * BuilderGUI is the main App.
@@ -13,10 +14,8 @@ import javafx.stage.Stage;
 public class BuilderGUI extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        XLSApp xls = null;
         InputCSV csv = null;
         try {
-            xls = XLSAppFactory.getXLSApp();
             csv = new InputCSV.Builder().build();
             if (csv != null) {
                 csv.validateCSVFile();
@@ -26,15 +25,13 @@ public class BuilderGUI extends Application {
         } catch (IOException ioe) {
             handleIOException(ioe, csv); // no return
         }
-        /*        catch (Exception e) {   // catch any other exceptions
-            handleException(e, csv); // no return
-        }*/
         if (csv != null) {
             TitleAndSortData data = new TitleAndSortDialog().showAndWait().orElse(null);
             if (data != null) {
                 OutputCSV out = generateOutputCSV(csv, data);
                 System.out.println(out);
-                xls.createXLS(out);
+                Workbook workbook = XLS.convertCSVToXLS(out);
+                XLS.writeXLSFile(workbook, "/home/jim/output.xls");
             }
         }
         System.exit(0);
