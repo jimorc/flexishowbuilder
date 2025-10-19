@@ -51,7 +51,6 @@
     <artifactId>poi</artifactId>
     <version>5.4.1</version>
 </dependency>
-
 </dependencies>
     <build>
         <plugins>
@@ -233,14 +232,46 @@
           </executions>
         </plugin>
 <plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>rpm-maven-plugin</artifactId>
+    <version>2.2.0</version> <!-- Use the latest version -->
+    <executions>
+        <execution>
+            <goals>
+                <goal>rpm</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <name>flexishowbuilder</name>
+        <version>0.1.0</version>
+        <group>Office</group>
+        <autoRequires>false</autoRequires>
+        <mappings>
+            <mapping>
+                <directory>/opt/${artifactid}</directory>
+                <filemode>755</filemode>
+                <username>root</username>
+                <groupname>root</groupname>
+                <sources>
+                    <source>
+                        <location>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</location>
+                    </source>
+                </sources>
+            </mapping>
+            <!-- Add more mappings for configuration files, scripts, etc. -->
+        </mappings>
+        <!-- Define preinstall, postinstall, preremove, postremove scripts if needed -->
+    </configuration>
+</plugin><plugin>
     <groupId>org.panteleyev</groupId>
     <artifactId>jpackage-maven-plugin</artifactId>
     <version>1.7.0</version>
     <configuration>
-    <linuxShortcut>true</linuxShortcut>
+      <linuxShortcut>true</linuxShortcut>
       <linuxMenuGroup>Office</linuxMenuGroup>
       <name>flexishowbuilder</name>
-      <type>DEB</type>
+      <type>deb</type>
       <input>target</input>
       <mainJar>${project.artifactId}-${project.version}-jar-with-dependencies.jar</mainJar>
       <destination>target/dist</destination>
