@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -182,6 +185,14 @@ public final class InputCSV {
      * @return The name of the selected CSV file, or null if no file was selected.
      */
     private static File getCSVFile() throws CSVException {
+        if (System.getProperty("os.name").contains("Mac")) {
+            Alert alert = new Alert(null);
+            alert.setAlertType(AlertType.INFORMATION);
+            alert.setTitle("You need to select the input CSV file");
+            alert.setHeaderText("A file open dialog is about to be displayed.");
+            alert.setContentText("Click OK, then use the file open dialog to select the input CSV file.");
+            alert.showAndWait();
+        }
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select CSV File");
         fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getHomeDirectory());
