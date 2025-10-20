@@ -1,14 +1,14 @@
 # flexishowbuilder
-flexishowbuilder is a program that takes a CSV file containing image file and owner names 
-downloaded from my photography club website, and builds title images and an Excel spreadsheet 
-(XLS) file for input into flexishow to display the slideshow. These slideshows are used to 
-display images for competitions, non-competition events which we call Theme Nights, and in 
+flexishowbuilder is a program that takes a CSV file containing image file and owner names
+downloaded from my photography club website, and builds title images and an Excel spreadsheet
+(XLS) file for input into flexishow to display the slideshow. These slideshows are used to
+display images for competitions, non-competition events which we call Theme Nights, and in
 special interest groups.
 
 ## License
-The license is provided in a file called 
-LICENSE. At the moment, this is the BSD 
-3-Clause License, but it may be necessary to 
+The license is provided in a file called
+LICENSE. At the moment, this is the BSD
+3-Clause License, but it may be necessary to
 modify this to a more restrictive license depending on the licensing of the various libraries
 that this project uses.
 
@@ -98,5 +98,82 @@ The generated rpm file is located at `<your java folder>/flexishowbuilder/target
 ### Windows
 To be added
 
-### MacOS
-To be added
+### macOS
+#### Install Building Tools
+1. XCode is available on the Mac App Store.
+2. Homebrew is used to download many other required building tools. Information on Homebrew and
+how to install it are available on the [Homebrew home page](https://brew.sh).
+3. Java JDK
+Open a terminal and enter:
+```zsh
+java --version
+```
+If the version is less than 25:
+```zsh
+brew install openjdk
+sudo ln -sfn /opt/homebrew/opt/openjdk.jdk /Library/Java/JavaVirtualMachines
+```
+On Intel Macs, you must replace `/opt/homebrew` with `/usr/local/opt`. Check for the exact location.
+
+Open ~/.zshrxc (or ~/.bashrc if you use bash instead of zsh) in an editor and enter:
+```
+export JAVA_HOME=$(usr/libexec.java_home)
+```
+and in the terminal:
+```zsh
+source ~/.zshrc
+java --version
+```
+The version information should now indicate openjdk and a version of 25 or greater.
+
+4. Install maven
+```zsh
+mvn --version
+```
+If mvn is not found, then enter:
+```zsh
+brew install maven
+mvn --version
+```
+5. Install the JavaFX SDK. Instructions for installing the JavaFX SDK are available from
+[Gluon](https://gluonhq.com/products/javafx). Extract the downloaded zip file
+and place it somewhere permanent. A good location would be in your Java projects
+folder.
+
+Add the following to ~/.zshrc:
+```
+export PATH_TO_JAVAFX="/path/to/javafx-sdk-25/lib"
+```
+Replace `25` with the version that you downloaded.
+Again, in the terminal:
+```zshrc
+source ~/.zshrc
+
+6. Install git
+In a terminal, enter:
+```zsh
+brew install git
+git --version
+```
+
+7. Clone flexishowbuilder.
+```zsh
+cd <your-projects-directory>
+git clone https://github.com/jimorc/flexishowbuilder.git
+```
+
+8. Install the IDE of your choice. Not a requirement, but it helps speed development.
+
+#### Build flexishowbuilder
+```zsh
+cd <your-projects-folder>/flexishowbuilder
+mvn clean
+mvn package
+mvn jpackage/jpackage
+```
+These steps produce the following artifacts:
+- flexishowbuilder/target/flexishowbuilder-<version>.jar
+- flexishowbuilder/target/flexishowbuilder-<version>-jar-with-dependencies.jar
+- flexishowbuilder/target/dist/flexishowbuilder-<version>.dmg
+
+
