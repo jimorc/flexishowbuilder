@@ -3,11 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.jimorc.flexishowbuilder</groupId>
     <artifactId>flexishowbuilder</artifactId>
-    <version>0.1.0-alpha</version>
+    <version>1.0.0</version>
     <properties>
+        <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
       <junit.version>6.0.0</junit.version>
       <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
       <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
@@ -31,7 +32,7 @@
     <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>13</version>
+            <version>${java.version}</version>
         </dependency>
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
       <dependency>
@@ -53,8 +54,8 @@
 </dependency>
 </dependencies>
     <build>
-        <plugins>
-     <plugin>
+      <plugins>
+        <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.7.1</version>
         <configuration>
@@ -82,7 +83,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>25</release>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -119,7 +120,7 @@
               </configuration>
             </execution>
           </executions>
-        </plugin>            
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -231,78 +232,36 @@
             </execution>
           </executions>
         </plugin>
-<plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>rpm-maven-plugin</artifactId>
-    <version>2.2.0</version> <!-- Use the latest version -->
-    <executions>
-        <execution>
-            <goals>
-                <goal>rpm</goal>
-            </goals>
-        </execution>
-    </executions>
-    <configuration>
-        <name>flexishowbuilder</name>
-        <version>0.1.0</version>
-        <group>Office</group>
-        <autoRequires>false</autoRequires>
-        <mappings>
-            <mapping>
-                <directory>/opt/${artifactid}</directory>
-                <filemode>755</filemode>
-                <username>root</username>
-                <groupname>root</groupname>
-                <sources>
-                    <source>
-                        <location>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</location>
-                    </source>
-                </sources>
-            </mapping>
-            <!-- Add more mappings for configuration files, scripts, etc. -->
-        </mappings>
-        <!-- Define preinstall, postinstall, preremove, postremove scripts if needed -->
-    </configuration>
-</plugin>
-<plugin>
-    <groupId>org.panteleyev</groupId>
-    <artifactId>jpackage-maven-plugin</artifactId>
-    <version>1.7.0</version>
-    <configuration>
-      <linuxShortcut>true</linuxShortcut>
-      <linuxMenuGroup>Office</linuxMenuGroup>
-      <name>flexishowbuilder</name>
-      <type>deb</type>
-      <input>target</input>
-      <mainJar>${project.artifactId}-${project.version}-jar-with-dependencies.jar</mainJar>
-      <destination>target/dist</destination>
-    </configuration>
-    <executions>
-      <execution>
-        <goals>
-          <goal>jpackage</goal>
-        </goals>
-      </execution>
-    </executions>
-  </plugin>
   <plugin>
     <groupId>org.panteleyev</groupId>
     <artifactId>jpackage-maven-plugin</artifactId>
     <version>1.7.0</version>
     <configuration>
-      <linuxShortcut>true</linuxShortcut>
-      <linuxMenuGroup>Office</linuxMenuGroup>
       <name>flexishowbuilder</name>
-      <type>DEB</type>
       <input>target</input>
       <mainJar>${project.artifactId}-${project.version}-jar-with-dependencies.jar</mainJar>
       <destination>target/dist</destination>
     </configuration>
     <executions>
       <execution>
+      <id>deb</id>
         <goals>
           <goal>jpackage</goal>
         </goals>
+        <configuration>
+          <type>DEB</type>
+          <linuxShortcut>true</linuxShortcut>
+          <linuxMenuGroup>Other</linuxMenuGroup>
+        </configuration>
+      </execution>
+      <execution>
+      <id>mac</id>
+        <goals>
+          <goal>jpackage</goal>
+        </goals>
+        <configuration>
+          <type>DMG</type>
+        </configuration>
       </execution>
     </executions>
    </plugin>
