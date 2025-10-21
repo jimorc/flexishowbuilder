@@ -1,7 +1,10 @@
 package com.github.jimorc.flexishowbuilder;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,6 +33,65 @@ import static org.junit.jupiter.api.Assertions.fail;
  * InputCSVTests contains tests of methods in InputCSV class.
  */
 public class InputCSVTests {
+    @Test
+    void testConstructor() {
+        File f = new File("testing/data/sort.csv");
+        try {
+            InputCSV iCSV = new InputCSV(f);
+            assertNotNull(iCSV);
+        } catch (CSVException ce) {
+            fail(ce.getMessage());
+        } catch (IOException ioe) {
+            fail(ioe.getMessage());
+        }
+    }
+
+    @Test
+    void testConstructorNonexistentFile() {
+        File f = new File("testing/data/notafile.csv");
+        assertThrows(CSVException.class, () -> new InputCSV(f));
+    }
+
+    @Test
+    void testConstructorNoHeaderInFile() {
+        File f = new File("testing/data/zeroheaderlength.csv");
+        assertThrows(CSVException.class, () -> new InputCSV(f));
+    }
+
+    @Test
+    void testConstructorInvalidLineInFile() {
+        File f = new File("testing/data/invalidline.csv");
+        assertThrows(CSVException.class, () -> new InputCSV(f));
+    }
+
+    @Test
+    void testConstructorNotAFile() {
+        File f = new File("testing/data");
+        assertThrows(CSVException.class, () -> new InputCSV(f));
+    }
+
+    @Test
+    void testConstructorIOError() {
+        Path path = Path.of("testing/data/temp.csv");
+        File f = new File("testing/data/temp.csv");
+        try {
+            Files.writeString(path, "A bunch of text");
+        } catch (IOException ioe) {
+            fail(ioe.getMessage());
+        }
+        try {
+            f.setReadable(false);
+            new InputCSV(f);
+        } catch (CSVException ce) {
+            f.delete();
+            fail("Threw CSVException, not IOException");
+        } catch (IOException ioe) {
+            f.delete();
+            return;
+        }
+        fail("Did not throw IOException");
+    }
+
     @Test
     void testBuildFileExists() {
         InputCSV csv = null;

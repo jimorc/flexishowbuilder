@@ -44,7 +44,11 @@ public class BuilderGUI extends Application {
         launch(args);
     }
 
-    private void handleCSVException(CSVException csve) {  // no return
+    /**
+     * handleCSVException displays an error alert.
+     * @param csve the CSVException to report.
+     */
+    protected static void handleCSVException(CSVException csve) {  // no return
         Alert alert = new Alert(null);
         String msg = csve.getMessage();
         alert.setAlertType(AlertType.ERROR);
@@ -55,7 +59,12 @@ public class BuilderGUI extends Application {
         System.exit(1);
     }
 
-    private void handleIOException(IOException ioe, InputCSV csv) {
+    /**
+     * handleIOException displays an error alert.
+     * @param ioe the IOException to report.
+     * @param csv the InputCSV object that the exception occurred on.
+     */
+    protected static void handleIOException(IOException ioe, InputCSV csv) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("CSV File Error");
         alert.setHeaderText("IOException attempting to read CSV file: "

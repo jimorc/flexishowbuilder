@@ -49,6 +49,29 @@ public final class InputCSV {
         this.csvFile = builder.csvFile;
     }
 
+    /** This constructor parses the specified CSV file and builds an InputCSV
+     * object from the file's contents.
+     * @param csvF is the File containing the CSV data to parse.
+     * @throws CSVException if csvF is null.
+     * @throws CSVException if csvF is not a file (i.e directory, link, etc.)
+     * @throws CSVException if csvF contains an invalid header line.
+     * @throws CSVException if csvF contains an invalid line.
+     * @throws IOException if the file cannot be read.
+     */
+    public InputCSV(File csvF) throws CSVException, IOException {
+        csvFile = csvF;
+        if (csvF == null) {
+            throw new CSVException("Trying to read a null CSVFile");
+        }
+        if (!csvF.isFile()) {
+            throw new CSVException("Trying to read " + csvF.getAbsolutePath()
+                + " which is not a file.");
+        }
+        loadCSVFile();
+        buildFullNameHashMap();
+        fullNameKeys = fullNameMap.keySet();
+    }
+
     /**
      * The Builder class is used to create a CSV object.
      */

@@ -1,10 +1,15 @@
 package com.github.jimorc.flexishowbuilder;
 
+import java.io.File;
+import java.io.IOException;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javax.swing.filechooser.FileSystemView;
 
 /**
  * StartStage is the first Stage that is displayed.
@@ -13,6 +18,7 @@ public class StartStage {
     private final int stageWidth = 1080;
     private final int stageHeight = 800;
     private final int spacing = 100;
+    private InputCSV iCSV;
     private Stage stage;
 
     /**
@@ -21,7 +27,12 @@ public class StartStage {
     public StartStage() {
         Button loadCSV = new Button("Load CSV");
         loadCSV.setOnAction(_ -> {
-            System.out.println("loadCSV clicked!");
+            loadCSVFile();
+            try {
+                iCSV.validateCSVFile();
+            } catch (CSVException ce) {
+                BuilderGUI.handleCSVException(ce);
+            }
         });
         Button exitButton = new Button("Exit");
         exitButton.setOnAction(_ -> {
@@ -42,5 +53,24 @@ public class StartStage {
      */
     public void showAndWait() {
         stage.showAndWait();
+    }
+
+    private void loadCSVFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select CSV File");
+        fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getHomeDirectory());
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV Files", "*.csv"));
+        File csvFile = fileChooser.showOpenDialog(null);
+
+        if (csvFile != null) {
+            try {
+                iCSV = new InputCSV(csvFile);
+            } catch (CSVException e) {
+                BuilderGUI.handleCSVException(e);
+            } catch (IOException ioe) {
+                BuilderGUI.handleIOException(ioe, iCSV);
+            }
+        }
+
     }
 }
