@@ -80,6 +80,7 @@ public class InputCSVTests {
             fail(ioe.getMessage());
         }
         try {
+            // make it so an IOException will be thrown when trying to read the file.
             f.setReadable(false);
             new InputCSV(f);
         } catch (CSVException ce) {
