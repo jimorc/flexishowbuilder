@@ -12,8 +12,12 @@ import javafx.stage.Stage;
  */
 public class BuilderGUI extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
-        InputCSV csv = null;
+    public void start(Stage stage) {
+        StartStage startStage = new StartStage();
+
+        startStage.showAndWait();
+        System.out.println("Have returned from startStage");
+        /* InputCSV csv = null;
         try {
             csv = new InputCSV.Builder().build();
             if (csv != null) {
@@ -32,7 +36,7 @@ public class BuilderGUI extends Application {
                 XLSWorkbook workbook = new XLSWorkbook(out);
                 workbook.writeToFile(csv.getFileDir() + "/output.xls");
             }
-        }
+        }*/
         System.exit(0);
     }
 
