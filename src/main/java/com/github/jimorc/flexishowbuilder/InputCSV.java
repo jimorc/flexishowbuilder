@@ -1,7 +1,6 @@
 package com.github.jimorc.flexishowbuilder;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,11 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
 
 /**
  * The InputCSV class reads the CSV file and stores multiple CSVLine objects.
@@ -41,14 +35,6 @@ public final class InputCSV {
      */
     private InputCSV() {}
 
-    /**
-     * This constructor is private. Use the Builder class to create a CSV object.
-     * @param builder - the Builder object used to create the CSV object.
-     */
-    private InputCSV(Builder builder) {
-        this.csvFile = builder.csvFile;
-    }
-
     /** This constructor parses the specified CSV file and builds an InputCSV
      * object from the file's contents.
      * @param csvF is the File containing the CSV data to parse.
@@ -70,58 +56,6 @@ public final class InputCSV {
         loadCSVFile();
         buildFullNameHashMap();
         fullNameKeys = fullNameMap.keySet();
-    }
-
-    /**
-     * The Builder class is used to create a CSV object.
-     */
-    public static class Builder {
-        private File csvFile;
-
-        /**
-         * Sets the CSV file.
-         * @param fileName the full path to the CSV file.
-         * @return the Builder object.
-         */
-        public Builder fileName(String fileName) {
-            if (fileName == null) {
-                this.csvFile = null;
-                return this;
-            }
-            this.csvFile = new File(fileName);
-            return this;
-        }
-
-        /**
-         * Builds the CSV object.
-         * @return the CSV object.
-         * @throws RuntimeException in junit tests if csvFile is null.
-         */
-        public InputCSV build() throws CSVException, IOException, FileNotFoundException {
-            InputCSV csv = null;
-            if (csvFile == null) {
-                try {
-                    csvFile = InputCSV.getCSVFile();
-                } catch (CSVException csve) {
-                    // in junit tests, we don't want to display a dialog, so we throw an exception.
-                    // CSVException is thrown when testing in VSCode.
-                    throw new RuntimeException("No CSV file selected.");
-                } catch (UnsatisfiedLinkError ue) {
-                    // in junit tests in maven (mvn test), UnsatisfiedLinkError thrown
-                    // instead of CSVException.
-                    throw new RuntimeException("No CSV file selected.");
-                }
-            }
-            if (csvFile.isFile()) {
-                csv = new InputCSV(this);
-                csv.loadCSVFile();
-                csv.buildFullNameHashMap();
-                csv.fullNameKeys = csv.fullNameMap.keySet();
-                return csv;
-            } else {
-                throw new FileNotFoundException("CSV file does not exist: " + csvFile.getAbsolutePath());
-            }
-        }
     }
 
     /**
@@ -200,31 +134,6 @@ public final class InputCSV {
      */
     protected ArrayList<String> getSortedFullNames() {
         return sortedFullNames;
-    }
-
-    /**
-     * Opens a file chooser dialog to select a CSV file.
-     * @return The name of the selected CSV file, or null if no file was selected.
-     */
-    private static File getCSVFile() throws CSVException {
-        if (System.getProperty("os.name").contains("Mac")) {
-            Alert alert = new Alert(null);
-            alert.setAlertType(AlertType.INFORMATION);
-            alert.setTitle("You need to select the input CSV file");
-            alert.setHeaderText("A file open dialog is about to be displayed.");
-            alert.setContentText("Click OK, then use the file open dialog to select the input CSV file.");
-            alert.showAndWait();
-        }
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select CSV File");
-        fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getHomeDirectory());
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV Files", "*.csv"));
-
-        File csv = fileChooser.showOpenDialog(null);
-        if (csv == null) {
-            throw new CSVException("No CSV file selected.");
-        }
-        return csv;
     }
 
     /**

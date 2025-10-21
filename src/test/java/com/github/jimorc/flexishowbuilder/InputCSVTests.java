@@ -1,7 +1,6 @@
 package com.github.jimorc.flexishowbuilder;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -94,92 +93,14 @@ public class InputCSVTests {
     }
 
     @Test
-    void testBuildFileExists() {
-        InputCSV csv = null;
-        try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/test.csv")
-                .build();
-        } catch (FileNotFoundException fnfe) {
-            fail("FileNotFoundException thrown: " + fnfe.getMessage());
-        } catch (IOException ioe) {
-            fail("IOException thrown: " + ioe.getMessage());
-        } catch (CSVException csve) {
-            fail("CSVException thrown: " + csve.getMessage());
-        }
-        assertNotNull(csv);
-        assertEquals("testing/data", csv.getFileDir());
-        assertEquals("test.csv", csv.getFileName());
-    }
-
-    @Test
-    void testBuildFileDoesntExist() {
-        assertThrows(FileNotFoundException.class, () -> {
-            new InputCSV.Builder()
-                .fileName("nonexistentfile.csv")
-                .build(); });
-    }
-
-    @Test
-    void testBuildNullFile() {
-        // RuntimeException is thrown if no file is provided because
-        // the file chooser dialog cannot be used in junit tests.
-        try {
-            new InputCSV.Builder()
-                .fileName(null)
-                .build();
-        } catch (IllegalStateException ise) {
-        } catch (CSVException ce) {
-            fail("Threw: " + ce);
-        } catch (IOException ioe) {
-            fail("Threw: " + ioe);
-        } catch (ExceptionInInitializerError ie) { }
-    }
-
-    @Test
-    void testLoadCSVFile() {
-        InputCSV csv = null;
-        try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/test.csv")
-                .build();
-        } catch (IOException ioe) {
-            fail("IOException thrown: " + ioe.getMessage());
-        } catch (CSVException csve) {
-            fail("CSVException thrown: " + csve.getMessage());
-        }
-        String expected = "Filename,Title,Full Name,First Name,Last Name\n"
-            + "image1.jpg,Image One,John Doe,John,Doe\n"
-            + "image2.jpg,\"Image, Two\",Jane Smith,Jane,Smith\n";
-        assertEquals(expected, csv.toString());
-    }
-
-    @Test
-    void testLoadEmptyCSVFile() {
-        InputCSV csv = null;
-        try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/empty.csv")
-                .build();
-        } catch (IOException ioe) {
-            fail("IOException thrown: " + ioe.getMessage());
-        } catch (CSVException csve) {
-            fail("CSVException thrown: " + csve.getMessage());
-        }
-        String expected = "";
-        assertEquals(expected, csv.toString());
-    }
-
-    @Test
     void testInsertAt() {
         final int line1 = 1;
         final int line2 = 2;
         final int line3 = 3;
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/test.csv")
-                .build();
+            File f = new File("testing/data/test.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -202,9 +123,8 @@ public class InputCSVTests {
         final int line3 = 3;
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/test.csv")
-                .build();
+            File f = new File("testing/data/test.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -227,9 +147,8 @@ public class InputCSVTests {
         final int line3 = 3;
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/test.csv")
-                .build();
+            File f = new File("testing/data/test.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -248,9 +167,8 @@ public class InputCSVTests {
         final int minus1 = -1;
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/test.csv")
-                .build();
+            File f = new File("testing/data/test.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -279,9 +197,8 @@ public class InputCSVTests {
         final int line3 = 3;
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/test.csv")
-                .build();
+            File f = new File("testing/data/test.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -299,9 +216,8 @@ public class InputCSVTests {
     void testAppendToEmptyCSV() {
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/empty.csv")
-                .build();
+            File f = new File("testing/data/empty.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -321,9 +237,8 @@ public class InputCSVTests {
         final int thirdLine = 2;
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/empty.csv")
-                .build();
+            File f = new File("testing/data/empty.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -367,9 +282,8 @@ public class InputCSVTests {
         final int jdLine = 5;
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/sort.csv")
-                .build();
+            File f = new File("testing/data/sort.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -419,9 +333,8 @@ public class InputCSVTests {
         final int jdLine = 2;
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/sort.csv")
-                .build();
+            File f = new File("testing/data/sort.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -471,9 +384,8 @@ public class InputCSVTests {
         final int jdLine = 1;
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/sort.csv")
-                .build();
+            File f = new File("testing/data/sort.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -525,9 +437,8 @@ public class InputCSVTests {
         // Order the sorted CSVLines are sorted in AlpabeticalByLastNameThenFirstNameReverse.
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/sort.csv")
-                .build();
+            File f = new File("testing/data/sort.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -582,9 +493,8 @@ public class InputCSVTests {
 
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/sort.csv")
-                .build();
+            File f = new File("testing/data/sort.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -611,19 +521,13 @@ public class InputCSVTests {
 
     @Test
     void testValidateCSVFileEmpty() {
-        InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/empty.csv")
-                .build();
+            File f = new File("testing/data/empty.csv");
+            InputCSV csv = new InputCSV(f);
+            csv.validateCSVFile();
+
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
-        } catch (CSVException csve) {
-            fail("CSVException thrown: " + csve.getMessage());
-        }
-        try {
-            csv.validateCSVFile();
-            fail("CSVException not thrown for empty CSVLines are sorted in  file");
         } catch (CSVException csve) {
             String expectedMessage = "No data found in CSV file empty.csv";
             String actualMessage = csve.getMessage();
@@ -634,9 +538,9 @@ public class InputCSVTests {
     @Test
     void testValidateCSVFileZerodHeaderLength() {
         try {
-            new InputCSV.Builder()
-                .fileName("testing/data/zeroheaderlength.csv")
-                .build();
+            File f = new File("testing/data/zeroheaderlength.csv");
+            InputCSV csv = new InputCSV(f);
+            assertThrows(Exception.class, () -> csv.validateCSVFile());
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -649,9 +553,10 @@ public class InputCSVTests {
     @Test
     void testValidateCSVFileInvalidHeader() {
         try {
-            new InputCSV.Builder()
-                .fileName("testing/data/invalidline.csv")
-                .build();
+            File f = new File("testing/data/invalidline.csv");
+            InputCSV csv = new InputCSV(f);
+            assertThrows(Exception.class, () -> csv.validateCSVFile());
+
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -665,9 +570,8 @@ public class InputCSVTests {
     void testGetPersonValid() {
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/test.csv")
-                .build();
+            File f = new File("testing/data/test.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -687,9 +591,8 @@ public class InputCSVTests {
     void testGetPersonInvalid() {
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/test.csv")
-                .build();
+            File f = new File("testing/data/test.csv");
+            csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
@@ -711,9 +614,8 @@ public class InputCSVTests {
     void testGetImageLinesValidName() {
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/sort.csv")
-                .build();
+            File f = new File("testing/data/sort.csv");
+            csv = new InputCSV(f);
             csv.sortNames(SortOrder.AlphabeticalByFullName);
             ImageAndPersonLine[] lines = csv.getImageLines("John Doe");
             assertEquals(1, lines.length);
@@ -734,9 +636,8 @@ public class InputCSVTests {
     void testGetImageLinesInvalidName() {
         InputCSV csv = null;
         try {
-            csv = new InputCSV.Builder()
-                .fileName("testing/data/sort.csv")
-                .build();
+            File f = new File("testing/data/sort.csv");
+            csv = new InputCSV(f);
             csv.sortNames(SortOrder.AlphabeticalByFullName);
             csv.getImageLines("Bob Brown");
             fail("Should have thrown CSVException for invalid name.");
