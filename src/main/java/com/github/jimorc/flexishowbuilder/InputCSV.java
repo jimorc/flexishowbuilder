@@ -14,13 +14,10 @@ import java.util.Set;
 /**
  * The InputCSV class reads the CSV file and stores multiple CSVLine objects.
  *
- * It uses the Builder pattern to create an InputCSV object. The only required
- * parameter is the io.File containing the CSV lines to read. If no file is provided,
- * a FileChooser dialog is displayed to select a CSV file.
+ *
  * ```java
- * InputCSV csv = new CSV.Builder()
- *     .file(fileName))  // optional, if not provided a file chooser dialog is displayed
- *     .build();
+ * File f = new File("<CSV-file-name>")
+ * InputCSV csv = new InputCSV(f);
  * ```
  */
 public final class InputCSV {
@@ -29,11 +26,6 @@ public final class InputCSV {
     private Map<String, ImageAndPersonLine[]> fullNameMap;
     private Set<String> fullNameKeys;
     private ArrayList<String> sortedFullNames;
-
-    /**
-     * This constructor is private. Use the Builder class to create a CSV object.
-     */
-    private InputCSV() {}
 
     /** This constructor parses the specified CSV file and builds an InputCSV
      * object from the file's contents.
