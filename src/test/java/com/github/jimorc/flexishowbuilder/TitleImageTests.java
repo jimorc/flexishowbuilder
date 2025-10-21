@@ -31,7 +31,12 @@ public class TitleImageTests {
 
     @Test
     void testGenerateTitleImage(FxRobot robot) {
-        Path path1 = Path.of("testing/data/test_image.jpg");
+        Path path1;
+        if (System.getProperty("os.name").contains("Mac OS X")) {
+            path1 = Path.of("testing/data/test_arial_image.jpg");
+        } else {
+            path1 = Path.of("testing/data/test_image.jpg");
+        }
         Path path2 = Path.of("test.jpg");
         try (RandomAccessFile randomAccessFile1 = new RandomAccessFile(path1.toFile(), "r");
                 RandomAccessFile randomAccessFile2 = new RandomAccessFile(path2.toFile(), "r")) {
