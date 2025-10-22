@@ -23,6 +23,7 @@ public class TitleAndSortStage {
     private final int stageWidth = 1080;
     private final int stageHeight = 800;
     private final int spacing = 10;
+    private SortOrder sortOrder = SortOrder.AsIs;
     private TextArea titleArea;
     private ToggleGroup sortGroup;
     private RadioButton noneButton;
@@ -43,6 +44,12 @@ public class TitleAndSortStage {
         stage.setWidth(stageWidth);
         stage.setHeight(stageHeight);
         stage.setScene(scene);
+    }
+
+    public TitleAndSortData getData() {
+        TitleAndSortData data = new TitleAndSortData(titleArea.getText(), sortOrder,
+            lastNameCheckBox.isSelected());
+        return data;
     }
 
     private VBox createBox() {
@@ -145,12 +152,14 @@ public class TitleAndSortStage {
         Tooltip noneTooltip = new Tooltip("No sorting - use the order in the CSV file.\n"
             + "All images for each person are grouped together.");
         noneButton.setTooltip(noneTooltip);
+        noneButton.setOnAction((_) -> {sortOrder = SortOrder.AsIs;});
         noneButton.setSelected(true);
         VBox.setMargin(noneButton, insets);
     }
 
     private void createAlphaFullButton(Insets insets) {
         alphaFullButton = createRadioButton("Alphabetical by Full Name", sortGroup, SortOrder.AlphabeticalByFullName);
+        alphaFullButton.setOnAction((_) -> {sortOrder = SortOrder.AlphabeticalByFullName;});
         Tooltip alphaFullTooltip = new Tooltip("Sort by person's full name (first name then last "
             + "name).\nAll images for each person are grouped together.");
         alphaFullButton.setTooltip(alphaFullTooltip);
@@ -160,6 +169,7 @@ public class TitleAndSortStage {
     private void createAlphaLastFirstRevButton(Insets insets) {
         alphaLastFirstRevButton = createRadioButton("Alphabetical by Last Name then First Name Reverse",
             sortGroup, SortOrder.AlphabeticalByLastNameThenFirstNameReverse);
+        alphaLastFirstRevButton.setOnAction((_) -> {sortOrder = SortOrder.AlphabeticalByLastNameThenFirstNameReverse;});
         Tooltip alphaLastFirstRevTooltip = new Tooltip("Sort by person's last name then first name "
             + "in reverse order.\nAll images for each person are grouped together.");
         alphaLastFirstRevButton.setTooltip(alphaLastFirstRevTooltip);
@@ -169,6 +179,7 @@ public class TitleAndSortStage {
     private void createAlphaLastFirstButton(Insets insets) {
         alphaLastFirstButton = createRadioButton("Alphabetical by Last Name then First Name",
             sortGroup, SortOrder.AlphabeticalByLastNameThenFirstName);
+        alphaLastFirstButton.setOnAction((_) -> {sortOrder = SortOrder.AlphabeticalByLastNameThenFirstName;});
         Tooltip alphaLastFirstTooltip = new Tooltip("Sort by person's last name then first name.\n"
             + "All images for each person are grouped together.");
         alphaLastFirstButton.setTooltip(alphaLastFirstTooltip);
@@ -178,6 +189,7 @@ public class TitleAndSortStage {
     private void createAlphaFullRevButton(Insets insets) {
         alphaFullRevButton = createRadioButton("Alphabetical by Full Name Reverse",
             sortGroup, SortOrder.AlphabeticalByFullNameReverse);
+        alphaFullRevButton.setOnAction((_) -> {sortOrder = SortOrder.AlphabeticalByFullNameReverse;});
         Tooltip alphaFullRevTooltip = new Tooltip("Sort by person's full name (first name then last "
             + "name) in reverse order.\nAll images for each person are grouped together.");
         alphaFullRevButton.setTooltip(alphaFullRevTooltip);
@@ -210,5 +222,15 @@ public class TitleAndSortStage {
      */
     public void showAndWait() {
         stage.showAndWait();
+    }
+
+    /**
+     * Retrieve the TitleAndSortData object representing the settings in the TitleAndSortStage
+     * object.
+     * @return TitleAndSortData object for the settings in this stage.
+     */
+    public TitleAndSortData getSortData() {
+        return new TitleAndSortData(titleArea.getText(), sortOrder,
+            lastNameCheckBox.isSelected());
     }
 }
