@@ -20,6 +20,7 @@ public class BuilderGUI extends Application {
         InputCSV iCSV = startStage.getInputCSV();
         TitleAndSortStage tsStage = new TitleAndSortStage();
         tsStage.showAndWait();
+        System.out.println("Back from TitleAndSortStage.showAndWait");
 
 
         /* InputCSV csv = null;

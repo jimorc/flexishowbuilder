@@ -99,6 +99,7 @@ public class TitleAndSortStage {
     private Button createGenButton() {
         Button gen = new Button("Generate title and person slides");
         gen.setDefaultButton(true);
+        gen.setOnAction((_) -> stage.close());
         return gen;
     }
 
