@@ -23,19 +23,29 @@ public class TitleAndSortStage {
     private final int stageWidth = 1080;
     private final int stageHeight = 800;
     private final int spacing = 10;
-    private final TextArea titleArea;
-    private final ToggleGroup sortGroup;
-    private final RadioButton noneButton;
-    private final RadioButton alphaFullButton;
-    private final RadioButton alphaLastFirstButton;
-    private final RadioButton alphaFullRevButton;
-    private final RadioButton alphaLastFirstRevButton;
+    private TextArea titleArea;
+    private ToggleGroup sortGroup;
+    private RadioButton noneButton;
+    private RadioButton alphaFullButton;
+    private RadioButton alphaLastFirstButton;
+    private RadioButton alphaFullRevButton;
+    private RadioButton alphaLastFirstRevButton;
+    private CheckBox lastNameCheckBox;
     private Stage stage;
 
     /**
      * Constructor.
      */
     public TitleAndSortStage() {
+        VBox vbox = createBox();
+        stage = new Stage();
+        Scene scene = new Scene(vbox);
+        stage.setWidth(stageWidth);
+        stage.setHeight(stageHeight);
+        stage.setScene(scene);
+    }
+
+    private VBox createBox() {
         final int fontSize = 14;
         final int tLabelMarginTop = 5;
         final int topMargin = 0;
@@ -46,49 +56,36 @@ public class TitleAndSortStage {
         final int buttonRightMargin = 20;
         final int buttonBottomMargin = 5;
         final int buttonLeftMargin = 20;
-        Label titleLabel = new Label("Show Title Text");
-        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, fontSize));
-        titleArea = createTextArea();
+        final Font labelFont = Font.font("Arial", FontWeight.BOLD, fontSize);
+        Insets vBoxInsets = new Insets(topMargin, rightMargin, bottomMargin, leftMargin);
+        Insets tLabelInsets = new Insets(tLabelMarginTop, rightMargin, bottomMargin, leftMargin);
+        Label titleLabel = createTitleLabel(labelFont, tLabelInsets);
+        titleArea = createTextArea(vBoxInsets);
 
-        Label sortLabel = new Label("Sort Order");
-        sortLabel.setFont(Font.font("Arial", FontWeight.BOLD, fontSize));
+        Label sortLabel = createSortLabel(labelFont, vBoxInsets);
         sortGroup = new ToggleGroup();
-        noneButton = createRadioButton("As Is", sortGroup, SortOrder.AsIs);
-        Tooltip noneTooltip = new Tooltip("No sorting - use the order in the CSV file.\n"
-            + "All images for each person are grouped together.");
-        noneButton.setTooltip(noneTooltip);
-        alphaFullButton = createRadioButton("Alphabetical by Full Name", sortGroup, SortOrder.AlphabeticalByFullName);
-        Tooltip alphaFullTooltip = new Tooltip("Sort by person's full name (first name then last "
-            + "name).\nAll images for each person are grouped together.");
-        alphaFullButton.setTooltip(alphaFullTooltip);
-        alphaLastFirstButton = createRadioButton("Alphabetical by Last Name then First Name",
-            sortGroup, SortOrder.AlphabeticalByLastNameThenFirstName);
-        Tooltip alphaLastFirstTooltip = new Tooltip("Sort by person's last name then first name.\n"
-            + "All images for each person are grouped together.");
-        alphaLastFirstButton.setTooltip(alphaLastFirstTooltip);
-        alphaFullRevButton = createRadioButton("Alphabetical by Full Name Reverse",
-            sortGroup, SortOrder.AlphabeticalByFullNameReverse);
-        Tooltip alphaFullRevTooltip = new Tooltip("Sort by person's full name (first name then last "
-            + "name) in reverse order.\nAll images for each person are grouped together.");
-        alphaFullRevButton.setTooltip(alphaFullRevTooltip);
-        alphaLastFirstRevButton = createRadioButton("Alphabetical by Last Name then First Name Reverse",
-            sortGroup, SortOrder.AlphabeticalByLastNameThenFirstNameReverse);
-        Tooltip alphaLastFirstRevTooltip = new Tooltip("Sort by person's last name then first name "
-            + "in reverse order.\nAll images for each person are grouped together.");
-        alphaLastFirstRevButton.setTooltip(alphaLastFirstRevTooltip);
-        noneButton.setSelected(true);
+        createNoneButton(vBoxInsets);
+        createAlphaFullButton(vBoxInsets);
+        createAlphaLastFirstButton(vBoxInsets);
+        createAlphaFullRevButton(vBoxInsets);
+        createAlphaLastFirstRevButton(vBoxInsets);
 
-        Label lastNameLabel = new Label("Last name in persion slides");
-        lastNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, fontSize));
-        CheckBox lastNameCheckBox = new CheckBox("Show last name as Initial");
-        lastNameCheckBox.selectedProperty().set(true);
-        Tooltip lastNameTooltip = new Tooltip("If checked, the person's last name will be shown "
-            + "as an initial in the\nperson slides. If not selected, the full last name will be shown.");
-        lastNameCheckBox.setTooltip(lastNameTooltip);
-        Button cancel = new Button("Terminate");
-        cancel.setCancelButton(true);
-        Button gen = new Button("Generate title and person slides");
-        gen.setDefaultButton(true);
+        Label lastNameLabel = createLastNameLabel(fontSize, vBoxInsets);
+        createLastNameCheckBox(vBoxInsets);
+
+        HBox buttonBox = createButtonBox(buttonTopMargin, buttonRightMargin, buttonBottomMargin, buttonLeftMargin);
+
+        VBox vbox = new VBox(spacing);
+        vbox.getChildren().addAll(titleLabel, titleArea, sortLabel, noneButton,
+            alphaFullButton, alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton,
+            lastNameLabel, lastNameCheckBox, buttonBox);
+        return vbox;
+    }
+
+    private HBox createButtonBox(final int buttonTopMargin, final int buttonRightMargin, final int buttonBottomMargin,
+            final int buttonLeftMargin) {
+        Button cancel = createCancelButton();
+        Button gen = createGenButton();
         HBox buttonBox = new HBox(spacing);
         buttonBox.getChildren().addAll(cancel, gen);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
@@ -96,31 +93,96 @@ public class TitleAndSortStage {
             buttonBottomMargin, buttonLeftMargin);
         HBox.setMargin(cancel, buttonInsets);
         HBox.setMargin(gen, buttonInsets);
-
-        VBox vbox = new VBox(spacing);
-        vbox.getChildren().addAll(titleLabel, titleArea, sortLabel, noneButton,
-            alphaFullButton, alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton,
-            lastNameLabel, lastNameCheckBox, buttonBox);
-        Insets vBoxInsets = new Insets(topMargin, rightMargin, bottomMargin, leftMargin);
-        Insets tLabelInsets = new Insets(tLabelMarginTop, rightMargin, bottomMargin, leftMargin);
-        VBox.setMargin(titleLabel, tLabelInsets);
-        VBox.setMargin(titleArea, vBoxInsets);
-        VBox.setMargin(sortLabel, vBoxInsets);
-        VBox.setMargin(noneButton, vBoxInsets);
-        VBox.setMargin(alphaFullButton, vBoxInsets);
-        VBox.setMargin(alphaLastFirstButton, vBoxInsets);
-        VBox.setMargin(alphaFullRevButton, vBoxInsets);
-        VBox.setMargin(alphaLastFirstRevButton, vBoxInsets);
-        VBox.setMargin(lastNameLabel, vBoxInsets);
-        VBox.setMargin(lastNameCheckBox, vBoxInsets);
-        stage = new Stage();
-        Scene scene = new Scene(vbox);
-        stage.setWidth(stageWidth);
-        stage.setHeight(stageHeight);
-        stage.setScene(scene);
+        return buttonBox;
     }
 
-    private TextArea createTextArea() {
+    private Button createGenButton() {
+        Button gen = new Button("Generate title and person slides");
+        gen.setDefaultButton(true);
+        return gen;
+    }
+
+    private Button createCancelButton() {
+        Button cancel = new Button("Terminate");
+        cancel.setCancelButton(true);
+        return cancel;
+    }
+
+    private void createLastNameCheckBox(Insets insets) {
+        lastNameCheckBox = new CheckBox("Show last name as Initial");
+        lastNameCheckBox.selectedProperty().set(true);
+        Tooltip lastNameTooltip = new Tooltip("If checked, the person's last name will be shown "
+            + "as an initial in the\nperson slides. If not selected, the full last name will be shown.");
+        lastNameCheckBox.setTooltip(lastNameTooltip);
+        VBox.setMargin(lastNameCheckBox, insets);
+    }
+
+    private Label createLastNameLabel(final int fontSize, final Insets insets) {
+        Label lastNameLabel = new Label("Last name in persion slides");
+        lastNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, fontSize));
+        VBox.setMargin(lastNameLabel, insets);
+        return lastNameLabel;
+    }
+
+    private Label createTitleLabel(final Font labelFont, final Insets insets) {
+        Label titleLabel = new Label("Show Title Text");
+        titleLabel.setFont(labelFont);
+        VBox.setMargin(titleLabel, insets);
+        return titleLabel;
+    }
+
+    private Label createSortLabel(final Font labelFont, final Insets insets) {
+        Label sortLabel = new Label("Sort Order");
+        sortLabel.setFont(labelFont);
+        VBox.setMargin(sortLabel, insets);
+        return sortLabel;
+    }
+
+    private void createNoneButton(Insets insets) {
+        noneButton = createRadioButton("As Is", sortGroup, SortOrder.AsIs);
+        Tooltip noneTooltip = new Tooltip("No sorting - use the order in the CSV file.\n"
+            + "All images for each person are grouped together.");
+        noneButton.setTooltip(noneTooltip);
+        noneButton.setSelected(true);
+        VBox.setMargin(noneButton, insets);
+    }
+
+    private void createAlphaFullButton(Insets insets) {
+        alphaFullButton = createRadioButton("Alphabetical by Full Name", sortGroup, SortOrder.AlphabeticalByFullName);
+        Tooltip alphaFullTooltip = new Tooltip("Sort by person's full name (first name then last "
+            + "name).\nAll images for each person are grouped together.");
+        alphaFullButton.setTooltip(alphaFullTooltip);
+        VBox.setMargin(alphaFullButton, insets);
+    }
+
+    private void createAlphaLastFirstRevButton(Insets insets) {
+        alphaLastFirstRevButton = createRadioButton("Alphabetical by Last Name then First Name Reverse",
+            sortGroup, SortOrder.AlphabeticalByLastNameThenFirstNameReverse);
+        Tooltip alphaLastFirstRevTooltip = new Tooltip("Sort by person's last name then first name "
+            + "in reverse order.\nAll images for each person are grouped together.");
+        alphaLastFirstRevButton.setTooltip(alphaLastFirstRevTooltip);
+        VBox.setMargin(alphaLastFirstRevButton, insets);
+    }
+
+    private void createAlphaLastFirstButton(Insets insets) {
+        alphaLastFirstButton = createRadioButton("Alphabetical by Last Name then First Name",
+            sortGroup, SortOrder.AlphabeticalByLastNameThenFirstName);
+        Tooltip alphaLastFirstTooltip = new Tooltip("Sort by person's last name then first name.\n"
+            + "All images for each person are grouped together.");
+        alphaLastFirstButton.setTooltip(alphaLastFirstTooltip);
+        VBox.setMargin(alphaLastFirstButton, insets);
+    }
+
+    private void createAlphaFullRevButton(Insets insets) {
+        alphaFullRevButton = createRadioButton("Alphabetical by Full Name Reverse",
+            sortGroup, SortOrder.AlphabeticalByFullNameReverse);
+        Tooltip alphaFullRevTooltip = new Tooltip("Sort by person's full name (first name then last "
+            + "name) in reverse order.\nAll images for each person are grouped together.");
+        alphaFullRevButton.setTooltip(alphaFullRevTooltip);
+        VBox.setMargin(alphaFullRevButton, insets);
+    }
+
+    private TextArea createTextArea(Insets insets) {
         final int prefColumnCount = 50;
         final int prefRowCount = 2;
         TextArea textArea = new TextArea();
@@ -130,6 +192,7 @@ public class TitleAndSortStage {
         Tooltip tTooltip = new Tooltip("Enter the title text to appear on the title slide. Two lines is recommended.");
         textArea.setTooltip(tTooltip);
         // TODO: centre text
+        VBox.setMargin(textArea, insets);
         return textArea;
     }
 
