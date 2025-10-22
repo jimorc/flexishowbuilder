@@ -105,6 +105,7 @@ public class TitleAndSortStage {
     private Button createCancelButton() {
         Button cancel = new Button("Terminate");
         cancel.setCancelButton(true);
+        cancel.setOnAction((_) -> {System.exit(0);});
         return cancel;
     }
 
