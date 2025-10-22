@@ -23,6 +23,10 @@ public class BuilderGUI extends Application {
         TitleAndSortData data = tsStage.getData();
         System.out.println(data.toString());
 
+        OutputCSV out = generateOutputCSV(iCSV, data);
+        System.out.println(out);
+
+
         /* InputCSV csv = null;
         try {
             csv = new InputCSV.Builder().build();
@@ -80,7 +84,11 @@ public class BuilderGUI extends Application {
         System.exit(1);
     }
 
-    private void handlePersonException(Exception e) {  // no return
+    /**
+     * handlePersonException displays an error alert.
+     * @param e the PersonException
+     */
+    protected static void handlePersonException(Exception e) {  // no return
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Person Error");
         alert.setHeaderText("Mismatch between requested person's name and CSV");

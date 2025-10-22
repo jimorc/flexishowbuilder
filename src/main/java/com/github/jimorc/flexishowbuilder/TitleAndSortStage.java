@@ -46,6 +46,10 @@ public class TitleAndSortStage {
         stage.setScene(scene);
     }
 
+    /**
+     * getData retrieves the values set in the TitleAndSortStage object.
+     * @return data set in stage object.
+     */
     public TitleAndSortData getData() {
         TitleAndSortData data = new TitleAndSortData(titleArea.getText(), sortOrder,
             lastNameCheckBox.isSelected());
@@ -106,14 +110,16 @@ public class TitleAndSortStage {
     private Button createGenButton() {
         Button gen = new Button("Generate title and person slides");
         gen.setDefaultButton(true);
-        gen.setOnAction((_) -> stage.close());
+        gen.setOnAction(_ -> {
+            stage.close();
+        });
         return gen;
     }
 
     private Button createCancelButton() {
         Button cancel = new Button("Terminate");
         cancel.setCancelButton(true);
-        cancel.setOnAction((_) -> {System.exit(0);});
+        cancel.setOnAction(_ -> System.exit(0));
         return cancel;
     }
 
@@ -152,14 +158,18 @@ public class TitleAndSortStage {
         Tooltip noneTooltip = new Tooltip("No sorting - use the order in the CSV file.\n"
             + "All images for each person are grouped together.");
         noneButton.setTooltip(noneTooltip);
-        noneButton.setOnAction((_) -> {sortOrder = SortOrder.AsIs;});
+        noneButton.setOnAction(_ -> {
+            sortOrder = SortOrder.AsIs;
+        });
         noneButton.setSelected(true);
         VBox.setMargin(noneButton, insets);
     }
 
     private void createAlphaFullButton(Insets insets) {
         alphaFullButton = createRadioButton("Alphabetical by Full Name", sortGroup, SortOrder.AlphabeticalByFullName);
-        alphaFullButton.setOnAction((_) -> {sortOrder = SortOrder.AlphabeticalByFullName;});
+        alphaFullButton.setOnAction(_ -> {
+            sortOrder = SortOrder.AlphabeticalByFullName;
+        });
         Tooltip alphaFullTooltip = new Tooltip("Sort by person's full name (first name then last "
             + "name).\nAll images for each person are grouped together.");
         alphaFullButton.setTooltip(alphaFullTooltip);
@@ -169,7 +179,9 @@ public class TitleAndSortStage {
     private void createAlphaLastFirstRevButton(Insets insets) {
         alphaLastFirstRevButton = createRadioButton("Alphabetical by Last Name then First Name Reverse",
             sortGroup, SortOrder.AlphabeticalByLastNameThenFirstNameReverse);
-        alphaLastFirstRevButton.setOnAction((_) -> {sortOrder = SortOrder.AlphabeticalByLastNameThenFirstNameReverse;});
+        alphaLastFirstRevButton.setOnAction(_ -> {
+            sortOrder = SortOrder.AlphabeticalByLastNameThenFirstNameReverse;
+        });
         Tooltip alphaLastFirstRevTooltip = new Tooltip("Sort by person's last name then first name "
             + "in reverse order.\nAll images for each person are grouped together.");
         alphaLastFirstRevButton.setTooltip(alphaLastFirstRevTooltip);
@@ -179,7 +191,9 @@ public class TitleAndSortStage {
     private void createAlphaLastFirstButton(Insets insets) {
         alphaLastFirstButton = createRadioButton("Alphabetical by Last Name then First Name",
             sortGroup, SortOrder.AlphabeticalByLastNameThenFirstName);
-        alphaLastFirstButton.setOnAction((_) -> {sortOrder = SortOrder.AlphabeticalByLastNameThenFirstName;});
+        alphaLastFirstButton.setOnAction(_ -> {
+            sortOrder = SortOrder.AlphabeticalByLastNameThenFirstName;
+        });
         Tooltip alphaLastFirstTooltip = new Tooltip("Sort by person's last name then first name.\n"
             + "All images for each person are grouped together.");
         alphaLastFirstButton.setTooltip(alphaLastFirstTooltip);
@@ -189,7 +203,9 @@ public class TitleAndSortStage {
     private void createAlphaFullRevButton(Insets insets) {
         alphaFullRevButton = createRadioButton("Alphabetical by Full Name Reverse",
             sortGroup, SortOrder.AlphabeticalByFullNameReverse);
-        alphaFullRevButton.setOnAction((_) -> {sortOrder = SortOrder.AlphabeticalByFullNameReverse;});
+        alphaFullRevButton.setOnAction(_ -> {
+            sortOrder = SortOrder.AlphabeticalByFullNameReverse;
+        });
         Tooltip alphaFullRevTooltip = new Tooltip("Sort by person's full name (first name then last "
             + "name) in reverse order.\nAll images for each person are grouped together.");
         alphaFullRevButton.setTooltip(alphaFullRevTooltip);
