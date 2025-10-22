@@ -28,6 +28,7 @@ public class StartStage {
         Button loadCSV = new Button("Load CSV");
         loadCSV.setOnAction(_ -> {
             loadCSVFile();
+            stage.close();
             try {
                 iCSV.validateCSVFile();
             } catch (CSVException ce) {
@@ -71,6 +72,13 @@ public class StartStage {
                 BuilderGUI.handleIOException(ioe, iCSV);
             }
         }
+    }
 
+    /**
+     * Retrieve the loaded InputCSV object.
+     * @return the InputCSV object.
+     */
+    public InputCSV getInputCSV() {
+        return iCSV;
     }
 }

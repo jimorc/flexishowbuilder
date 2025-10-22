@@ -17,6 +17,11 @@ public class BuilderGUI extends Application {
 
         startStage.showAndWait();
         System.out.println("Have returned from startStage");
+        InputCSV iCSV = startStage.getInputCSV();
+        TitleAndSortStage tsStage = new TitleAndSortStage();
+        tsStage.showAndWait();
+
+
         /* InputCSV csv = null;
         try {
             csv = new InputCSV.Builder().build();

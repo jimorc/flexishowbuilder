@@ -1,22 +1,28 @@
 package com.github.jimorc.flexishowbuilder;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 /**
- * TitleAndSortDialog displays a dialog for entry of title and sort order input.
+ * TitleAndSortStage contains inputs for title image text and the image sort order.
  */
-public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
+public class TitleAndSortStage {
+    private final int stageWidth = 1080;
+    private final int stageHeight = 800;
+    private final int spacing = 10;
     private final TextArea titleArea;
     private final ToggleGroup sortGroup;
     private final RadioButton noneButton;
@@ -24,13 +30,22 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
     private final RadioButton alphaLastFirstButton;
     private final RadioButton alphaFullRevButton;
     private final RadioButton alphaLastFirstRevButton;
+    private Stage stage;
 
     /**
      * Constructor.
      */
-    public TitleAndSortDialog() {
-        final int spacing = 10;
+    public TitleAndSortStage() {
         final int fontSize = 14;
+        final int tLabelMarginTop = 5;
+        final int topMargin = 0;
+        final int rightMargin = 10;
+        final int bottomMargin = 0;
+        final int leftMargin = 10;
+        final int buttonTopMargin = 5;
+        final int buttonRightMargin = 20;
+        final int buttonBottomMargin = 5;
+        final int buttonLeftMargin = 20;
         Label titleLabel = new Label("Show Title Text");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, fontSize));
         titleArea = createTextArea();
@@ -70,29 +85,39 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
         Tooltip lastNameTooltip = new Tooltip("If checked, the person's last name will be shown "
             + "as an initial in the\nperson slides. If not selected, the full last name will be shown.");
         lastNameCheckBox.setTooltip(lastNameTooltip);
+        Button cancel = new Button("Terminate");
+        cancel.setCancelButton(true);
+        Button gen = new Button("Generate title and person slides");
+        gen.setDefaultButton(true);
+        HBox buttonBox = new HBox(spacing);
+        buttonBox.getChildren().addAll(cancel, gen);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+        Insets buttonInsets = new Insets(buttonTopMargin, buttonRightMargin,
+            buttonBottomMargin, buttonLeftMargin);
+        HBox.setMargin(cancel, buttonInsets);
+        HBox.setMargin(gen, buttonInsets);
+
         VBox vbox = new VBox(spacing);
         vbox.getChildren().addAll(titleLabel, titleArea, sortLabel, noneButton,
             alphaFullButton, alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton,
-            lastNameLabel, lastNameCheckBox);
-        getDialogPane().setContent(vbox);
-        setTitle("Set Title and Sort Order");
-        setResizable(true);
-        getDialogPane().getButtonTypes().addAll(javafx.scene.control.ButtonType.OK,
-            javafx.scene.control.ButtonType.CANCEL);
-        Button cancel = (Button) this.getDialogPane().lookupButton(ButtonType.CANCEL);
-        cancel.setText("Terminate");
-        Button ok = (Button) this.getDialogPane().lookupButton(ButtonType.OK);
-        ok.setText("Generate title and person slides");
-        setResultConverter(dialogButton -> {
-            if (dialogButton == javafx.scene.control.ButtonType.OK) {
-                String title = titleArea.getText();
-                SortOrder order = (SortOrder) sortGroup.getSelectedToggle().getUserData();
-                boolean lastNameAsInitial = lastNameCheckBox.isSelected();
-                return new TitleAndSortData(title, order, lastNameAsInitial);
-            } else {
-                return null;
-            }
-        });
+            lastNameLabel, lastNameCheckBox, buttonBox);
+        Insets vBoxInsets = new Insets(topMargin, rightMargin, bottomMargin, leftMargin);
+        Insets tLabelInsets = new Insets(tLabelMarginTop, rightMargin, bottomMargin, leftMargin);
+        VBox.setMargin(titleLabel, tLabelInsets);
+        VBox.setMargin(titleArea, vBoxInsets);
+        VBox.setMargin(sortLabel, vBoxInsets);
+        VBox.setMargin(noneButton, vBoxInsets);
+        VBox.setMargin(alphaFullButton, vBoxInsets);
+        VBox.setMargin(alphaLastFirstButton, vBoxInsets);
+        VBox.setMargin(alphaFullRevButton, vBoxInsets);
+        VBox.setMargin(alphaLastFirstRevButton, vBoxInsets);
+        VBox.setMargin(lastNameLabel, vBoxInsets);
+        VBox.setMargin(lastNameCheckBox, vBoxInsets);
+        stage = new Stage();
+        Scene scene = new Scene(vbox);
+        stage.setWidth(stageWidth);
+        stage.setHeight(stageHeight);
+        stage.setScene(scene);
     }
 
     private TextArea createTextArea() {
@@ -113,5 +138,12 @@ public class TitleAndSortDialog extends Dialog<TitleAndSortData> {
         button.setToggleGroup(group);
         button.setUserData(order);
         return button;
+    }
+
+    /**
+     * showAndWait displays the StartStage object and waits for a close request.
+     */
+    public void showAndWait() {
+        stage.showAndWait();
     }
 }
