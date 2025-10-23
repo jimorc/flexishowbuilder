@@ -29,26 +29,6 @@ public class BuilderGUI extends Application {
         OutputCSVStage outCSVStage = new OutputCSVStage(out, iCSV.getFileDir());
         outCSVStage.showAndWait();
 
-        /* InputCSV csv = null;
-        try {
-            csv = new InputCSV.Builder().build();
-            if (csv != null) {
-                csv.validateCSVFile();
-            }
-        } catch (CSVException csve) {
-            handleCSVException(csve); // no return
-        } catch (IOException ioe) {
-            handleIOException(ioe, csv); // no return
-        }
-        if (csv != null) {
-            TitleAndSortData data = new TitleAndSortDialog().showAndWait().orElse(null);
-            if (data != null) {
-                OutputCSV out = generateOutputCSV(csv, data);
-                System.out.println(out);
-                XLSWorkbook workbook = new XLSWorkbook(out);
-                workbook.writeToFile(csv.getFileDir() + "/output.xls");
-            }
-        }*/
         System.exit(0);
     }
 
