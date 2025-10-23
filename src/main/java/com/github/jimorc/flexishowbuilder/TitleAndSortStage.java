@@ -100,8 +100,8 @@ public class TitleAndSortStage extends FlexiStage {
         return buttonBox;
     }
 
-    private Button createGenButton() {
-        Button gen = new Button("Create title and person slides");
+    private FlexiButton createGenButton() {
+        FlexiButton gen = new FlexiButton("Create title and person slides");
         gen.setDefaultButton(true);
         gen.setOnAction(_ -> {
             this.close();
@@ -109,8 +109,8 @@ public class TitleAndSortStage extends FlexiStage {
         return gen;
     }
 
-    private Button createCancelButton() {
-        Button cancel = new Button("Quit");
+    private FlexiButton createCancelButton() {
+        FlexiButton cancel = new FlexiButton("Quit");
         cancel.setCancelButton(true);
         cancel.setOnAction(_ -> System.exit(0));
         return cancel;

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -21,7 +20,7 @@ public class StartStage extends FlexiStage {
      * Constructor.
      */
     public StartStage() {
-        Button loadCSV = new Button("Load CSV");
+        FlexiButton loadCSV = new FlexiButton("Load CSV");
         loadCSV.setOnAction(_ -> {
             loadCSVFile();
             this.close();
@@ -31,7 +30,7 @@ public class StartStage extends FlexiStage {
                 BuilderGUI.handleCSVException(ce);
             }
         });
-        Button exitButton = new Button("Quit");
+        FlexiButton exitButton = new FlexiButton("Quit");
         exitButton.setOnAction(_ -> {
             System.exit(0);
         });

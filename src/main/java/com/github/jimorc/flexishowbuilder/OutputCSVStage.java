@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -82,11 +81,11 @@ public class OutputCSVStage extends FlexiStage {
 
         Insets insets = new Insets(buttonTopMargin, buttonRightMargin,
             buttonBottomMargin, buttonLeftMargin);
-        Button quit = new Button("Quit");
+        FlexiButton quit = new FlexiButton("Quit");
         quit.setOnAction(_ -> System.exit(0));
         HBox.setMargin(quit, insets);
 
-        Button save = new Button("Save to slideshow.xls");
+        FlexiButton save = new FlexiButton("Save to slideshow.xls");
         save.setDefaultButton(true);
         save.setOnAction(_ -> {
             XLSWorkbook workbook = new XLSWorkbook(csv);
