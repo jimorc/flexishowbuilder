@@ -1,5 +1,6 @@
 package com.github.jimorc.flexishowbuilder;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 /**
@@ -17,5 +18,10 @@ public class FlexiStage extends Stage {
         setTitle(title);
         setWidth(width);
         setHeight(height);
+        // make sure program closes when window close button is clicked.
+        setOnCloseRequest(_ -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 }
