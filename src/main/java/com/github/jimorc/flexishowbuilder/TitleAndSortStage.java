@@ -101,7 +101,7 @@ public class TitleAndSortStage extends FlexiStage {
     }
 
     private Button createGenButton() {
-        Button gen = new Button("Generate title and person slides");
+        Button gen = new Button("Create title and person slides");
         gen.setDefaultButton(true);
         gen.setOnAction(_ -> {
             this.close();
