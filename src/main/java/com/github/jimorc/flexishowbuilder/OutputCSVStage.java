@@ -78,6 +78,7 @@ public class OutputCSVStage extends FlexiStage {
         final int buttonRightMargin = 20;
         final int buttonBottomMargin = 5;
         final int buttonLeftMargin = 20;
+        final String saveFileName = dir + "/slideshow.xls";
 
         Insets insets = new Insets(buttonTopMargin, buttonRightMargin,
             buttonBottomMargin, buttonLeftMargin);
@@ -89,7 +90,7 @@ public class OutputCSVStage extends FlexiStage {
         save.setOnAction(_ -> {
             XLSWorkbook workbook = new XLSWorkbook(csv);
             try {
-                workbook.writeToFile(dir + "/slideshow.xls");
+                workbook.writeToFile(saveFileName);
             } catch (IOException ioe) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("IO Error");
@@ -99,6 +100,11 @@ public class OutputCSVStage extends FlexiStage {
                 alert.showAndWait();
                 System.exit(1);
             }
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("File Saved");
+            alert.setHeaderText(saveFileName + " has been saved.");
+            alert.setContentText("Click OK to terminate program.");
+            alert.showAndWait();
             this.close();
         });
         HBox.setMargin(save, insets);
