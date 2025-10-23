@@ -12,15 +12,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 /**
  * OutputCSVStage is the panel that displays the OutputCSV object.
  */
-public class OutputCSVStage {
-    private final int stageWidth = 1080;
-    private final int stageHeight = 800;
-    private Stage stage;
+public class OutputCSVStage extends FlexiStage {
 
     /**
      * OutputCSVStage constructor.
@@ -34,17 +30,7 @@ public class OutputCSVStage {
         HBox buttonBox = createButtonBox(csv, dir);
         VBox box = new VBox(sPane, buttonBox);
         Scene scene = new Scene(box);
-        stage = new Stage();
-        stage.setScene(scene);
-        stage.setWidth(stageWidth);
-        stage.setHeight(stageHeight);
-    }
-
-    /**
-     * showAndWait displays the StartStage object and waits for a close request.
-     */
-    public void showAndWait() {
-        stage.showAndWait();
+        this.setScene(scene);
     }
 
     private GridPane createGrid(OutputCSV csv) {
@@ -115,7 +101,7 @@ public class OutputCSVStage {
                 alert.showAndWait();
                 System.exit(1);
             }
-            stage.close();
+            this.close();
         });
         HBox.setMargin(save, insets);
         HBox box = new HBox(quit, save);

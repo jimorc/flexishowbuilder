@@ -14,14 +14,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
 /**
  * TitleAndSortStage contains inputs for title image text and the image sort order.
  */
-public class TitleAndSortStage {
-    private final int stageWidth = 1080;
-    private final int stageHeight = 800;
+public class TitleAndSortStage extends FlexiStage {
     private final int spacing = 10;
     private SortOrder sortOrder = SortOrder.AsIs;
     private TextArea titleArea;
@@ -32,18 +29,14 @@ public class TitleAndSortStage {
     private RadioButton alphaFullRevButton;
     private RadioButton alphaLastFirstRevButton;
     private CheckBox lastNameCheckBox;
-    private Stage stage;
 
     /**
      * Constructor.
      */
     public TitleAndSortStage() {
         VBox vbox = createBox();
-        stage = new Stage();
         Scene scene = new Scene(vbox);
-        stage.setWidth(stageWidth);
-        stage.setHeight(stageHeight);
-        stage.setScene(scene);
+        this.setScene(scene);
     }
 
     /**
@@ -111,7 +104,7 @@ public class TitleAndSortStage {
         Button gen = new Button("Generate title and person slides");
         gen.setDefaultButton(true);
         gen.setOnAction(_ -> {
-            stage.close();
+            this.close();
         });
         return gen;
     }
@@ -231,13 +224,6 @@ public class TitleAndSortStage {
         button.setToggleGroup(group);
         button.setUserData(order);
         return button;
-    }
-
-    /**
-     * showAndWait displays the StartStage object and waits for a close request.
-     */
-    public void showAndWait() {
-        stage.showAndWait();
     }
 
     /**

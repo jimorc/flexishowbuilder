@@ -8,18 +8,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 import javax.swing.filechooser.FileSystemView;
 
 /**
  * StartStage is the first Stage that is displayed.
  */
-public class StartStage {
-    private final int stageWidth = 1080;
-    private final int stageHeight = 800;
+public class StartStage extends FlexiStage {
     private final int spacing = 100;
     private InputCSV iCSV;
-    private Stage stage;
 
     /**
      * Constructor.
@@ -28,7 +24,7 @@ public class StartStage {
         Button loadCSV = new Button("Load CSV");
         loadCSV.setOnAction(_ -> {
             loadCSVFile();
-            stage.close();
+            this.close();
             try {
                 iCSV.validateCSVFile();
             } catch (CSVException ce) {
@@ -37,23 +33,13 @@ public class StartStage {
         });
         Button exitButton = new Button("Exit");
         exitButton.setOnAction(_ -> {
-            stage.close();
+            this.close();
         });
         VBox box = new VBox(spacing);
         box.getChildren().addAll(loadCSV, exitButton);
         box.setAlignment(Pos.CENTER);
         Scene scene = new Scene(box);
-        stage = new Stage();
-        stage.setWidth(stageWidth);
-        stage.setHeight(stageHeight);
-        stage.setScene(scene);
-    }
-
-    /**
-     * showAndWait displays the StartStage object and waits for a close request.
-     */
-    public void showAndWait() {
-        stage.showAndWait();
+        this.setScene(scene);
     }
 
     private void loadCSVFile() {
