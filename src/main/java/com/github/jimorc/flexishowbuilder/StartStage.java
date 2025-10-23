@@ -33,7 +33,7 @@ public class StartStage extends FlexiStage {
         });
         Button exitButton = new Button("Exit");
         exitButton.setOnAction(_ -> {
-            this.close();
+            System.exit(0);
         });
         VBox box = new VBox(spacing);
         box.getChildren().addAll(loadCSV, exitButton);
