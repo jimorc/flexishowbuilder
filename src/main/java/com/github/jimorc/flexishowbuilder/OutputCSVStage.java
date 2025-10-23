@@ -81,8 +81,7 @@ public class OutputCSVStage extends FlexiStage {
 
         Insets insets = new Insets(buttonTopMargin, buttonRightMargin,
             buttonBottomMargin, buttonLeftMargin);
-        FlexiButton quit = new FlexiButton("Quit");
-        quit.setOnAction(_ -> System.exit(0));
+        QuitButton quit = new QuitButton();
         HBox.setMargin(quit, insets);
 
         FlexiButton save = new FlexiButton("Save to slideshow.xls");

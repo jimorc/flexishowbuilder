@@ -30,12 +30,9 @@ public class StartStage extends FlexiStage {
                 BuilderGUI.handleCSVException(ce);
             }
         });
-        FlexiButton exitButton = new FlexiButton("Quit");
-        exitButton.setOnAction(_ -> {
-            System.exit(0);
-        });
+        QuitButton quit = new QuitButton();
         VBox box = new VBox(spacing);
-        box.getChildren().addAll(loadCSV, exitButton);
+        box.getChildren().addAll(loadCSV, quit);
         box.setAlignment(Pos.CENTER);
         Scene scene = new Scene(box);
         this.setScene(scene);

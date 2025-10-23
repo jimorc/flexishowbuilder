@@ -88,14 +88,14 @@ public class TitleAndSortStage extends FlexiStage {
 
     private HBox createButtonBox(final int buttonTopMargin, final int buttonRightMargin, final int buttonBottomMargin,
             final int buttonLeftMargin) {
-        Button cancel = createCancelButton();
+        QuitButton quit = new QuitButton();
         Button gen = createGenButton();
         HBox buttonBox = new HBox(spacing);
-        buttonBox.getChildren().addAll(cancel, gen);
+        buttonBox.getChildren().addAll(quit, gen);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
         Insets buttonInsets = new Insets(buttonTopMargin, buttonRightMargin,
             buttonBottomMargin, buttonLeftMargin);
-        HBox.setMargin(cancel, buttonInsets);
+        HBox.setMargin(quit, buttonInsets);
         HBox.setMargin(gen, buttonInsets);
         return buttonBox;
     }
@@ -107,13 +107,6 @@ public class TitleAndSortStage extends FlexiStage {
             this.close();
         });
         return gen;
-    }
-
-    private FlexiButton createCancelButton() {
-        FlexiButton cancel = new FlexiButton("Quit");
-        cancel.setCancelButton(true);
-        cancel.setOnAction(_ -> System.exit(0));
-        return cancel;
     }
 
     private void createLastNameCheckBox(Insets insets) {
