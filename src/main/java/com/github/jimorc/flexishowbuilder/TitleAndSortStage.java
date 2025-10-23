@@ -110,7 +110,7 @@ public class TitleAndSortStage extends FlexiStage {
     }
 
     private Button createCancelButton() {
-        Button cancel = new Button("Terminate");
+        Button cancel = new Button("Quit");
         cancel.setCancelButton(true);
         cancel.setOnAction(_ -> System.exit(0));
         return cancel;

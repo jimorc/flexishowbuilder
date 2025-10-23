@@ -31,7 +31,7 @@ public class StartStage extends FlexiStage {
                 BuilderGUI.handleCSVException(ce);
             }
         });
-        Button exitButton = new Button("Exit");
+        Button exitButton = new Button("Quit");
         exitButton.setOnAction(_ -> {
             System.exit(0);
         });
