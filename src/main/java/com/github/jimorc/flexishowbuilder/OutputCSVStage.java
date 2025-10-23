@@ -1,37 +1,39 @@
 package com.github.jimorc.flexishowbuilder;
 
+import java.io.IOException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * OutputCSVStage is the panel that displays the OutputCSV object.
+ */
 public class OutputCSVStage {
     private final int stageWidth = 1080;
     private final int stageHeight = 800;
-    private final int spacing = 10;
     private Stage stage;
 
-    public OutputCSVStage(OutputCSV csv) {
+    /**
+     * OutputCSVStage constructor.
+     * @param csv the OutputCSV object to display.
+     * @param dir the folder to save the XLS file to when the "Save" button is clicked.
+     */
+    public OutputCSVStage(OutputCSV csv, String dir) {
         GridPane grid = createGrid(csv);
         ScrollPane sPane = new ScrollPane();
         sPane.setContent(grid);
-        Scene scene = new Scene(sPane);
+        HBox buttonBox = createButtonBox(csv, dir);
+        VBox box = new VBox(sPane, buttonBox);
+        Scene scene = new Scene(box);
         stage = new Stage();
         stage.setScene(scene);
         stage.setWidth(stageWidth);
@@ -51,11 +53,13 @@ public class OutputCSVStage {
         final int fullNameCol = 2;
         final int firstNameCol = 3;
         final int lastNameCol = 4;
+        final int gridGap = 5;
+        final int padding = 10;
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10));
-        grid.setVgap(5);
-        grid.setHgap(5);
+        grid.setPadding(new Insets(padding));
+        grid.setVgap(gridGap);
+        grid.setHgap(gridGap);
 
         CSVLine[] lines = csv.getLines();
         int row = 1;
@@ -82,6 +86,42 @@ public class OutputCSVStage {
             }
         }
         return grid;
+    }
+
+    private HBox createButtonBox(OutputCSV csv, String dir) {
+        final int buttonTopMargin = 5;
+        final int buttonRightMargin = 20;
+        final int buttonBottomMargin = 5;
+        final int buttonLeftMargin = 20;
+
+        Insets insets = new Insets(buttonTopMargin, buttonRightMargin,
+            buttonBottomMargin, buttonLeftMargin);
+        Button quit = new Button("Quit");
+        quit.setOnAction(_ -> System.exit(0));
+        HBox.setMargin(quit, insets);
+
+        Button save = new Button("Save to slideshow.xls");
+        save.setDefaultButton(true);
+        save.setOnAction(_ -> {
+            XLSWorkbook workbook = new XLSWorkbook(csv);
+            try {
+                workbook.writeToFile(dir + "/slideshow.xls");
+            } catch (IOException ioe) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("IO Error");
+                alert.setHeaderText("Error encountered while writing the XLS file.");
+                alert.setContentText(ioe.getMessage()
+                    + "\nProgram will now exit.");
+                alert.showAndWait();
+                System.exit(1);
+            }
+            stage.close();
+        });
+        HBox.setMargin(save, insets);
+        HBox box = new HBox(quit, save);
+        box.setAlignment(Pos.CENTER_RIGHT);
+
+        return box;
     }
 
 }
