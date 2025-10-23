@@ -29,6 +29,14 @@ public class OutputCSV {
     }
 
     /**
+     * Return the number of lines in the CSV.
+     * @return number of lines
+     */
+    public int length() {
+        return lines.length;
+    }
+
+    /**
      * Retrieves the CSVLine objects in this object.
      * @return the CSVLine objects
      */

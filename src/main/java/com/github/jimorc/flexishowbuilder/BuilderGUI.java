@@ -26,6 +26,8 @@ public class BuilderGUI extends Application {
         OutputCSV out = generateOutputCSV(iCSV, data);
         System.out.println(out);
 
+        OutputCSVStage outCSVStage = new OutputCSVStage(out);
+        outCSVStage.showAndWait();
 
         /* InputCSV csv = null;
         try {
