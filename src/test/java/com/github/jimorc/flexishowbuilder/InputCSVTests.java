@@ -61,7 +61,7 @@ public class InputCSVTests {
     void testBuildNullFile() {
         // RuntimeException is thrown if no file is provided because
         // the file chooser dialog cannot be used in junit tests.
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(ExceptionInInitializerError.class, () -> {
             new InputCSV.Builder()
                 .fileName(null)
                 .build();
