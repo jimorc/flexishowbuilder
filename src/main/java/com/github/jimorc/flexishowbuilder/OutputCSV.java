@@ -25,6 +25,8 @@ public class OutputCSV {
             newLines[i] = lines[i];
         }
         newLines[lines.length] = line;
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "OutputCSV - added line: ", line.toString()));
         lines = newLines;
     }
 

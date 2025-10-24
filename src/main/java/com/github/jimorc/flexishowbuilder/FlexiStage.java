@@ -20,6 +20,7 @@ public class FlexiStage extends Stage {
         setHeight(height);
         // make sure program closes when window close button is clicked.
         setOnCloseRequest(_ -> {
+            BuilderGUI.LOG.debug("Handling FlexiStage close request");
             Platform.exit();
             System.exit(0);
         });

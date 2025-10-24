@@ -11,6 +11,8 @@ public class TitleImageLine extends CSVLine {
      */
     public TitleImageLine(String imageName) {
         if (!imageName.toLowerCase().endsWith(".jpg")) {
+            BuilderGUI.LOG.error(BuilderGUI.buildLogMessage(
+                "File name: ", imageName, " does not end with .jpg"));
             throw new IllegalArgumentException("imageName must end with .jpg");
         }
         addField(imageName);

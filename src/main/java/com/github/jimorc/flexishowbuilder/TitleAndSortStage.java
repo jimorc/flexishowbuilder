@@ -34,6 +34,7 @@ public class TitleAndSortStage extends FlexiStage {
      * Constructor.
      */
     public TitleAndSortStage() {
+        BuilderGUI.LOG.debug("In TitleAndSortStage constructor");
         VBox vbox = createBox();
         Scene scene = new Scene(vbox);
         this.setScene(scene);

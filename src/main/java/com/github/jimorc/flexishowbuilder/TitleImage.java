@@ -32,6 +32,7 @@ public final class TitleImage {
      * @throws IOException when there is an error writing the file.
      */
     public static void generateTitleImage(String caption, String imageFileName) throws IOException {
+        BuilderGUI.LOG.debug("About to create new image with caption: ", caption);
         Text cap = new Text(caption);
         cap.setFill(Color.YELLOW);
         cap.setFont(Font.font("System", FontWeight.BLACK, FONTSIZE));
@@ -47,6 +48,10 @@ public final class TitleImage {
             BufferedImage.OPAQUE);
         Graphics2D graphics = imageRGB.createGraphics();
         graphics.drawImage(bufferedImage, 0, 0, null);
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "About to save new image: ", imageFileName));
         ImageIO.write(imageRGB, "jpg", new File(imageFileName));
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "File ", imageFileName, " has been saved"));
     }
 }

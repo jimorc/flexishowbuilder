@@ -59,6 +59,6 @@ public final class XLSWorkbook {
         workbook.write(fos);
         fos.close();
         workbook.close();
-        System.out.println("output.xls" + " written successfully");
+        BuilderGUI.LOG.debug("output.xls written successfully");
     }
 }

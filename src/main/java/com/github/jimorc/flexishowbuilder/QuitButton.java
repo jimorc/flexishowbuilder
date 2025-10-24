@@ -13,6 +13,7 @@ public class QuitButton extends FlexiButton {
     public QuitButton() {
         super("Quit");
         setOnAction(_ -> {
+            BuilderGUI.LOG.debug("Quit button clicked");
             Platform.exit();
             System.exit(0);
         });

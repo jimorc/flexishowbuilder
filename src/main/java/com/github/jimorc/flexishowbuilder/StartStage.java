@@ -20,13 +20,17 @@ public class StartStage extends FlexiStage {
      * Constructor.
      */
     public StartStage() {
+        BuilderGUI.LOG.debug("In StartStage constructor");
         FlexiButton loadCSV = new FlexiButton("Load CSV");
         loadCSV.setOnAction(_ -> {
+            BuilderGUI.LOG.debug("Processing Load CSV button click");
             loadCSVFile();
+            BuilderGUI.LOG.debug("Closing StartStage");
             this.close();
             try {
                 iCSV.validateCSVFile();
             } catch (CSVException ce) {
+                BuilderGUI.LOG.debug("validateCSVFile threw CSVException: ", ce);
                 BuilderGUI.handleCSVException(ce);
             }
         });
@@ -36,21 +40,26 @@ public class StartStage extends FlexiStage {
         box.setAlignment(Pos.CENTER);
         Scene scene = new Scene(box);
         this.setScene(scene);
+        BuilderGUI.LOG.debug("Returning from StartStage constructor");
     }
 
     private void loadCSVFile() {
+        BuilderGUI.LOG.debug("Building and showing FileChooser");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select CSV File");
         fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getHomeDirectory());
         fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV Files", "*.csv"));
         File csvFile = fileChooser.showOpenDialog(null);
+        BuilderGUI.LOG.debug("Back from FileChooser");
 
         if (csvFile != null) {
             try {
                 iCSV = new InputCSV(csvFile);
             } catch (CSVException e) {
+                BuilderGUI.LOG.debug("InputCSV threw CSVException: ", e);
                 BuilderGUI.handleCSVException(e);
             } catch (IOException ioe) {
+                BuilderGUI.LOG.debug("InputCSV constructor threw IOException: ", ioe);
                 BuilderGUI.handleIOException(ioe, iCSV);
             }
         }

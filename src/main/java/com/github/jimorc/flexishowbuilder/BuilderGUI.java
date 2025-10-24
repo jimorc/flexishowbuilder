@@ -6,29 +6,39 @@ import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * BuilderGUI is the main App.
  */
 public class BuilderGUI extends Application {
+    /**
+     * log4j2 logger.
+     */
+    public static final Logger LOG = LogManager.getLogger();
+
     @Override
     public void start(Stage stage) {
+        LOG.debug("flexishowbuilder starting.");
         StartStage startStage = new StartStage();
 
         startStage.showAndWait();
-        System.out.println("Have returned from startStage");
+        LOG.debug("Have returned from StartStage.");
         InputCSV iCSV = startStage.getInputCSV();
         TitleAndSortStage tsStage = new TitleAndSortStage();
         tsStage.showAndWait();
         TitleAndSortData data = tsStage.getData();
-        System.out.println(data.toString());
+        LOG.debug(BuilderGUI.buildLogMessage(
+            "TitleAndSortData after return from TitleAndSortStage: ", data.toString()));
 
         OutputCSV out = generateOutputCSV(iCSV, data);
-        System.out.println(out);
-
+        LOG.debug(BuilderGUI.buildLogMessage(
+            "OutputCSV after creation: ", out.toString()));
+        LOG.debug("Creating outCSVStage");
         OutputCSVStage outCSVStage = new OutputCSVStage(out, iCSV.getFileDir());
         outCSVStage.showAndWait();
-
+        LOG.debug("Back from OutputCSVStage");
         System.exit(0);
     }
 
@@ -80,12 +90,12 @@ public class BuilderGUI extends Application {
     }
 
     private OutputCSV generateOutputCSV(InputCSV csv, TitleAndSortData data) {
+        LOG.debug("In BuilderGUI.generateOutputCSV");
         OutputCSV out = new OutputCSV();
         try {
             out.appendLine(csv.getLine(0));
             String dir = csv.getFileDir();
             String titleFileName = dir + "/title.jpg";
-            System.out.println(dir);
             TitleImage.generateTitleImage(data.getTitle(), titleFileName);
             out.appendLine(new TitleImageLine("title.jpg"));
 
@@ -110,10 +120,25 @@ public class BuilderGUI extends Application {
             }
             out.appendLine(new TitleImageLine("title.jpg"));
         } catch (CSVException e) {
+            LOG.error("CSVException thrown in generateOutputCSV: ", e);
             handlePersonException(e);
         } catch (IOException ioe) {
+            LOG.error("IOException thrown in generateOutputCSV: ", ioe);
             handleIOException(ioe, csv);
         }
         return out;
+    }
+
+    /**
+     * buildLogMessage combines various String objects into a single string.
+     * @param parts the Strings to combine into a single String object.
+     * @return
+     */
+    public static String buildLogMessage(String... parts) {
+        StringBuffer sb = new StringBuffer();
+        for (String part: parts) {
+            sb.append(part);
+        }
+        return sb.toString();
     }
 }

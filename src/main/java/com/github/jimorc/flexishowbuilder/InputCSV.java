@@ -37,11 +37,14 @@ public final class InputCSV {
      * @throws IOException if the file cannot be read.
      */
     public InputCSV(File csvF) throws CSVException, IOException {
+        BuilderGUI.LOG.debug("In InputCSV constructor");
         csvFile = csvF;
         if (csvF == null) {
+            BuilderGUI.LOG.debug("InputCSV constructor was passed a null CSV file object");
             throw new CSVException("Trying to read a null CSVFile");
         }
         if (!csvF.isFile()) {
+            BuilderGUI.LOG.debug(csvF.getAbsolutePath(), " passed to InputCSV constructor, is not a file");
             throw new CSVException("Trying to read " + csvF.getAbsolutePath()
                 + " which is not a file.");
         }
@@ -113,9 +116,14 @@ public final class InputCSV {
      * @return a Person object for the named person or null if not in CSV object.
      */
     public Person getPerson(String name) throws CSVException {
+        BuilderGUI.LOG.error(BuilderGUI.buildLogMessage(
+            "Retrieving Person info for ", name));
         if (fullNameMap.containsKey(name)) {
             ImageAndPersonLine[] personLines = fullNameMap.get(name);
-            return new Person(personLines[0].getPersonFirstName(), personLines[0].getPersonLastName());
+            Person p = new Person(personLines[0].getPersonFirstName(), personLines[0].getPersonLastName());
+            BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+                "getPerson returning: ", p.toString()));
+            return p;
         }
         throw new CSVException("Programming error: Trying to retrieve info for " + name + " but it does not exist.");
     }
@@ -138,17 +146,28 @@ public final class InputCSV {
      * it can called for testing purposes.
      */
     protected void loadCSVFile() throws IOException, CSVException {
+        BuilderGUI.LOG.debug("In InputCSV.loadCSVFile");
         String dir = getFileDir();
         java.nio.file.Path path = java.nio.file.Paths.get(dir, getFileName());
         List<String> allLines = java.nio.file.Files.readAllLines(path);
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "Number of lines in InputCSV file: ", Integer.toString(allLines.size())));
+        for (int i = 0; i < allLines.size(); i++) {
+            BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+                "Line ", Integer.toString(i), ":", allLines.get(i)));
+        }
         lines = new CSVLine[allLines.size()];
         for (int i = 0; i < allLines.size(); i++) {
             try {
                 lines[i] = new ImageAndPersonLine(allLines.get(i));
             } catch (ArrayIndexOutOfBoundsException aioobe) {
                 if (i == 0) {
+                    BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+                        "Header line: ", allLines.get(0), " is invalid"));
                     throw new CSVException("Invalid header found in CSV file " + getFileName());
                 } else {
+                    BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+                        "Line ", Integer.toString(i), " is invalid"));
                     throw new CSVException("Invalid line number " + (i + 1) + " found in CSV file " + getFileName());
                 }
             }
@@ -183,6 +202,8 @@ public final class InputCSV {
      */
     public void insertAt(int index, CSVLine line) throws ArrayIndexOutOfBoundsException {
         if (index < 0 || index > lines.length) {
+            BuilderGUI.LOG.error(BuilderGUI.buildLogMessage(
+                "Index out of bounds in InputCSV.insertAt: ", Integer.toString(index)));
             throw new ArrayIndexOutOfBoundsException("Index out of bounds: " + index);
         }
         CSVLine[] newLines = new CSVLine[lines.length + 1];
@@ -211,6 +232,8 @@ public final class InputCSV {
      */
     public CSVLine getLine(int index) {
         if (index < 0 || index >= lines.length) {
+            BuilderGUI.LOG.error(BuilderGUI.buildLogMessage(
+                "Invalid index in InputCSV.getLine: ", Integer.toString(index)));
             throw new ArrayIndexOutOfBoundsException("Index out of bounds: " + index);
         }
         return lines[index];
@@ -226,11 +249,14 @@ public final class InputCSV {
         if (fullNameMap.containsKey(fullName)) {
             return fullNameMap.get(fullName);
         } else {
+            BuilderGUI.LOG.error(BuilderGUI.buildLogMessage(
+                "There are no CSVLines for: ", fullName));
             throw new CSVException("The CSV file does not contain lines for " + fullName);
         }
     }
 
     private void buildFullNameHashMap() {
+        BuilderGUI.LOG.debug("In InputCSV.buildFullNameHashMap");
         fullNameMap = new HashMap<>();
         boolean firstLine = true;
         for (CSVLine line : lines) {
@@ -241,6 +267,8 @@ public final class InputCSV {
             ImageAndPersonLine ipLine = (ImageAndPersonLine) line;
             String fullName = ipLine.getPersonFullName();
             if (!fullNameMap.containsKey(fullName)) {
+                BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+                    "Adding ", fullName, " to hash map"));
                 fullNameMap.put(fullName, new ImageAndPersonLine[] {ipLine});
             } else {
                 ImageAndPersonLine[] existingLines = fullNameMap.get(fullName);
@@ -250,6 +278,8 @@ public final class InputCSV {
                 fullNameMap.put(fullName, newLines);
             }
         }
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "fullNameHashMap: ", fullNameMap.toString()));
     }
 
     /**
@@ -259,6 +289,8 @@ public final class InputCSV {
      * it can called for testing purposes.
      */
     protected void sortNames(SortOrder order) throws IllegalArgumentException {
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "Sorting names for ", order.toString()));
         switch (order) {
             case AsIs:
                 sortNamesAsIs();
@@ -294,6 +326,8 @@ public final class InputCSV {
             }
         }
         this.lines = entries.toArray(new CSVLine[entries.size()]);
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "Persons sorted alpha by full name: ", sortedFullNames.toString()));
     }
 
     private void sortNamesAlphabeticallyByFullNameReverse() {
@@ -310,6 +344,8 @@ public final class InputCSV {
             }
         }
         this.lines = entries.toArray(new CSVLine[entries.size()]);
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "Persons sorted alpha by full name reverse: ", sortedFullNames.toString()));
     }
 
     private void sortNamesAlphabeticallyByLastNamelFirstName() {
@@ -342,6 +378,8 @@ public final class InputCSV {
             }
         }
         this.lines = entries.toArray(new CSVLine[entries.size()]);
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "Persons sorted alpha lastName, firstName: ", sortedFullNames.toString()));
     }
 
     private void sortNamesAlphabeticallytByLastNamelFirstNameReverse() {
@@ -373,6 +411,8 @@ public final class InputCSV {
             }
         }
         this.lines = entries.toArray(new CSVLine[entries.size()]);
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "Persons sorted alpha by lastName, firstName reversed: ", sortedFullNames.toString()));
     }
 
     // This actually sorts the names so that all entries for a given full name are
@@ -396,6 +436,8 @@ public final class InputCSV {
             }
         }
         this.lines = entries.toArray(new CSVLine[entries.size()]);
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "Persons sorted in AsIs order: ", sortedFullNames.toString()));
     }
 
     /**
@@ -415,6 +457,8 @@ public final class InputCSV {
                 missingImages.add(imageFileName);
             }
         }
+        BuilderGUI.LOG.debug(BuilderGUI.buildLogMessage(
+            "Image files not found in CSV file folder: ", missingImages.toString()));
         return missingImages;
     }
 
@@ -443,7 +487,8 @@ public final class InputCSV {
             || !headerLine.field(fullNameLine).equalsIgnoreCase("Full Name")
             || !headerLine.field(firstNameLine).equalsIgnoreCase("First Name")
             || !headerLine.field(lastNameLine).equalsIgnoreCase("Last Name")) {
-            throw new CSVException("Invalid header found in CSV file " + getFileName());
+            throw new CSVException("Invalid header: "
+                + headerLine.toString() + " found in CSV file " + getFileName());
         }
         // check for missing images
         List<String> missingImages = getListOfMissingImages();
