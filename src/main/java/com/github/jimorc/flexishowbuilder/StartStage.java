@@ -2,6 +2,7 @@ package com.github.jimorc.flexishowbuilder;
 
 import java.io.File;
 import java.io.IOException;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -62,6 +63,10 @@ public class StartStage extends FlexiStage {
                 BuilderGUI.LOG.debug("InputCSV constructor threw IOException: ", ioe);
                 BuilderGUI.handleIOException(ioe, iCSV);
             }
+        } else {
+            BuilderGUI.LOG.debug("FileChooser returned null (cancel clicked)");
+            Platform.exit();
+            System.exit(0);
         }
     }
 
