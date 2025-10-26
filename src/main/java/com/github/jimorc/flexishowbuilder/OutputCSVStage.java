@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.tinylog.Logger;
 
 /**
  * OutputCSVStage is the panel that displays the OutputCSV object.
@@ -61,7 +62,7 @@ public class OutputCSVStage extends FlexiStage {
                     grid.add(new Text(ipl.field(lastNameCol)), lastNameCol, row++);
                     break;
                 default:
-                    BuilderGUI.LOG.error(BuilderGUI.buildLogMessage(
+                    Logger.error(BuilderGUI.buildLogMessage(
                         "Invalid line: ", line.toString(), " found in OutputCSV"));
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setTitle("Programming Error");
@@ -94,7 +95,7 @@ public class OutputCSVStage extends FlexiStage {
             try {
                 workbook.writeToFile(saveFileName);
             } catch (IOException ioe) {
-                BuilderGUI.LOG.error("IOException thrown writing XLS file: ", ioe);
+                Logger.error("IOException thrown writing XLS file: ", ioe);
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("IO Error");
                 alert.setHeaderText("Error encountered while writing the XLS file.");

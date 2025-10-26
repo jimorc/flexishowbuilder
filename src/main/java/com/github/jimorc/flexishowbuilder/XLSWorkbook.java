@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.tinylog.Logger;
 
 /**
  * XLSWorkbook generates an Apache POI workbook that can then be saved as an XLS file.
@@ -59,6 +60,6 @@ public final class XLSWorkbook {
         workbook.write(fos);
         fos.close();
         workbook.close();
-        BuilderGUI.LOG.debug("output.xls written successfully");
+        Logger.debug("output.xls written successfully");
     }
 }

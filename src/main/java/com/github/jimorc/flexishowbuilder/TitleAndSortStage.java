@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import org.tinylog.Logger;
 
 /**
  * TitleAndSortStage contains inputs for title image text and the image sort order.
@@ -34,7 +35,7 @@ public class TitleAndSortStage extends FlexiStage {
      * Constructor.
      */
     public TitleAndSortStage() {
-        BuilderGUI.LOG.debug("In TitleAndSortStage constructor");
+        Logger.debug("In TitleAndSortStage constructor");
         VBox vbox = createBox();
         Scene scene = new Scene(vbox);
         this.setScene(scene);

@@ -2,6 +2,7 @@ package com.github.jimorc.flexishowbuilder;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.tinylog.Logger;
 
 /**
  * FlexiStage encapsulates the common functionality for all Stage objects in this program.
@@ -20,7 +21,7 @@ public class FlexiStage extends Stage {
         setHeight(height);
         // make sure program closes when window close button is clicked.
         setOnCloseRequest(_ -> {
-            BuilderGUI.LOG.debug("Handling FlexiStage close request");
+            Logger.trace("Handling FlexiStage close request");
             Platform.exit();
             System.exit(0);
         });
