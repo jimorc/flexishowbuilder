@@ -63,4 +63,19 @@ public class CSVLine {
             addField(field);
         }
     }
+
+    /**
+     * toString returns a string representation of the CSVLine.
+     * @return String representing the contents of the CSVLine object.
+     */
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < fields.length; i++) {
+            sb.append(fields[i]);
+            if (i < fields.length - 1) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
 }

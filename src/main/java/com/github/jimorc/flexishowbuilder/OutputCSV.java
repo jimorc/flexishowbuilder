@@ -1,5 +1,7 @@
 package com.github.jimorc.flexishowbuilder;
 
+import org.tinylog.Logger;
+
 /**
  * The OutputCSV class is used to build the CSV lines to be passed to LibreOffice or Excel
  * to generate an XLS file representing the slide show.
@@ -25,7 +27,17 @@ public class OutputCSV {
             newLines[i] = lines[i];
         }
         newLines[lines.length] = line;
+        Logger.debug(BuilderGUI.buildLogMessage(
+            "OutputCSV - added line: ", line.toString()));
         lines = newLines;
+    }
+
+    /**
+     * Return the number of lines in the CSV.
+     * @return number of lines
+     */
+    public int length() {
+        return lines.length;
     }
 
     /**

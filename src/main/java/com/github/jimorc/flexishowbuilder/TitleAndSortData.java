@@ -5,7 +5,7 @@ package com.github.jimorc.flexishowbuilder;
 */
 public class TitleAndSortData {
     private final String title;
-    private final SortOrder order;
+    private SortOrder order;
     private final boolean lastNameAsInitial;
 
     /**
@@ -30,5 +30,15 @@ public class TitleAndSortData {
 
     public boolean isLastNameAsInitial() {
         return lastNameAsInitial;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("TitleAndSortData:");
+        sb.append("\n   title: " + title);
+        sb.append("\n   sortOrder: " + order);
+        sb.append("\n   lastNameAsInitial: " + isLastNameAsInitial() + "\n");
+        return sb.toString();
     }
 }

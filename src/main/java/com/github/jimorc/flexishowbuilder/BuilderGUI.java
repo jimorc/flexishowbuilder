@@ -6,33 +6,34 @@ import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import org.tinylog.Logger;
 
 /**
  * BuilderGUI is the main App.
  */
 public class BuilderGUI extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
-        InputCSV csv = null;
-        try {
-            csv = new InputCSV.Builder().build();
-            if (csv != null) {
-                csv.validateCSVFile();
-            }
-        } catch (CSVException csve) {
-            handleCSVException(csve); // no return
-        } catch (IOException ioe) {
-            handleIOException(ioe, csv); // no return
-        }
-        if (csv != null) {
-            TitleAndSortData data = new TitleAndSortDialog().showAndWait().orElse(null);
-            if (data != null) {
-                OutputCSV out = generateOutputCSV(csv, data);
-                System.out.println(out);
-                XLSWorkbook workbook = new XLSWorkbook(out);
-                workbook.writeToFile(csv.getFileDir() + "/output.xls");
-            }
-        }
+    public void start(Stage stage) {
+        System.setProperty("LOG_LEVEL", "trace");
+        Logger.trace("flexishowbuilder starting.");
+        StartStage startStage = new StartStage();
+
+        startStage.showAndWait();
+        Logger.trace("Have returned from StartStage.");
+        InputCSV iCSV = startStage.getInputCSV();
+        TitleAndSortStage tsStage = new TitleAndSortStage();
+        tsStage.showAndWait();
+        TitleAndSortData data = tsStage.getData();
+        Logger.debug(BuilderGUI.buildLogMessage(
+            "TitleAndSortData after return from TitleAndSortStage: ", data.toString()));
+
+        OutputCSV out = generateOutputCSV(iCSV, data);
+        Logger.debug(BuilderGUI.buildLogMessage(
+            "OutputCSV after creation:\n", out.toString()));
+        Logger.trace("Creating outCSVStage");
+        OutputCSVStage outCSVStage = new OutputCSVStage(out, iCSV.getFileDir());
+        outCSVStage.showAndWait();
+        Logger.trace("Back from OutputCSVStage");
         System.exit(0);
     }
 
@@ -40,7 +41,11 @@ public class BuilderGUI extends Application {
         launch(args);
     }
 
-    private void handleCSVException(CSVException csve) {  // no return
+    /**
+     * handleCSVException displays an error alert.
+     * @param csve the CSVException to report.
+     */
+    protected static void handleCSVException(CSVException csve) {  // no return
         Alert alert = new Alert(null);
         String msg = csve.getMessage();
         alert.setAlertType(AlertType.ERROR);
@@ -51,7 +56,12 @@ public class BuilderGUI extends Application {
         System.exit(1);
     }
 
-    private void handleIOException(IOException ioe, InputCSV csv) {
+    /**
+     * handleIOException displays an error alert.
+     * @param ioe the IOException to report.
+     * @param csv the InputCSV object that the exception occurred on.
+     */
+    protected static void handleIOException(IOException ioe, InputCSV csv) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("CSV File Error");
         alert.setHeaderText("IOException attempting to read CSV file: "
@@ -61,7 +71,11 @@ public class BuilderGUI extends Application {
         System.exit(1);
     }
 
-    private void handlePersonException(Exception e) {  // no return
+    /**
+     * handlePersonException displays an error alert.
+     * @param e the PersonException
+     */
+    protected static void handlePersonException(Exception e) {  // no return
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Person Error");
         alert.setHeaderText("Mismatch between requested person's name and CSV");
@@ -71,12 +85,12 @@ public class BuilderGUI extends Application {
     }
 
     private OutputCSV generateOutputCSV(InputCSV csv, TitleAndSortData data) {
+        Logger.trace("In BuilderGUI.generateOutputCSV");
         OutputCSV out = new OutputCSV();
         try {
             out.appendLine(csv.getLine(0));
             String dir = csv.getFileDir();
             String titleFileName = dir + "/title.jpg";
-            System.out.println(dir);
             TitleImage.generateTitleImage(data.getTitle(), titleFileName);
             out.appendLine(new TitleImageLine("title.jpg"));
 
@@ -101,10 +115,25 @@ public class BuilderGUI extends Application {
             }
             out.appendLine(new TitleImageLine("title.jpg"));
         } catch (CSVException e) {
+            Logger.error("CSVException thrown in generateOutputCSV: ", e);
             handlePersonException(e);
         } catch (IOException ioe) {
+            Logger.error("IOException thrown in generateOutputCSV: ", ioe);
             handleIOException(ioe, csv);
         }
         return out;
+    }
+
+    /**
+     * buildLogMessage combines various String objects into a single string.
+     * @param parts the Strings to combine into a single String object.
+     * @return
+     */
+    public static String buildLogMessage(String... parts) {
+        StringBuffer sb = new StringBuffer();
+        for (String part: parts) {
+            sb.append(part);
+        }
+        return sb.toString();
     }
 }
