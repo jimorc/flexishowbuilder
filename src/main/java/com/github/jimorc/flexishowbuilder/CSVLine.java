@@ -17,9 +17,9 @@ public class CSVLine {
      * Constructor - creates a CSVLine object from a CSV line.
      * @param csvFields - the value of each field in the CSV line.
      */
-    public CSVLine(String[] csvFields) {
+    /*    public CSVLine(String[] csvFields) {
         fields = csvFields;
-    }
+    }*/
 
     /**
      * Returns the number of fields in the object.
