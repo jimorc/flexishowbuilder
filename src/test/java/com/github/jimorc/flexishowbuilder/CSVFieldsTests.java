@@ -81,4 +81,15 @@ public class CSVFieldsTests {
             assertEquals("Line contains illegal newline character.", e.getMessage());
         }
     }
+
+    @Test
+    public void testCSVFieldsUnterminatedQuote() {
+        String line = "H1,\"H2";
+        try {
+            new CSVFields(line);
+            fail("Failed to throw IllegalArgumentException for line with unterminated quote");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Last field in line has unterminated quote mark.", e.getMessage());
+        }
+    }
 }

@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
  */
 public class CSVFields {
     private final ArrayList<String> fields;
+    private MutableBoolean insideQuote;
 
     /**
      * Constructor.
@@ -19,7 +20,7 @@ public class CSVFields {
     public CSVFields(String line) throws IllegalArgumentException {
         fields = new ArrayList<String>(0);
         IntStream cpStream = line.codePoints();
-        MutableBoolean insideQuote = new MutableBoolean(false);
+        insideQuote = new MutableBoolean(false);
         StringBuffer field = new StringBuffer();
         cpStream.forEach(cp -> processCodePoint(insideQuote, field, cp));
         // last field has not been added, so do it now;
@@ -27,6 +28,9 @@ public class CSVFields {
             fields.add(field.toString());
         } else {
             throw new IllegalArgumentException("Line either empty or last character is a comma.");
+        }
+        if (insideQuote.getValue()) {
+            throw new IllegalArgumentException("Last field in line has unterminated quote mark.");
         }
     }
 
@@ -68,5 +72,13 @@ public class CSVFields {
      */
     public String getField(int index) throws IndexOutOfBoundsException {
         return fields.get(index);
+    }
+
+    /**
+     * Retrieve whether the last field did not have an ending quote mark.
+     * @return if insideQuote.
+     */
+    public boolean getInsideQuote() {
+        return insideQuote.getValue();
     }
 }
