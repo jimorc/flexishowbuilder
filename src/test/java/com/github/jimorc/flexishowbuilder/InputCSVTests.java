@@ -560,7 +560,8 @@ public class InputCSVTests {
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
-            String expectedMessage = "Invalid line number 2 found in CSV file invalidline.csv";
+            String expectedMessage = "Invalid line number 2 found in CSV file invalidline.csv"
+                + "\nLine does not contain at least 5 fields.";
             String actualMessage = csve.getMessage();
             assertEquals(expectedMessage, actualMessage);
         }

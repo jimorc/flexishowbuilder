@@ -169,7 +169,9 @@ public final class InputCSV {
                 } else {
                     Logger.error(BuilderGUI.buildLogMessage(
                         "Line ", Integer.toString(i), " is invalid"));
-                    throw new CSVException("Invalid line number " + (i + 1) + " found in CSV file " + getFileName());
+                    Logger.error("ArrayIndexOutOfBoundsException: ", aioobe);
+                    throw new CSVException("Invalid line number " + (i + 1) + " found in CSV file " + getFileName()
+                        + "\nLine does not contain at least 5 fields.");
                 }
             }
         }

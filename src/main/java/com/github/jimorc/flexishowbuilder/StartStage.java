@@ -32,7 +32,8 @@ public class StartStage extends FlexiStage {
             try {
                 iCSV.validateCSVFile();
             } catch (CSVException ce) {
-                Logger.error("validateCSVFile threw CSVException: ", ce);
+                Logger.error(BuilderGUI.buildLogMessage(
+                    "validateCSVFile threw CSVException: ", ce.getMessage()));
                 BuilderGUI.handleCSVException(ce);
             }
         });
