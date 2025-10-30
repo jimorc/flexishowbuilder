@@ -100,20 +100,27 @@ To be added
 
 ### macOS
 #### Install Building Tools
-1. XCode is available on the Mac App Store.
-2. Homebrew is used to download many other required building tools. Information on Homebrew and
-how to install it are available on the [Homebrew home page](https://brew.sh).
-3. Java JDK
-Open a terminal and enter:
-```zsh
+1. XCode must be installed. It is available on the Mac App Store.
+
+2. Both Java and Maven are required. openjdk (Java) and maven are both available on Homebrew but the Homebrew version of openjdk links to a
+shared version of harfbuzz, which is not installed by default on MacOS. Installing maven from
+Homebrew will install openjdk from Homebrew if it is not alreay installed.
+Using these installations,
+a DMG package for flexishowbuilder can be built and installed. Unfortunately, flexishowbuilder
+will abort on
+systems on which the harfbuzz library has not been installed. Therefore, a different source for
+both Java and maven must be found.
+An up-to-date version of Java is available from Oracle, and Maven is available using MacPorts. So,
+for Maven, [MacPorts](https://www.macports.org/install.php) is required. Installation of Java and
+Maven are detailed in the next two steps.
+
+3. Install Java:
+In a terminal window, enter:
 java --version
 ```
-If the version is less than 25:
-```zsh
-brew install openjdk
-sudo ln -sfn /opt/homebrew/opt/openjdk.jdk /Library/Java/JavaVirtualMachines
-```
-On Intel Macs, you must replace `/opt/homebrew` with `/usr/local/opt`. Check for the exact location.
+If the version information specifies openjdk, then you must uninstall openjdk. If not openjdk, but
+the version is less than 25, [download Java from
+Oracle](https://www.oracle.com/java/technologies/downloads/), and install it.
 
 Open ~/.zshrxc (or ~/.bashrc if you use bash instead of zsh) in an editor and enter:
 ```
@@ -124,17 +131,15 @@ and in the terminal:
 source ~/.zshrc
 java --version
 ```
-The version information should now indicate openjdk and a version of 25 or greater.
+The version information should now indicate a Java version that is not openjdk, and a version of
+25 or greater.
 
 4. Install maven
 ```zsh
+sudo port install maven
 mvn --version
 ```
-If mvn is not found, then enter:
-```zsh
-brew install maven
-mvn --version
-```
+
 5. Install the JavaFX SDK. Instructions for installing the JavaFX SDK are available from
 [Gluon](https://gluonhq.com/products/javafx). Extract the downloaded zip file
 and place it somewhere permanent. A good location would be in your Java projects
@@ -151,6 +156,11 @@ source ~/.zshrc
 
 6. Install git
 In a terminal, enter:
+```
+git --version
+```
+If git is not installed, then install it from either MacPorts, or Homebrew. The following
+instructions will install it from MacPorts. In a terminal, enter:
 ```zsh
 brew install git
 git --version
@@ -176,4 +186,6 @@ These steps produce the following artifacts:
 - flexishowbuilder/target/flexishowbuilder-<version>-jar-with-dependencies.jar
 - flexishowbuilder/target/dist/flexishowbuilder-<version>.dmg
 
-
+Install the DMG file as a final test. If you have a Mac without the build tools installed, then
+install the DMG on that system and run flexishowbuilder to completion to ensure that the
+executable can access all of the libraries it needs.
