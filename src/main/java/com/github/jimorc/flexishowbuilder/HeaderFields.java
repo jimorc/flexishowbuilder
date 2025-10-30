@@ -4,12 +4,15 @@ package com.github.jimorc.flexishowbuilder;
  * HeaderFields encapsulates the column position of each field needed by flexishowbuilder.
  */
 public class HeaderFields {
-    public final static int noField = -1;
-    private int fileNameField = noField;
-    private int titleField = noField;
-    private int fullNameField = noField;
-    private int firstNameField = noField;
-    private int lastNameField = noField;
+    /**
+     * NOFIELD indicates that the field value has not been set.
+     */
+    public static final int NOFIELD = -1;
+    private int fileNameField = NOFIELD;
+    private int titleField = NOFIELD;
+    private int fullNameField = NOFIELD;
+    private int firstNameField = NOFIELD;
+    private int lastNameField = NOFIELD;
 
     /**
      * HeaderFields constructor parses the passed input header line to determine the column
@@ -20,30 +23,34 @@ public class HeaderFields {
     public HeaderFields(String headerLine) throws CSVException {
         CSVFields f = new CSVFields(headerLine);
         for (int i = 0; i < f.size(); i++) {
-            switch(f.getField(i)) {
-                case "Filename":
-                    fileNameField = i;
-                    break;
-                case "Title":
-                    titleField = i;
-                    break;
-                case "Full Name":
-                    fullNameField = i;
-                    break;
-                case "First Name":
-                    firstNameField = i;
-                    break;
-                case "Last Name":
-                    lastNameField = i;
-                    break;
-                default:
-                    break;
-            }
+            setFieldPos(f, i);
         }
-        if (fileNameField == noField || titleField == noField || fullNameField == noField
-            || firstNameField == noField || lastNameField == noField) {
-                throw new CSVException("Invalid header line. Does not contain at least:\n"
-                    + "Filename,Title,Full Name,First tName,Last Name");
+        if (fileNameField == NOFIELD || titleField == NOFIELD || fullNameField == NOFIELD
+            || firstNameField == NOFIELD || lastNameField == NOFIELD) {
+            throw new CSVException("Invalid header line. Does not contain at least:\n"
+                + "Filename,Title,Full Name,First tName,Last Name");
+        }
+    }
+
+    private void setFieldPos(CSVFields f, int i) {
+        switch (f.getField(i)) {
+            case "Filename":
+                fileNameField = i;
+                break;
+            case "Title":
+                titleField = i;
+                break;
+            case "Full Name":
+                fullNameField = i;
+                break;
+            case "First Name":
+                firstNameField = i;
+                break;
+            case "Last Name":
+                lastNameField = i;
+                break;
+            default:
+                break;
         }
     }
 
