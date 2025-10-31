@@ -31,7 +31,7 @@ public class CSVFieldsTests {
         String line = "H1,\"H,2\",H3";
         CSVFields f = new CSVFields(line);
         assertEquals("H1", f.getField(0));
-        assertEquals("H,2", f.getField(1));
+        assertEquals("\"H,2\"", f.getField(1));
         assertEquals("H3", f.getField(2));
     }
 

@@ -39,6 +39,7 @@ public class CSVFields {
         switch (cp) {
             case '\u0022':
                 insideQuote.setValue(!insideQuote.getValue());
+                field.appendCodePoint(cp);
                 break;
             case ',':
                 if (insideQuote.getValue()) {

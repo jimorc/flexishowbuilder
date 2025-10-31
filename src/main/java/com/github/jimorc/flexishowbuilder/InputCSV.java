@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.tinylog.Logger;
 
 /**
@@ -35,6 +36,7 @@ public final class InputCSV {
      * @throws CSVException if csvF is not a file (i.e directory, link, etc.)
      * @throws CSVException if csvF contains an invalid header line.
      * @throws CSVException if csvF contains an invalid line.
+     * @throws CSVException if csvF is empty.
      * @throws IOException if the file cannot be read.
      */
     public InputCSV(File csvF) throws CSVException, IOException {
@@ -153,14 +155,20 @@ public final class InputCSV {
         List<String> allLines = java.nio.file.Files.readAllLines(path);
         Logger.debug(BuilderGUI.buildLogMessage(
             "Number of lines in InputCSV file: ", Integer.toString(allLines.size())));
+        if (allLines.size() == 0) {
+            Logger.error(BuilderGUI.buildLogMessage("File ", path.toString(), " is empty"));
+            throw new CSVException("File " + path.toString() + " is empty");
+        }
         for (int i = 0; i < allLines.size(); i++) {
             Logger.debug(BuilderGUI.buildLogMessage(
                 "Line ", Integer.toString(i), ":", allLines.get(i)));
         }
         lines = new CSVLine[allLines.size()];
-        for (int i = 0; i < allLines.size(); i++) {
+        HeaderFields hf = new HeaderFields(allLines.get(0));
+        lines[0] = new ImageAndPersonLine(allLines.get(0), hf);
+        for (int i = 1; i < allLines.size(); i++) {
             try {
-                lines[i] = new ImageAndPersonLine(allLines.get(i));
+                lines[i] = new ImageAndPersonLine(allLines.get(i), hf);
             } catch (ArrayIndexOutOfBoundsException aioobe) {
                 if (i == 0) {
                     Logger.error(BuilderGUI.buildLogMessage(

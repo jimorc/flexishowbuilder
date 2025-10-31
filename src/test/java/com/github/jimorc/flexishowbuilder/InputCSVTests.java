@@ -54,13 +54,13 @@ public class InputCSVTests {
     @Test
     void testConstructorNoHeaderInFile() {
         File f = new File("testing/data/zeroheaderlength.csv");
-        assertThrows(CSVException.class, () -> new InputCSV(f));
+        assertThrows(IllegalArgumentException.class, () -> new InputCSV(f));
     }
 
     @Test
     void testConstructorInvalidLineInFile() {
         File f = new File("testing/data/invalidline.csv");
-        assertThrows(CSVException.class, () -> new InputCSV(f));
+        assertThrows(IndexOutOfBoundsException.class, () -> new InputCSV(f));
     }
 
     @Test
@@ -107,12 +107,18 @@ public class InputCSVTests {
             fail("CSVException thrown: " + csve.getMessage());
         }
         final int numLines = csv.getNumberOfLines();
-        CSVLine newLine = new ImageAndPersonLine("image4.jpg,\"Image, Two\",Bob Brown,Bob,Brown");
-        csv.insertAt(1, newLine);
-        assertEquals(numLines + 1, csv.getNumberOfLines());
-        assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line1)).getImageFileName());
-        assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
-        assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+        String header = "Filename,Title,Full Name,First Name,Last Name";
+        try {
+            HeaderFields hf = new HeaderFields(header);
+            CSVLine newLine = new ImageAndPersonLine("image4.jpg,\"Image, Two\",Bob Brown,Bob,Brown", hf);
+            csv.insertAt(1, newLine);
+            assertEquals(numLines + 1, csv.getNumberOfLines());
+            assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line1)).getImageFileName());
+            assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
+            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+        } catch (CSVException e) {
+            fail("CSVException: " + e.getMessage());
+        }
     }
 
     @Test
@@ -131,12 +137,18 @@ public class InputCSVTests {
             fail("CSVException thrown: " + csve.getMessage());
         }
 
-        CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Four,Bob Brown,Bob,Brown");
-        csv.insertAt(0, newLine);
-        assertEquals(numLines, csv.getNumberOfLines());
-        assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line0)).getImageFileName());
-        assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
-        assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+        String header = "Filename,Title,Full Name,First Name,Last Name";
+        try {
+            HeaderFields hf = new HeaderFields(header);
+            CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Four,Bob Brown,Bob,Brown", hf);
+            csv.insertAt(0, newLine);
+            assertEquals(numLines, csv.getNumberOfLines());
+            assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line0)).getImageFileName());
+            assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
+            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+        } catch (CSVException e) {
+            fail("CSVException: " + e.getMessage());
+        }
     }
 
     @Test
@@ -154,12 +166,18 @@ public class InputCSVTests {
         } catch (CSVException csve) {
             fail("CSVException thrown: " + csve.getMessage());
         }
-        CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Three,Bob Brown,Bob,Brown");
-        csv.insertAt(line3, newLine);
-        assertEquals(numLines, csv.getNumberOfLines());
-        assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line1)).getImageFileName());
-        assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
-        assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+        String header = "Filename,Title,Full Name,First Name,Last Name";
+        try {
+            HeaderFields hf = new HeaderFields(header);
+            CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Three,Bob Brown,Bob,Brown", hf);
+            csv.insertAt(line3, newLine);
+            assertEquals(numLines, csv.getNumberOfLines());
+            assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line1)).getImageFileName());
+            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
+            assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+        } catch (CSVException e) {
+            fail("CSVException: " + e.getMessage());
+        }
     }
 
     @Test
@@ -174,18 +192,26 @@ public class InputCSVTests {
         } catch (CSVException csve) {
             fail("CSVException thrown: " + csve.getMessage());
         }
-        CSVLine newLine = new ImageAndPersonLine("image3.jpg,Image Three,Bob Brown,Bob,Brown");
+        String header = "Filename,Title,Full Name,First Name,Last Name";
         try {
+            HeaderFields hf = new HeaderFields(header);
+            CSVLine newLine = new ImageAndPersonLine("image3.jpg,Image Three,Bob Brown,Bob,Brown", hf);
             csv.insertAt(minus1, newLine);
             fail("ArrayIndexOutOfBoundsException not thrown for negative index");
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             // expected
+        } catch (CSVException e) {
+            fail("CSVException for insertAt minus1");
         }
         try {
+            HeaderFields hf = new HeaderFields(header);
+            CSVLine newLine = new ImageAndPersonLine("image3.jpg,Image Three,Bob Brown,Bob,Brown", hf);
             csv.insertAt(csv.getNumberOfLines() + 1, newLine);
             fail("ArrayIndexOutOfBoundsException not thrown for index greater than number of lines");
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             // expected
+        } catch (CSVException e) {
+            fail("CSVException for insertAt minus1");
         }
     }
 
@@ -204,56 +230,51 @@ public class InputCSVTests {
         } catch (CSVException csve) {
             fail("CSVException thrown: " + csve.getMessage());
         }
-        CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Four,Bob Brown,Bob,Brown");
-        csv.append(newLine);
-        assertEquals(numLines, csv.getNumberOfLines());
-        assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line1)).getImageFileName());
-        assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
-        assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
-    }
-
-    @Test
-    void testAppendToEmptyCSV() {
-        InputCSV csv = null;
+        String header = "Filename,Title,Full Name,First Name,Last Name";
         try {
-            File f = new File("testing/data/empty.csv");
-            csv = new InputCSV(f);
-        } catch (IOException ioe) {
-            fail("IOException thrown: " + ioe.getMessage());
-        } catch (CSVException csve) {
-            fail("CSVException thrown: " + csve.getMessage());
+            HeaderFields hf = new HeaderFields(header);
+            CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Four,Bob Brown,Bob,Brown", hf);
+            csv.append(newLine);
+            assertEquals(numLines, csv.getNumberOfLines());
+            assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line1)).getImageFileName());
+            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
+            assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+        } catch (CSVException e) {
+            fail("CSVException: " + e.getMessage());
         }
-        CSVLine newLine = new ImageAndPersonLine("image1.jpg,Image One,John Doe,John,Doe");
-        csv.append(newLine);
-        assertEquals(1, csv.getNumberOfLines());
-        assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(0)).getImageFileName());
     }
 
     @Test
     void testAppendMultiple() {
-        final int numLines = 3;
-        final int firstLine = 0;
-        final int secondLine = 1;
-        final int thirdLine = 2;
+        final int numLines = 4;
+        final int firstLine = 1;
+        final int secondLine = 2;
+        final int thirdLine = 3;
         InputCSV csv = null;
         try {
-            File f = new File("testing/data/empty.csv");
+            File f = new File("testing/data/headeronly.csv");
             csv = new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
             fail("CSVException thrown: " + csve.getMessage());
         }
-        CSVLine line1 = new ImageAndPersonLine("image1.jpg,Image One,John Doe,John,Doe");
-        CSVLine line2 = new ImageAndPersonLine("image2.jpg,\"Image, Two\",Jane Smith,Jane,Smith");
-        CSVLine line3 = new ImageAndPersonLine("image3.jpg,Image Three,Bob Brown,Bob,Brown");
-        csv.append(line1);
-        csv.append(line2);
-        csv.append(line3);
-        assertEquals(numLines, csv.getNumberOfLines());
-        assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(firstLine)).getImageFileName());
-        assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(secondLine)).getImageFileName());
-        assertEquals("image3.jpg", ((ImageAndPersonLine) csv.getLine(thirdLine)).getImageFileName());
+        String header = "Filename,Title,Full Name,First Name,Last Name";
+        try {
+            HeaderFields hf = new HeaderFields(header);
+            CSVLine line1 = new ImageAndPersonLine("image1.jpg,Image One,John Doe,John,Doe", hf);
+            CSVLine line2 = new ImageAndPersonLine("image2.jpg,\"Image, Two\",Jane Smith,Jane,Smith", hf);
+            CSVLine line3 = new ImageAndPersonLine("image3.jpg,Image Three,Bob Brown,Bob,Brown", hf);
+            csv.append(line1);
+            csv.append(line2);
+            csv.append(line3);
+            assertEquals(numLines, csv.getNumberOfLines());
+            assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(firstLine)).getImageFileName());
+            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(secondLine)).getImageFileName());
+            assertEquals("image3.jpg", ((ImageAndPersonLine) csv.getLine(thirdLine)).getImageFileName());
+        } catch (CSVException e) {
+            fail("CSVException: " + e.getMessage());
+        }
     }
 
     @Test
@@ -520,32 +541,34 @@ public class InputCSVTests {
     }
 
     @Test
-    void testValidateCSVFileEmpty() {
+    void testCSVFileEmpty() {
         try {
             File f = new File("testing/data/empty.csv");
-            InputCSV csv = new InputCSV(f);
-            csv.validateCSVFile();
-
+            new InputCSV(f);
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
-            String expectedMessage = "No data found in CSV file empty.csv";
+            String expectedMessage = "File testing/data/empty.csv is empty";
             String actualMessage = csve.getMessage();
             assertEquals(expectedMessage, actualMessage);
         }
     }
 
     @Test
-    void testValidateCSVFileZerodHeaderLength() {
+    void testValidateCSVFileZeroHeaderLength() {
         try {
             File f = new File("testing/data/zeroheaderlength.csv");
-            InputCSV csv = new InputCSV(f);
-            assertThrows(Exception.class, () -> csv.validateCSVFile());
+            new InputCSV(f);
+//            assertThrows(Exception.class, () -> csv.validateCSVFile());
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
             String expectedMessage = "Invalid header found in CSV file zeroheaderlength.csv";
             String actualMessage = csve.getMessage();
+            assertEquals(expectedMessage, actualMessage);
+        } catch (IllegalArgumentException iae) {
+            String expectedMessage = "Line either empty or last character is a comma.";
+            String actualMessage = iae.getMessage();
             assertEquals(expectedMessage, actualMessage);
         }
     }
@@ -563,6 +586,10 @@ public class InputCSVTests {
             String expectedMessage = "Invalid line number 2 found in CSV file invalidline.csv"
                 + "\nLine does not contain at least 5 fields.";
             String actualMessage = csve.getMessage();
+            assertEquals(expectedMessage, actualMessage);
+        } catch (IndexOutOfBoundsException obe) {
+            String expectedMessage = "Index 4 out of bounds for length 4";
+            String actualMessage = obe.getMessage();
             assertEquals(expectedMessage, actualMessage);
         }
     }

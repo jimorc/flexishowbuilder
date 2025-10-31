@@ -5,6 +5,7 @@ package com.github.jimorc.flexishowbuilder;
  * flexishow as downloaded into an InputCSV object.
  */
 public class ImageAndPersonLine extends CSVLine {
+    public final int NUMFIELDS = 5;
     private final int imageFilePosition = 0;
     private final int imageTitlePosition = 1;
     private final int personFullNamePosition = 2;
@@ -25,21 +26,15 @@ public class ImageAndPersonLine extends CSVLine {
      * @throws ArrayIndexOutOfBoundsException if the line does not contain at least
      * five fields.
      */
-    public ImageAndPersonLine(String line) throws ArrayIndexOutOfBoundsException {
+    public ImageAndPersonLine(String line, HeaderFields hf) throws ArrayIndexOutOfBoundsException {
         super();
-        int first = line.indexOf(',');
-        int fourth = line.lastIndexOf(',');
-        int third = line.lastIndexOf(',', fourth - 1);
-        int second = line.lastIndexOf(',', third - 1);
-        String[] fields = new String[personLastNamePosition + 1];
-        if (!validateFieldCount(first, second, third, fourth)) {
-            throw new ArrayIndexOutOfBoundsException("Line does not contain at least five fields: " + line);
-        }
-        fields[imageFilePosition] = line.substring(0, first);
-        fields[imageTitlePosition] = line.substring(first + 1, second);
-        fields[personFullNamePosition] = line.substring(second + 1, third);
-        fields[personFirstNamePosition] = line.substring(third + 1, fourth);
-        fields[personLastNamePosition] = line.substring(fourth + 1);
+        String[] fields = new String[NUMFIELDS];
+        CSVFields f = new CSVFields(line);
+        fields[0] = f.getField(hf.getFilenameField());
+        fields[1] = f.getField(hf.getTitleField());
+        fields[2] = f.getField(hf.getFullNameField());
+        fields[3] = f.getField(hf.getFirstNameField());
+        fields[4] = f.getField(hf.getLastNameField());
         addFields(fields);
     }
 
@@ -93,12 +88,5 @@ public class ImageAndPersonLine extends CSVLine {
     public String toString() {
         return getImageFileName() + "," + getImageTitle() + "," + getPersonFullName() + ","
             + getPersonFirstName() + "," + getPersonLastName();
-    }
-
-    private boolean validateFieldCount(int first, int second, int third, int fourth) {
-        if (first == -1 || second == -1 || third == -1 || fourth == -1) {
-            return false;
-        }
-        return !(first == second) && !(second == third) && !(third == fourth);
     }
 }
