@@ -22,7 +22,7 @@ public class CSVFields {
         IntStream cpStream = line.codePoints();
         insideQuote = new MutableBoolean(false);
         StringBuffer field = new StringBuffer();
-        cpStream.forEach(cp -> processCodePoint(insideQuote, field, cp));
+        cpStream.forEach(cp -> processCodePoint(field, cp));
         // last field has not been added, so do it now;
         if (field.length() != 0) {
             fields.add(field.toString());
@@ -34,7 +34,7 @@ public class CSVFields {
         }
     }
 
-    private void processCodePoint(MutableBoolean insideQuote, StringBuffer field, int cp)
+    private void processCodePoint(StringBuffer field, int cp)
             throws IllegalArgumentException {
         switch (cp) {
             case '\u0022':

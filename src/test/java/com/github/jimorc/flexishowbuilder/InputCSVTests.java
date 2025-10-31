@@ -559,7 +559,7 @@ public class InputCSVTests {
         try {
             File f = new File("testing/data/zeroheaderlength.csv");
             new InputCSV(f);
-//            assertThrows(Exception.class, () -> csv.validateCSVFile());
+            //assertThrows(Exception.class, () -> csv.validateCSVFile());
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {

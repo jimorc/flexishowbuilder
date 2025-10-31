@@ -5,7 +5,10 @@ package com.github.jimorc.flexishowbuilder;
  * flexishow as downloaded into an InputCSV object.
  */
 public class ImageAndPersonLine extends CSVLine {
-    public final int NUMFIELDS = 5;
+    /**
+     * NUMFIELDS is the number of fields that an ImageAndPersonLine object should contain.
+     */
+    public static final int NUMFIELDS = 5;
     private final int imageFilePosition = 0;
     private final int imageTitlePosition = 1;
     private final int personFullNamePosition = 2;
@@ -30,11 +33,11 @@ public class ImageAndPersonLine extends CSVLine {
         super();
         String[] fields = new String[NUMFIELDS];
         CSVFields f = new CSVFields(line);
-        fields[0] = f.getField(hf.getFilenameField());
-        fields[1] = f.getField(hf.getTitleField());
-        fields[2] = f.getField(hf.getFullNameField());
-        fields[3] = f.getField(hf.getFirstNameField());
-        fields[4] = f.getField(hf.getLastNameField());
+        fields[imageFilePosition] = f.getField(hf.getFilenameField());
+        fields[imageTitlePosition] = f.getField(hf.getTitleField());
+        fields[personFullNamePosition] = f.getField(hf.getFullNameField());
+        fields[personFirstNamePosition] = f.getField(hf.getFirstNameField());
+        fields[personLastNamePosition] = f.getField(hf.getLastNameField());
         addFields(fields);
     }
 
