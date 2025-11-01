@@ -22,7 +22,7 @@ import org.tinylog.Logger;
  * ```
  */
 public final class InputCSV {
-    private File csvFile;
+    private final File csvFile;
     private CSVLine[] lines = new CSVLine[0];
     private Map<String, ImageAndPersonLine[]> fullNameMap;
     private Set<String> fullNameKeys;
@@ -154,7 +154,7 @@ public final class InputCSV {
         List<String> allLines = java.nio.file.Files.readAllLines(path);
         Logger.debug(BuilderGUI.buildLogMessage(
             "Number of lines in InputCSV file: ", Integer.toString(allLines.size())));
-        if (allLines.size() == 0) {
+        if (allLines.isEmpty()) {
             Logger.error(BuilderGUI.buildLogMessage("File ", path.toString(), " is empty"));
             throw new CSVException("File " + path.toString() + " is empty");
         }
