@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
  */
 public class CSVFields {
     private final ArrayList<String> fields;
-    private MutableBoolean insideQuote;
+    private final MutableBoolean insideQuote;
 
     /**
      * Constructor.
