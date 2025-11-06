@@ -47,7 +47,7 @@ public class StartStage extends FlexiStage {
     }
 
     private void loadCSVFile() {
-        //BuilderGUI.LOG.debug("Building and showing FileChooser");
+        Logger.trace("Building and showing FileChooser");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select CSV File");
         fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getHomeDirectory());
