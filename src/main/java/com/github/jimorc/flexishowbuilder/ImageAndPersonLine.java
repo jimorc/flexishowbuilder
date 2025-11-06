@@ -14,6 +14,7 @@ public class ImageAndPersonLine extends CSVLine {
     private final int personFullNamePosition = 2;
     private final int personFirstNamePosition = 3;
     private final int personLastNamePosition = 4;
+    private String[] fields = new String[NUMFIELDS];
 
     /**
      * Constructor - creates an ImageAndPersonLine object from a CSV line. Special
@@ -31,18 +32,17 @@ public class ImageAndPersonLine extends CSVLine {
      */
     public ImageAndPersonLine(String line, HeaderFields hf) throws ArrayIndexOutOfBoundsException {
         super();
-        String[] fields = new String[NUMFIELDS];
         CSVFields f = null;
         try {
             f = new CSVFields(line);
         } catch (IllegalArgumentException iae) {
             setException(iae);
         }
-        fields[imageFilePosition] = f.getField(hf.getFilenameField());
-        fields[imageTitlePosition] = f.getField(hf.getTitleField());
-        fields[personFullNamePosition] = f.getField(hf.getFullNameField());
-        fields[personFirstNamePosition] = f.getField(hf.getFirstNameField());
-        fields[personLastNamePosition] = f.getField(hf.getLastNameField());
+        addField(f, hf.getFilenameField(), imageFilePosition);
+        addField(f, hf.getTitleField(), imageTitlePosition);
+        addField(f, hf.getFullNameField(), personFullNamePosition);
+        addField(f, hf.getFirstNameField(), personFirstNamePosition);
+        addField(f, hf.getLastNameField(), personLastNamePosition);
         addFields(fields);
     }
 
@@ -96,5 +96,9 @@ public class ImageAndPersonLine extends CSVLine {
     public String toString() {
         return getImageFileName() + "," + getImageTitle() + "," + getPersonFullName() + ","
             + getPersonFirstName() + "," + getPersonLastName();
+    }
+
+    private void addField(CSVFields f, int csvFieldPos, int imageAndPersonFieldPos) {
+        fields[imageAndPersonFieldPos] = f.getField(csvFieldPos);
     }
 }
