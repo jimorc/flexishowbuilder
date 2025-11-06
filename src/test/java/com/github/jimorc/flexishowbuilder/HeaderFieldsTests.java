@@ -77,7 +77,7 @@ public class HeaderFieldsTests {
             fail("Did not throw exception for No Filename");
         } catch (CSVException e) {
             assertEquals("Invalid header line. Does not contain at least:\n"
-                    + "Filename,Title,Full Name,First tName,Last Name", e.getMessage());
+                    + "Filename,Title,Full Name,First Name,Last Name", e.getMessage());
         }
     }
 
@@ -89,7 +89,7 @@ public class HeaderFieldsTests {
             fail("Did not throw exception for No Filename");
         } catch (CSVException e) {
             assertEquals("Invalid header line. Does not contain at least:\n"
-                    + "Filename,Title,Full Name,First tName,Last Name", e.getMessage());
+                    + "Filename,Title,Full Name,First Name,Last Name", e.getMessage());
         }
     }
 
@@ -101,7 +101,7 @@ public class HeaderFieldsTests {
             fail("Did not throw exception for No Filename");
         } catch (CSVException e) {
             assertEquals("Invalid header line. Does not contain at least:\n"
-                    + "Filename,Title,Full Name,First tName,Last Name", e.getMessage());
+                    + "Filename,Title,Full Name,First Name,Last Name", e.getMessage());
         }
     }
 
@@ -113,7 +113,7 @@ public class HeaderFieldsTests {
             fail("Did not throw exception for No Filename");
         } catch (CSVException e) {
             assertEquals("Invalid header line. Does not contain at least:\n"
-                    + "Filename,Title,Full Name,First tName,Last Name", e.getMessage());
+                    + "Filename,Title,Full Name,First Name,Last Name", e.getMessage());
         }
     }
 
@@ -125,7 +125,7 @@ public class HeaderFieldsTests {
             fail("Did not throw exception for No Filename");
         } catch (CSVException e) {
             assertEquals("Invalid header line. Does not contain at least:\n"
-                    + "Filename,Title,Full Name,First tName,Last Name", e.getMessage());
+                    + "Filename,Title,Full Name,First Name,Last Name", e.getMessage());
         }
     }
 
@@ -137,7 +137,7 @@ public class HeaderFieldsTests {
             fail("Did not throw exception for fewer than 5 fields");
         } catch (CSVException e) {
             assertEquals("Invalid header line. Does not contain at least:\n"
-                    + "Filename,Title,Full Name,First tName,Last Name", e.getMessage());
+                    + "Filename,Title,Full Name,First Name,Last Name", e.getMessage());
         }
     }       
 }

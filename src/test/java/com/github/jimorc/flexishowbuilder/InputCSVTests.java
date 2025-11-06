@@ -54,7 +54,7 @@ public class InputCSVTests {
     @Test
     void testConstructorNoHeaderInFile() {
         File f = new File("testing/data/zeroheaderlength.csv");
-        assertThrows(IllegalArgumentException.class, () -> new InputCSV(f));
+        assertThrows(CSVException.class, () -> new InputCSV(f));
     }
 
     @Test
@@ -563,7 +563,8 @@ public class InputCSVTests {
         } catch (IOException ioe) {
             fail("IOException thrown: " + ioe.getMessage());
         } catch (CSVException csve) {
-            String expectedMessage = "Invalid header found in CSV file zeroheaderlength.csv";
+            String expectedMessage = "Invalid header line. Does not contain at least:\n"
+                + "Filename,Title,Full Name,First Name,Last Name";
             String actualMessage = csve.getMessage();
             assertEquals(expectedMessage, actualMessage);
         } catch (IllegalArgumentException iae) {

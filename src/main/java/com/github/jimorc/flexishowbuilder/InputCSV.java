@@ -163,8 +163,15 @@ public final class InputCSV {
                 "Line ", Integer.toString(i), ":", allLines.get(i)));
         }
         lines = new CSVLine[allLines.size()];
+        // The following line throws CSVException if header line is invalid.
+        // We cannot continue if the header line is invalid.
         HeaderFields hf = new HeaderFields(allLines.get(0));
+
+        // Header is valid, so let's add it to the lines array.
         lines[0] = new ImageAndPersonLine(allLines.get(0), hf);
+        // Now process the remaining lines.
+        // If a line is invalid, we will add the exception to the CSVLine object.
+        // The line will be shown in the GUI as being in error.
         for (int i = 1; i < allLines.size(); i++) {
             try {
                 lines[i] = new ImageAndPersonLine(allLines.get(i), hf);

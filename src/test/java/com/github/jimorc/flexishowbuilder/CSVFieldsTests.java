@@ -53,10 +53,10 @@ public class CSVFieldsTests {
     public void testCSVFieldsEmptyLine() {
         String line = "";
         try {
-            new CSVFields(line);
-            fail("Failed to throw IllegalArgumentException for empty line");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Line either empty or last character is a comma.", e.getMessage());
+            CSVFields f = new CSVFields(line);
+            assertEquals("Line either empty or last character is a comma.", f.getException().getMessage());
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
     }
 
@@ -64,10 +64,10 @@ public class CSVFieldsTests {
     public void testCSVFieldsLineEndsWithComma() {
         String line = "H1,";
         try {
-            new CSVFields(line);
-            fail("Failed to throw IllegalArgumentException for line ending with comma.");
+            CSVFields f = new CSVFields(line);
+            assertEquals("Line either empty or last character is a comma.", f.getException().getMessage());
         } catch (IllegalArgumentException e) {
-            assertEquals("Line either empty or last character is a comma.", e.getMessage());
+            fail(e.getMessage());
         }
     }
 
@@ -75,10 +75,10 @@ public class CSVFieldsTests {
     public void testCSVFieldsContainsNewLine() {
         String line = "H1\n,H2";
         try {
-            new CSVFields(line);
-            fail("Failed to throw IllegalArgumentException for line containing newline");
+            CSVFields f = new CSVFields(line);
+            assertEquals("Line contains illegal newline character.", f.getException().getMessage());
         } catch (IllegalArgumentException e) {
-            assertEquals("Line contains illegal newline character.", e.getMessage());
+            fail(e.getMessage());
         }
     }
 
@@ -86,10 +86,10 @@ public class CSVFieldsTests {
     public void testCSVFieldsUnterminatedQuote() {
         String line = "H1,\"H2";
         try {
-            new CSVFields(line);
-            fail("Failed to throw IllegalArgumentException for line with unterminated quote");
+            CSVFields f = new CSVFields(line);
+            assertEquals("Last field in line has unterminated quote mark.", f.getException().getMessage());
         } catch (IllegalArgumentException e) {
-            assertEquals("Last field in line has unterminated quote mark.", e.getMessage());
+            fail(e.getMessage());
         }
     }
 }

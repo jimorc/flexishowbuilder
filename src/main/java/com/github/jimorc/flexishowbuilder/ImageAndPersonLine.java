@@ -32,7 +32,12 @@ public class ImageAndPersonLine extends CSVLine {
     public ImageAndPersonLine(String line, HeaderFields hf) throws ArrayIndexOutOfBoundsException {
         super();
         String[] fields = new String[NUMFIELDS];
-        CSVFields f = new CSVFields(line);
+        CSVFields f = null;
+        try {
+            f = new CSVFields(line);
+        } catch (IllegalArgumentException iae) {
+            setException(iae);
+        }
         fields[imageFilePosition] = f.getField(hf.getFilenameField());
         fields[imageTitlePosition] = f.getField(hf.getTitleField());
         fields[personFullNamePosition] = f.getField(hf.getFullNameField());

@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 public class CSVFields {
     private final ArrayList<String> fields;
     private final MutableBoolean insideQuote;
+    private Exception exception;
 
     /**
      * Constructor.
@@ -27,10 +28,10 @@ public class CSVFields {
         if (field.length() != 0) {
             fields.add(field.toString());
         } else {
-            throw new IllegalArgumentException("Line either empty or last character is a comma.");
+            exception = new IllegalArgumentException("Line either empty or last character is a comma.");
         }
         if (insideQuote.getValue()) {
-            throw new IllegalArgumentException("Last field in line has unterminated quote mark.");
+            exception = new IllegalArgumentException("Last field in line has unterminated quote mark.");
         }
     }
 
@@ -50,7 +51,7 @@ public class CSVFields {
                 }
                 break;
             case '\n':
-                throw new IllegalArgumentException("Line contains illegal newline character.");
+                exception = new IllegalArgumentException("Line contains illegal newline character.");
             default:
                 field.appendCodePoint(cp);
                 break;
@@ -81,5 +82,13 @@ public class CSVFields {
      */
     public boolean getInsideQuote() {
         return insideQuote.getValue();
+    }
+
+    /**
+     * Retrieve the exception associated with this CSVFields object.
+     * @return the exception, or null if no exception.
+     */
+    public Exception getException() {
+        return exception;
     }
 }

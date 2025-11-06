@@ -28,7 +28,7 @@ public class HeaderFields {
         if (fileNameField == NOFIELD || titleField == NOFIELD || fullNameField == NOFIELD
             || firstNameField == NOFIELD || lastNameField == NOFIELD) {
             throw new CSVException("Invalid header line. Does not contain at least:\n"
-                + "Filename,Title,Full Name,First tName,Last Name");
+                + "Filename,Title,Full Name,First Name,Last Name");
         }
     }
 
