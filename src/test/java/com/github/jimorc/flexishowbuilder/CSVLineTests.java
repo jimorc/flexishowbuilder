@@ -24,6 +24,7 @@ class CSVLineTests {
         assertEquals(2, csvL.length());
         assertEquals("a", csvL.field(0));
         assertEquals("b", csvL.field(1));
+        assertEquals(0, csvL.getExceptions().size());
     }
 
     @Test
@@ -36,5 +37,18 @@ class CSVLineTests {
         assertEquals("a", csvL.field(0));
         assertEquals("b", csvL.field(1));
         assertEquals("c", csvL.field(2));
+        assertEquals(0, csvL.getExceptions().size());
+    }
+
+    @Test
+    void setAndGetException() {
+        CSVLine csvL = new CSVLine();
+        Exception e = new Exception("Test exception");
+        Exception e2 = new Exception("Second exception");
+        csvL.setException(e);
+        csvL.setException(e2);
+        assertEquals(2, csvL.getExceptions().size());
+        assertEquals("Test exception", csvL.getExceptions().get(0).getMessage());
+        assertEquals("Second exception", csvL.getExceptions().get(1).getMessage());
     }
 }

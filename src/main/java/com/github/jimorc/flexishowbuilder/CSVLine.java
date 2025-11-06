@@ -1,10 +1,13 @@
 package com.github.jimorc.flexishowbuilder;
 
+import java.util.ArrayList;
+
 /**
  * The CSVLine class stores each field of a CSV line.
  */
 public class CSVLine {
     private String[] fields;
+    private ArrayList<Exception> exceptions = new ArrayList<Exception>(0);
 
     /**
      * Constructor - creates an empty CSVLine object.
@@ -77,5 +80,21 @@ public class CSVLine {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * Sets an exception associated with this CSVLine.
+     * @param e - the exception to set
+     */
+    public void setException(Exception e) {
+        this.exceptions.add(e);
+    }
+
+    /**
+     * Returns the exceptions associated with this CSVLine.
+     * @return the exceptions associated with this CSVLine. There may be none.
+     */
+    public ArrayList<Exception> getExceptions() {
+        return this.exceptions;
     }
 }
