@@ -128,4 +128,16 @@ public class HeaderFieldsTests {
                     + "Filename,Title,Full Name,First tName,Last Name", e.getMessage());
         }
     }
+
+    @Test
+    public void testFewerThan5Fields() {
+        String line = "Filename,Title,Full Name,First Name";
+        try {
+            new HeaderFields(line);
+            fail("Did not throw exception for fewer than 5 fields");
+        } catch (CSVException e) {
+            assertEquals("Invalid header line. Does not contain at least:\n"
+                    + "Filename,Title,Full Name,First tName,Last Name", e.getMessage());
+        }
+    }       
 }
