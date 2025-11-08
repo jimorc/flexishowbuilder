@@ -3,6 +3,7 @@ package com.github.jimorc.flexishowbuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -52,44 +53,28 @@ public class CSVFieldsTests {
     @Test
     public void testCSVFieldsEmptyLine() {
         String line = "";
-        try {
-            CSVFields f = new CSVFields(line);
-            assertEquals("Line either empty or last character is a comma.", f.getException().getMessage());
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+        CSVFields f = new CSVFields(line);
+        assertTrue(f.getLineEmpty());
     }
 
     @Test
     public void testCSVFieldsLineEndsWithComma() {
         String line = "H1,";
-        try {
-            CSVFields f = new CSVFields(line);
-            assertEquals("Line either empty or last character is a comma.", f.getException().getMessage());
-        } catch (IllegalArgumentException e) {
-            fail(e.getMessage());
-        }
+        CSVFields f = new CSVFields(line);
+        assertTrue(f.getLineEndsWithComma());
     }
 
     @Test
     public void testCSVFieldsContainsNewLine() {
         String line = "H1\n,H2";
-        try {
-            CSVFields f = new CSVFields(line);
-            assertEquals("Line contains illegal newline character.", f.getException().getMessage());
-        } catch (IllegalArgumentException e) {
-            fail(e.getMessage());
-        }
+        CSVFields f = new CSVFields(line);
+        assertTrue(f.getLineContainsNewline());
     }
 
     @Test
     public void testCSVFieldsUnterminatedQuote() {
         String line = "H1,\"H2";
-        try {
-            CSVFields f = new CSVFields(line);
-            assertEquals("Last field in line has unterminated quote mark.", f.getException().getMessage());
-        } catch (IllegalArgumentException e) {
-            fail(e.getMessage());
-        }
+        CSVFields f = new CSVFields(line);
+        assertTrue(f.getInsideQuote());
     }
 }

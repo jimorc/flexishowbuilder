@@ -139,5 +139,5 @@ public class HeaderFieldsTests {
             assertEquals("Invalid header line. Does not contain at least:\n"
                     + "Filename,Title,Full Name,First Name,Last Name", e.getMessage());
         }
-    }       
+    }
 }

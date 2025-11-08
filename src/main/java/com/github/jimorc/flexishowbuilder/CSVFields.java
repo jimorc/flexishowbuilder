@@ -9,16 +9,18 @@ import java.util.stream.IntStream;
 public class CSVFields {
     private final ArrayList<String> fields;
     private final MutableBoolean insideQuote;
-    private Exception exception;
+    private boolean lineEmpty;
+    private boolean lineEndsWithComma;
+    private boolean lineContainsNewline;
 
     /**
      * Constructor.
      * @param line the line to convert to fields.
-     * @throws IllegalArgumentException if line is empty.
-     * @throws IllegalArgumentException i line ends with a comma.
-     * @throws IllegalArgumentException if line contains a newline character.
      */
-    public CSVFields(String line) throws IllegalArgumentException {
+    public CSVFields(String line) {
+        lineEmpty = line.isEmpty();
+        lineEndsWithComma = line.endsWith(",");
+        lineContainsNewline = line.contains("\n");
         fields = new ArrayList<String>(0);
         IntStream cpStream = line.codePoints();
         insideQuote = new MutableBoolean(false);
@@ -28,15 +30,11 @@ public class CSVFields {
         if (field.length() != 0) {
             fields.add(field.toString());
         } else {
-            exception = new IllegalArgumentException("Line either empty or last character is a comma.");
-        }
-        if (insideQuote.getValue()) {
-            exception = new IllegalArgumentException("Last field in line has unterminated quote mark.");
+            fields.add("");
         }
     }
 
-    private void processCodePoint(StringBuffer field, int cp)
-            throws IllegalArgumentException {
+    private void processCodePoint(StringBuffer field, int cp) {
         switch (cp) {
             case '\u0022':
                 insideQuote.setValue(!insideQuote.getValue());
@@ -51,7 +49,7 @@ public class CSVFields {
                 }
                 break;
             case '\n':
-                exception = new IllegalArgumentException("Line contains illegal newline character.");
+                break;
             default:
                 field.appendCodePoint(cp);
                 break;
@@ -85,10 +83,26 @@ public class CSVFields {
     }
 
     /**
-     * Retrieve the exception associated with this CSVFields object.
-     * @return the exception, or null if no exception.
+     * Retrieve whether the line was empty.
+     * @return if the line was empty.
      */
-    public Exception getException() {
-        return exception;
+    public boolean getLineEmpty() {
+        return lineEmpty;
+    }
+
+    /**
+     * Retrieve whether the line ends with a comma.
+     * @return if the line ends with a comma.
+     */
+    public boolean getLineEndsWithComma() {
+        return lineEndsWithComma;
+    }
+
+    /**
+     * Retrieve whether the line contains a newline character.
+     * @return
+     */
+    public boolean getLineContainsNewline() {
+        return lineContainsNewline;
     }
 }
