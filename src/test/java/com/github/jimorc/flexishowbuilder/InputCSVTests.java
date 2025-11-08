@@ -60,7 +60,15 @@ public class InputCSVTests {
     @Test
     void testConstructorInvalidLineInFile() {
         File f = new File("testing/data/invalidline.csv");
-        assertThrows(IndexOutOfBoundsException.class, () -> new InputCSV(f));
+        try {
+            new InputCSV(f);
+        } catch (IOException ioe) {
+            fail(ioe.getMessage());
+        } catch (CSVException ce) {
+            fail(ce.getMessage());
+            return;
+        }
+
     }
 
     @Test
@@ -570,27 +578,6 @@ public class InputCSVTests {
         } catch (IllegalArgumentException iae) {
             String expectedMessage = "Line either empty or last character is a comma.";
             String actualMessage = iae.getMessage();
-            assertEquals(expectedMessage, actualMessage);
-        }
-    }
-
-    @Test
-    void testValidateCSVFileInvalidHeader() {
-        try {
-            File f = new File("testing/data/invalidline.csv");
-            InputCSV csv = new InputCSV(f);
-            assertThrows(Exception.class, () -> csv.validateCSVFile());
-
-        } catch (IOException ioe) {
-            fail("IOException thrown: " + ioe.getMessage());
-        } catch (CSVException csve) {
-            String expectedMessage = "Invalid line number 2 found in CSV file invalidline.csv"
-                + "\nLine does not contain at least 5 fields.";
-            String actualMessage = csve.getMessage();
-            assertEquals(expectedMessage, actualMessage);
-        } catch (IndexOutOfBoundsException obe) {
-            String expectedMessage = "Index 4 out of bounds for length 4";
-            String actualMessage = obe.getMessage();
             assertEquals(expectedMessage, actualMessage);
         }
     }

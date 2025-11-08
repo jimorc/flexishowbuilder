@@ -14,6 +14,10 @@ public class ImageAndPersonLine extends CSVLine {
     private final int personFullNamePosition = 2;
     private final int personFirstNamePosition = 3;
     private final int personLastNamePosition = 4;
+    private boolean insideQuote;
+    private boolean lineEmpty;
+    private boolean lineEndsWithComma;
+    private boolean lineContainsNewline;
     private String[] fields = new String[NUMFIELDS];
 
     /**
@@ -33,16 +37,17 @@ public class ImageAndPersonLine extends CSVLine {
     public ImageAndPersonLine(String line, HeaderFields hf) throws ArrayIndexOutOfBoundsException {
         super();
         CSVFields f = null;
-        try {
-            f = new CSVFields(line);
-        } catch (IllegalArgumentException iae) {
-            setException(iae);
-        }
-        addField(f, hf.getFilenameField(), imageFilePosition);
-        addField(f, hf.getTitleField(), imageTitlePosition);
-        addField(f, hf.getFullNameField(), personFullNamePosition);
-        addField(f, hf.getFirstNameField(), personFirstNamePosition);
-        addField(f, hf.getLastNameField(), personLastNamePosition);
+        f = new CSVFields(line);
+        insideQuote = f.getInsideQuote();
+        lineEmpty = f.getLineEmpty();
+        lineEndsWithComma = f.getLineEndsWithComma();
+        lineContainsNewline = f.getLineContainsNewline();
+
+        addImageField(f, hf);
+        addTitleField(f, hf);
+        addFullNameField(f, hf);
+        addFirstNameField(f, hf);
+        addLastNameField(f, hf);
         addFields(fields);
     }
 
@@ -87,6 +92,78 @@ public class ImageAndPersonLine extends CSVLine {
     }
 
     /**
+     * Returns whether the image title field was inside quotes.
+     * @return whether the image title field was inside quotes.
+     */
+    public boolean getInsideQuote() {
+        return insideQuote;
+    }
+
+    /**
+     * Returns whether the line was empty.
+     * @return true if line was empty, false otherwise.
+     */
+    public boolean getLineEmpty() {
+        return lineEmpty;
+    }
+
+    /**
+     * Returns whether the line contains a newline character.
+     * @return true if the line contains a newline character, false otherwise.
+     */
+    public boolean getLineContainsNewline() {
+        return lineContainsNewline;
+    }
+    /**
+     * Returns whether the line ends with a comma.
+     * @return true if the line ends with a comma, false otherwise.
+     */
+
+    public boolean getLineEndsWithComma() {
+        return lineEndsWithComma;
+    }
+
+    /**
+     * Returns whether the image file field was missing.
+     * @return true if the image file field was missing, false otherwise.
+     */
+    public boolean getNoImageFile() {
+        return fields[imageFilePosition].isBlank();
+    }
+
+    /**
+     * Returns whether the image title field was missing.
+     * @return true if the image title field was missing, false otherwise.
+     */
+    public boolean getNoImageTitle() {
+        return fields[imageTitlePosition].isBlank();
+    }
+
+    /**
+     * Returns whether the person's full name field was missing.
+    * @return true if full name field was missing, false otherwise.
+    */
+    public boolean getNoPersonFullName() {
+        return fields[personFullNamePosition].isBlank();
+    }
+
+    /**
+     * Returns whether the person's first name field was missing.
+     * @returntrue if first name field was missing, false otherwise.
+     */
+    public boolean getNoPersonFirstName() {
+        return fields[personFirstNamePosition].isBlank();
+    }
+
+    /**
+     * Returns whether the person's last name field was missing.
+     * @return true if last name field was missing, false otherwise.
+     */
+    public boolean getNoPersonLastName() {
+        return fields[personLastNamePosition].isBlank();
+    }
+
+    /**
      * Returns a String representation of the object.
      * @return a String representation of the object.
      * @throws ArrayIndexOutOfBoundsException if the object does not
@@ -98,7 +175,63 @@ public class ImageAndPersonLine extends CSVLine {
             + getPersonFirstName() + "," + getPersonLastName();
     }
 
-    private void addField(CSVFields f, int csvFieldPos, int imageAndPersonFieldPos) {
-        fields[imageAndPersonFieldPos] = f.getField(csvFieldPos);
+    private void addImageField(CSVFields f, HeaderFields hf) {
+        int csvFieldPos = hf.getFilenameField();
+        if (csvFieldPos == -1) {
+            return;
+        }
+        try {
+            fields[imageFilePosition] = f.getField(csvFieldPos);
+        } catch (IndexOutOfBoundsException e) {
+            fields[imageFilePosition] = "";
+        }
+    }
+
+    private void addTitleField(CSVFields f, HeaderFields hf) {
+        int csvFieldPos = hf.getTitleField();
+        if (csvFieldPos == -1) {
+            return;
+        }
+        try {
+            fields[imageTitlePosition] = f.getField(csvFieldPos);
+        } catch (IndexOutOfBoundsException e) {
+            fields[imageTitlePosition] = "";
+        }
+    }
+
+    private void addFullNameField(CSVFields f, HeaderFields hf) {
+        int csvFieldPos = hf.getFullNameField();
+        if (csvFieldPos == -1) {
+            return;
+        }
+        try {
+            fields[personFullNamePosition] = f.getField(csvFieldPos);
+        } catch (IndexOutOfBoundsException e) {
+            fields[personFullNamePosition] = "";
+        }
+    }
+
+    private void addFirstNameField(CSVFields f, HeaderFields hf) {
+        int csvFieldPos = hf.getFirstNameField();
+        if (csvFieldPos == -1) {
+            return;
+        }
+        try {
+            fields[personFirstNamePosition] = f.getField(csvFieldPos);
+        } catch (IndexOutOfBoundsException e) {
+            fields[personFirstNamePosition] = "";
+        }
+    }
+
+    private void addLastNameField(CSVFields f, HeaderFields hf) {
+        int csvFieldPos = hf.getLastNameField();
+        if (csvFieldPos == -1) {
+            return;
+        }
+        try {
+            fields[personLastNamePosition] = f.getField(csvFieldPos);
+        } catch (IndexOutOfBoundsException e) {
+            fields[personLastNamePosition] = "";
+        }
     }
 }
