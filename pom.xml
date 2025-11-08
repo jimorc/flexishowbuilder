@@ -6,6 +6,7 @@
     <version>1.2.0</version>
     <properties>
         <java.version>25</java.version>
+        <javafx.version>25.0.1</javafx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -32,13 +33,13 @@
     <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>${java.version}</version>
+            <version>${javafx.version}</version>
         </dependency>
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
       <dependency>
           <groupId>org.openjfx</groupId>
           <artifactId>javafx-swing</artifactId>
-          <version>${java.version}</version>
+          <version>${javafx.version}</version>
       </dependency>
       <dependency>
           <groupId>org.testfx</groupId>
