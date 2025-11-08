@@ -34,7 +34,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @throws ArrayIndexOutOfBoundsException if the line does not contain at least
      * five fields.
      */
-    public ImageAndPersonLine(String line, HeaderFields hf) throws ArrayIndexOutOfBoundsException {
+    public ImageAndPersonLine(String line, HeaderFields hf) {
         super();
         CSVFields f = null;
         f = new CSVFields(line);
