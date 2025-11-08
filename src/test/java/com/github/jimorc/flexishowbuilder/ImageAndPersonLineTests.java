@@ -84,10 +84,10 @@ public class ImageAndPersonLineTests {
             ImageAndPersonLine ipl = new ImageAndPersonLine("image.jpg,\"image title,John Doe,John,Doe", hf);
             assertEquals(LINES, ipl.length());
             assertEquals("image.jpg", ipl.getImageFileName());
-            // assertEquals("image title", ipl.getImageTitle());
-            // assertEquals("John Doe", ipl.getPersonFullName());
-            // assertEquals("John", ipl.getPersonFirstName());
-            // assertEquals("Doe", ipl.getPersonLastName());
+            assertEquals("\"image title,John Doe,John,Doe", ipl.getImageTitle());
+            assertEquals("", ipl.getPersonFullName());
+            assertEquals("", ipl.getPersonFirstName());
+            assertEquals("", ipl.getPersonLastName());
             assertTrue(ipl.getInsideQuote());
             assertFalse(ipl.getLineEmpty());
             assertFalse(ipl.getLineEndsWithComma());
