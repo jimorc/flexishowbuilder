@@ -29,6 +29,7 @@ public class ImageAndPersonLineTests {
             assertFalse(ipl.getLineEmpty());
             assertFalse(ipl.getLineEndsWithComma());
             assertFalse(ipl.getLineContainsNewline());
+            assertFalse(ipl.getImageNotJpeg());
         } catch (CSVException e) {
             fail("CSVException: " + e.getMessage());
         }
@@ -113,6 +114,7 @@ public class ImageAndPersonLineTests {
             assertTrue(ipl.getLineEmpty());
             assertFalse(ipl.getLineEndsWithComma());
             assertFalse(ipl.getLineContainsNewline());
+            assertFalse(ipl.getImageNotJpeg());
         } catch (CSVException e) {
             fail("CSVException: " + e.getMessage());
         }
@@ -159,6 +161,7 @@ public class ImageAndPersonLineTests {
             assertFalse(ipl.getNoPersonFullName());
             assertFalse(ipl.getNoPersonFirstName());
             assertFalse(ipl.getNoPersonLastName());
+            assertFalse(ipl.getImageNotJpeg());
         } catch (CSVException e) {
             fail("CSVException: " + e.getMessage());
         }
@@ -237,6 +240,20 @@ public class ImageAndPersonLineTests {
             assertFalse(ipl.getNoPersonFullName());
             assertTrue(ipl.getNoPersonFirstName());
             assertFalse(ipl.getNoPersonLastName());
+        } catch (CSVException e) {
+            fail("CSVException: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testImageNotJpeg() {
+        String header = "Filename,Title,Full Name,First Name,Last Name";
+        try {
+            HeaderFields hf = new HeaderFields(header);
+            ImageAndPersonLine ipl = new ImageAndPersonLine("image.png,image title,John Doe,John,Doe", hf);
+            assertEquals(LINES, ipl.length());
+            assertEquals("image.png", ipl.getImageFileName());
+            assertTrue(ipl.getImageNotJpeg());
         } catch (CSVException e) {
             fail("CSVException: " + e.getMessage());
         }

@@ -67,7 +67,7 @@ public class ImageAndPersonLine extends CSVLine {
         return field(imageTitlePosition);
     }
 
-    /**
+    /**imageFileNotJpeg
      * Returns the person's full name.
      * @return the person's full name.
      */
@@ -161,6 +161,16 @@ public class ImageAndPersonLine extends CSVLine {
      */
     public boolean getNoPersonLastName() {
         return fields[personLastNamePosition].isBlank();
+    }
+
+    /**
+     * Returns whether the image file is not a jpg file.
+     * @return true if the image file is not "" and not a jpg, false otherwise.
+     */
+    public boolean getImageNotJpeg() {
+        return !fields[imageFilePosition].isBlank()
+            && !fields[imageFilePosition].toLowerCase().endsWith(".jpg")
+            && !fields[imageFilePosition].toLowerCase().endsWith(".jpeg");
     }
 
     /**
