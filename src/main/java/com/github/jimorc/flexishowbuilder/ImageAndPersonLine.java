@@ -8,18 +8,12 @@ public class ImageAndPersonLine extends CSVLine {
     /**
      * NUMFIELDS is the number of fields that an ImageAndPersonLine object should contain.
      */
-    public static final int NUMFIELDS = 5;
-    private final int imageFilePosition = 0;
-    private final int imageTitlePosition = 1;
-    private final int personFullNamePosition = 2;
-    private final int personFirstNamePosition = 3;
-    private final int personLastNamePosition = 4;
     private boolean insideQuote;
     private boolean lineEmpty;
     private boolean lineEndsWithComma;
     private boolean lineContainsNewline;
     private boolean imageFileNotFound;
-    private String[] fields = new String[NUMFIELDS];
+    private String[] fields = new String[IPLColumn.values().length];
 
     /**
      * Constructor - creates an ImageAndPersonLine object from a CSV line. Special
@@ -57,7 +51,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @return the image file name.
      */
     public String getImageFileName() {
-        return field(imageFilePosition);
+        return field(IPLColumn.IMAGE_FILE_NAME.ordinal());
     }
 
     /**
@@ -65,7 +59,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @return the image title.
      */
     public String getImageTitle() {
-        return field(imageTitlePosition);
+        return field(IPLColumn.IMAGE_TITLE.ordinal());
     }
 
     /**imageFileNotJpeg
@@ -73,7 +67,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @return the person's full name.
      */
     public String getPersonFullName() {
-        return field(personFullNamePosition);
+        return field(IPLColumn.PERSON_FULL_NAME.ordinal());
     }
 
     /**
@@ -81,7 +75,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @return the person's first name.
      */
     public String getPersonFirstName() {
-        return field(personFirstNamePosition);
+        return field(IPLColumn.PERSON_FIRST_NAME.ordinal());
     }
 
     /**
@@ -89,7 +83,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @return the person's last name.
      */
     public String getPersonLastName() {
-        return field(personLastNamePosition);
+        return field(IPLColumn.PERSON_LAST_NAME.ordinal());
     }
 
     /**
@@ -129,7 +123,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @return true if the image file field was missing, false otherwise.
      */
     public boolean getNoImageFile() {
-        return fields[imageFilePosition].isBlank();
+        return fields[IPLColumn.IMAGE_FILE_NAME.ordinal()].isBlank();
     }
 
     /**
@@ -137,7 +131,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @return true if the image title field was missing, false otherwise.
      */
     public boolean getNoImageTitle() {
-        return fields[imageTitlePosition].isBlank();
+        return fields[IPLColumn.IMAGE_TITLE.ordinal()].isBlank();
     }
 
     /**
@@ -145,7 +139,7 @@ public class ImageAndPersonLine extends CSVLine {
     * @return true if full name field was missing, false otherwise.
     */
     public boolean getNoPersonFullName() {
-        return fields[personFullNamePosition].isBlank();
+        return fields[IPLColumn.PERSON_FULL_NAME.ordinal()].isBlank();
     }
 
     /**
@@ -153,7 +147,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @returntrue if first name field was missing, false otherwise.
      */
     public boolean getNoPersonFirstName() {
-        return fields[personFirstNamePosition].isBlank();
+        return fields[IPLColumn.PERSON_FIRST_NAME.ordinal()].isBlank();
     }
 
     /**
@@ -161,7 +155,7 @@ public class ImageAndPersonLine extends CSVLine {
      * @return true if last name field was missing, false otherwise.
      */
     public boolean getNoPersonLastName() {
-        return fields[personLastNamePosition].isBlank();
+        return fields[IPLColumn.PERSON_LAST_NAME.ordinal()].isBlank();
     }
 
     /**
@@ -185,9 +179,9 @@ public class ImageAndPersonLine extends CSVLine {
      * @return true if the image file is not "" and not a jpg, false otherwise.
      */
     public boolean getImageNotJpeg() {
-        return !fields[imageFilePosition].isBlank()
-            && !fields[imageFilePosition].toLowerCase().endsWith(".jpg")
-            && !fields[imageFilePosition].toLowerCase().endsWith(".jpeg");
+        return !fields[IPLColumn.IMAGE_FILE_NAME.ordinal()].isBlank()
+            && !fields[IPLColumn.IMAGE_FILE_NAME.ordinal()].toLowerCase().endsWith(".jpg")
+            && !fields[IPLColumn.IMAGE_FILE_NAME.ordinal()].toLowerCase().endsWith(".jpeg");
     }
 
     /**
@@ -208,9 +202,9 @@ public class ImageAndPersonLine extends CSVLine {
             return;
         }
         try {
-            fields[imageFilePosition] = f.getField(csvFieldPos);
+            fields[IPLColumn.IMAGE_FILE_NAME.ordinal()] = f.getField(csvFieldPos);
         } catch (IndexOutOfBoundsException e) {
-            fields[imageFilePosition] = "";
+            fields[IPLColumn.IMAGE_FILE_NAME.ordinal()] = "";
         }
     }
 
@@ -220,9 +214,9 @@ public class ImageAndPersonLine extends CSVLine {
             return;
         }
         try {
-            fields[imageTitlePosition] = f.getField(csvFieldPos);
+            fields[IPLColumn.IMAGE_TITLE.ordinal()] = f.getField(csvFieldPos);
         } catch (IndexOutOfBoundsException e) {
-            fields[imageTitlePosition] = "";
+            fields[IPLColumn.IMAGE_TITLE.ordinal()] = "";
         }
     }
 
@@ -232,9 +226,9 @@ public class ImageAndPersonLine extends CSVLine {
             return;
         }
         try {
-            fields[personFullNamePosition] = f.getField(csvFieldPos);
+            fields[IPLColumn.PERSON_FULL_NAME.ordinal()] = f.getField(csvFieldPos);
         } catch (IndexOutOfBoundsException e) {
-            fields[personFullNamePosition] = "";
+            fields[IPLColumn.PERSON_FULL_NAME.ordinal()] = "";
         }
     }
 
@@ -244,9 +238,9 @@ public class ImageAndPersonLine extends CSVLine {
             return;
         }
         try {
-            fields[personFirstNamePosition] = f.getField(csvFieldPos);
+            fields[IPLColumn.PERSON_FIRST_NAME.ordinal()] = f.getField(csvFieldPos);
         } catch (IndexOutOfBoundsException e) {
-            fields[personFirstNamePosition] = "";
+            fields[IPLColumn.PERSON_FIRST_NAME.ordinal()] = "";
         }
     }
 
@@ -256,9 +250,9 @@ public class ImageAndPersonLine extends CSVLine {
             return;
         }
         try {
-            fields[personLastNamePosition] = f.getField(csvFieldPos);
+            fields[IPLColumn.PERSON_LAST_NAME.ordinal()] = f.getField(csvFieldPos);
         } catch (IndexOutOfBoundsException e) {
-            fields[personLastNamePosition] = "";
+            fields[IPLColumn.PERSON_LAST_NAME.ordinal()] = "";
         }
     }
 }
