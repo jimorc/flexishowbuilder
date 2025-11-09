@@ -21,6 +21,9 @@ public class BuilderGUI extends Application {
         startStage.showAndWait();
         Logger.trace("Have returned from StartStage.");
         InputCSV iCSV = startStage.getInputCSV();
+        InputCSVStage iStage = new InputCSVStage(iCSV);
+        iStage.showAndWait();
+        Logger.trace("Back from InputCSVStage");
         TitleAndSortStage tsStage = new TitleAndSortStage();
         tsStage.showAndWait();
         TitleAndSortData data = tsStage.getData();
