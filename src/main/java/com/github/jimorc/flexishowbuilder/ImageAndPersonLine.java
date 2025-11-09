@@ -18,6 +18,7 @@ public class ImageAndPersonLine extends CSVLine {
     private boolean lineEmpty;
     private boolean lineEndsWithComma;
     private boolean lineContainsNewline;
+    private boolean imageFileNotFound;
     private String[] fields = new String[NUMFIELDS];
 
     /**
@@ -161,6 +162,22 @@ public class ImageAndPersonLine extends CSVLine {
      */
     public boolean getNoPersonLastName() {
         return fields[personLastNamePosition].isBlank();
+    }
+
+    /**
+     * Sets whether the image file has been found.
+     * @param b true if the image file was not found, false otherwise.
+     */
+    public void setImageFileNotFound(boolean b) {
+        imageFileNotFound = b;
+    }
+
+    /**
+     * Returns whether the image file was not found.
+     * @return true if the image file was not found, false otherwise.
+     */
+    public boolean getImageFileNotFound() {
+        return imageFileNotFound;
     }
 
     /**

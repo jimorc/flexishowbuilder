@@ -2,6 +2,7 @@ package com.github.jimorc.flexishowbuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,6 +24,7 @@ import org.tinylog.Logger;
  */
 public final class InputCSV {
     private final File csvFile;
+    private Path csvFolder;
     private CSVLine[] lines = new CSVLine[0];
     private Map<String, ImageAndPersonLine[]> fullNameMap;
     private Set<String> fullNameKeys;
@@ -34,7 +36,6 @@ public final class InputCSV {
      * @throws CSVException if csvF is null.
      * @throws CSVException if csvF is not a file (i.e directory, link, etc.)
      * @throws CSVException if csvF contains an invalid header line.
-     * @throws CSVException if csvF contains an invalid line.
      * @throws CSVException if csvF is empty.
      * @throws IOException if the file cannot be read.
      */
@@ -50,9 +51,24 @@ public final class InputCSV {
             throw new CSVException("Trying to read " + csvF.getAbsolutePath()
                 + " which is not a file.");
         }
+        csvFolder = csvF.toPath().getParent();
+        Logger.debug(BuilderGUI.buildLogMessage("CSV file folder: ", csvFolder.toString()));
         loadCSVFile();
         buildFullNameHashMap();
         fullNameKeys = fullNameMap.keySet();
+        for (int i = 1; i < lines.length; i++) {
+            switch (lines[i]) {
+                case ImageAndPersonLine ipLine:
+                    String imageFile = ipLine.getImageFileName();
+                    Path imagePath = csvFolder.resolve(imageFile);
+                    File imageFileObj = imagePath.toFile();
+                    ipLine.setImageFileNotFound(!imageFileObj.isFile());
+                    break;
+                default:
+                    // ignore other line types
+                    break;
+            }
+        }
     }
 
     /**

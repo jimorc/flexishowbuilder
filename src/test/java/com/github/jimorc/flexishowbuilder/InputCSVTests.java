@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -662,5 +663,21 @@ public class InputCSVTests {
         } catch (IOException ioe) {
             fail(ioe.getMessage());
         }
+    }
+
+    @Test
+    void testImageFileNotFound() {
+        final int line1 = 1;
+        InputCSV csv = null;
+        try {
+            File f = new File("testing/data/filenotfound.csv");
+            csv = new InputCSV(f);
+        } catch (IOException ioe) {
+            fail("IOException thrown: " + ioe.getMessage());
+        } catch (CSVException csve) {
+            fail("CSVException thrown: " + csve.getMessage());
+        }
+        ImageAndPersonLine notfound = (ImageAndPersonLine) csv.getLine(line1);
+        assertTrue(notfound.getImageFileNotFound());
     }
 }
