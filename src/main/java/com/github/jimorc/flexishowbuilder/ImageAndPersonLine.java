@@ -8,6 +8,7 @@ import javafx.util.Duration;
  * flexishow as downloaded into an InputCSV object.
  */
 public class ImageAndPersonLine extends CSVLine {
+    private static final double TOOLTIP_SHOW_DURATION_SECONDS = 10.0;
     /**
      * NUMFIELDS is the number of fields that an ImageAndPersonLine object should contain.
      */
@@ -196,7 +197,7 @@ public class ImageAndPersonLine extends CSVLine {
             + "The file name must end with .jpg or .jpeg\n"
             + "Flexishowbuilder will not generate an XLS file for\n"
             + "RunFlexishow until this is fixed.");
-        tt.setShowDuration(Duration.seconds(10.));
+        tt.setShowDuration(Duration.seconds(TOOLTIP_SHOW_DURATION_SECONDS));
         return tt;
     }
 
@@ -208,8 +209,9 @@ public class ImageAndPersonLine extends CSVLine {
         Tooltip tt = new Tooltip("The image file was not found in the image folder.\n"
             + "Flexishowbuilder will not generate an XLS file for\n"
             + "RunFlexishow until this is fixed.");
-        tt.setShowDuration(Duration.seconds(10.));
-        return tt;}
+        tt.setShowDuration(Duration.seconds(TOOLTIP_SHOW_DURATION_SECONDS));
+        return tt;
+    }
 
     /**
      * Returns a String representation of the object.

@@ -45,9 +45,8 @@ public class IPLine extends HBox {
                                 ipF.setBackgroundColor(Color.TRANSPARENT);
                             }
                             break;
-                        default: {
+                        default:
                             break;
-                        }
                     }
                     break;
                 case titleColumn:
