@@ -22,6 +22,7 @@ public class IPLines extends VBox {
         CSVLine[] csvLines = csv.getLines();
         IPLine header = new IPLine(csvLines[0], fieldWidths);
         header.clearBackgrounds();
+        header.setHeaderStyle();
         getChildren().add(header);
         for (int row = 1; row < csv.getLines().length; row++) {
             CSVLine csvLine = csv.getLine(row);

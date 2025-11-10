@@ -107,4 +107,15 @@ public class IPLine extends HBox {
             ipField.setBackgroundColor(Color.TRANSPARENT);
         }
     }
+
+    /**
+     * Sets the font weight to bold and centers the text of all IPLFields in this IPLine.
+     */
+    public void setHeaderStyle() {
+        for (int col = 0; col < getChildren().size(); col++) {
+            IPLField ipField = (IPLField) getChildren().get(col);
+            ipField.getTextElement().setStyle("-fx-font-weight: bold;"
+                + " -fx-text-alignment: center;");
+        }
+    }
 }

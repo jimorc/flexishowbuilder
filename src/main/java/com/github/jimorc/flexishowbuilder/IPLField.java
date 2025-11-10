@@ -51,4 +51,12 @@ public class IPLField  extends StackPane {
     public void setBackgroundColor(Color color) {
         background.setFill(color);
     }
+
+    /**
+     * Returns the Text element of the IPLField.
+     * @return the Text element.
+     */
+    public Text getTextElement() {
+        return text;
+    }
 }
