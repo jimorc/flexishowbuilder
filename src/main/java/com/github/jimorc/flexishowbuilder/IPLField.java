@@ -43,4 +43,12 @@ public class IPLField  extends StackPane {
         background.setWidth(width);
         text.setWrappingWidth(width - PADDING);
     }
+
+    /**
+     * Sets the background color of the IPLField.
+     * @param color the color to set.
+     */
+    public void setBackgroundColor(Color color) {
+        background.setFill(color);
+    }
 }

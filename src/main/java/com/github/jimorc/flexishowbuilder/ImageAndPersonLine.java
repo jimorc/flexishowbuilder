@@ -1,5 +1,8 @@
 package com.github.jimorc.flexishowbuilder;
 
+import javafx.scene.control.Tooltip;
+import javafx.util.Duration;
+
 /**
  * ImageAndPersonLine represents the image and person information for each image to be displayed by
  * flexishow as downloaded into an InputCSV object.
@@ -183,6 +186,30 @@ public class ImageAndPersonLine extends CSVLine {
             && !fields[IPLColumn.IMAGE_FILE_NAME.ordinal()].toLowerCase().endsWith(".jpg")
             && !fields[IPLColumn.IMAGE_FILE_NAME.ordinal()].toLowerCase().endsWith(".jpeg");
     }
+
+    /**
+     * Returns a tooltip explaining that the image file is not a jpg file.
+     * @return a tooltip explaining that the image file is not a jpg file.
+     */
+    public Tooltip getImageNotJpegTooltip() {
+        Tooltip tt = new Tooltip("RunFlexishow requires the image file to be a JPEG.\n"
+            + "The file name must end with .jpg or .jpeg\n"
+            + "Flexishowbuilder will not generate an XLS file for\n"
+            + "RunFlexishow until this is fixed.");
+        tt.setShowDuration(Duration.seconds(10.));
+        return tt;
+    }
+
+    /**
+     * Returns a tooltip explaining that the image file was not found.
+     * @return a tooltip explaining that the image file was not found.
+     */
+    public Tooltip getImageNotFoundTooltip() {
+        Tooltip tt = new Tooltip("The image file was not found in the image folder.\n"
+            + "Flexishowbuilder will not generate an XLS file for\n"
+            + "RunFlexishow until this is fixed.");
+        tt.setShowDuration(Duration.seconds(10.));
+        return tt;}
 
     /**
      * Returns a String representation of the object.

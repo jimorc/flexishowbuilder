@@ -1,6 +1,8 @@
 package com.github.jimorc.flexishowbuilder;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 /**
  * IPLine is an HBox that displays a CSVLine as IPLFields.
@@ -31,6 +33,22 @@ public class IPLine extends HBox {
             switch (col) {
                 case imageColumn:
                     fieldWidths.setMaxImageFileNameWidth(ipF.getFieldWidth());
+                    switch (line) {
+                        case ImageAndPersonLine iapl:
+                            if (iapl.getImageNotJpeg()) {
+                                ipF.setBackgroundColor(Color.YELLOW);
+                                Tooltip.install(ipF, iapl.getImageNotJpegTooltip());
+                            } else if (iapl.getImageFileNotFound()) {
+                                ipF.setBackgroundColor(Color.ORANGE);
+                                Tooltip.install(ipF, iapl.getImageNotFoundTooltip());
+                            } else {
+                                ipF.setBackgroundColor(Color.TRANSPARENT);
+                            }
+                            break;
+                        default: {
+                            break;
+                        }
+                    }
                     break;
                 case titleColumn:
                     fieldWidths.setMaxImageTitleWidth(ipF.getFieldWidth());
