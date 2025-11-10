@@ -97,4 +97,14 @@ public class IPLine extends HBox {
             }
         }
     }
+
+    /**
+     * Clears the background colors of all IPLFields in this IPLine.
+     */
+    public void clearBackgrounds() {
+        for (int col = 0; col < getChildren().size(); col++) {
+            IPLField ipField = (IPLField) getChildren().get(col);
+            ipField.setBackgroundColor(Color.TRANSPARENT);
+        }
+    }
 }

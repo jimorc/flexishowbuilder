@@ -19,7 +19,11 @@ public class IPLines extends VBox {
         super();
         setSpacing(SPACING);
         setPadding(PADDING);
-        for (int row = 0; row < csv.getLines().length; row++) {
+        CSVLine[] csvLines = csv.getLines();
+        IPLine header = new IPLine(csvLines[0], fieldWidths);
+        header.clearBackgrounds();
+        getChildren().add(header);
+        for (int row = 1; row < csv.getLines().length; row++) {
             CSVLine csvLine = csv.getLine(row);
             IPLine ipLine = new IPLine(csvLine, fieldWidths);
             getChildren().add(ipLine);
