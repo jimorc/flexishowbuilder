@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 /**
  * InputCSVStage is the panel that displays lines from the InputCSV object.
@@ -69,23 +68,23 @@ public class InputCSVStage extends FlexiStage {
                 case HBox hbox:
                     for (Node field : hbox.getChildren()) {
                         switch (field) {
-                            case Text text:
+                            case IPLField text:
                                 int col = hbox.getChildren().indexOf(field);
                                 switch (col) {
                                     case imageColumn: // image
-                                        fieldWidths.setMaxImageFileNameWidth(text.getLayoutBounds().getWidth());
+                                        fieldWidths.setMaxImageFileNameWidth(text.getFieldWidth());
                                         break;
                                     case titleColumn: // title
-                                        fieldWidths.setMaxImageTitleWidth(text.getLayoutBounds().getWidth());
+                                        fieldWidths.setMaxImageTitleWidth(text.getFieldWidth());
                                         break;
                                     case personFullNameColumn: // person full name
-                                        fieldWidths.setMaxPersonFullNameWidth(text.getLayoutBounds().getWidth());
+                                        fieldWidths.setMaxPersonFullNameWidth(text.getFieldWidth());
                                         break;
                                     case personFirstNameColumn: // person first name
-                                        fieldWidths.setMaxPersonFirstNameWidth(text.getLayoutBounds().getWidth());
+                                        fieldWidths.setMaxPersonFirstNameWidth(text.getFieldWidth());
                                         break;
                                     case personLastNameColumn: // person last name
-                                        fieldWidths.setMaxPersonLastNameWidth(text.getLayoutBounds().getWidth());
+                                        fieldWidths.setMaxPersonLastNameWidth(text.getFieldWidth());
                                         break;
                                     default:
                                     // handle error.
@@ -117,23 +116,23 @@ public class InputCSVStage extends FlexiStage {
                 case HBox hbox:
                     for (Node field : hbox.getChildren()) {
                         switch (field) {
-                            case Text text:
+                            case IPLField iplF:
                                 int col = hbox.getChildren().indexOf(field);
                                 switch (col) {
                                     case imageColumn: // image
-                                        text.setWrappingWidth(fieldWidths.getImageFileNameWidth() + padding);
+                                        iplF.setFieldWidth(fieldWidths.getImageFileNameWidth() + padding);
                                         break;
                                     case titleColumn: // title
-                                        text.setWrappingWidth(fieldWidths.getImageTitleWidth() + padding);
+                                        iplF.setFieldWidth(fieldWidths.getImageTitleWidth() + padding);
                                         break;
                                     case personFullNameColumn: // person full name
-                                        text.setWrappingWidth(fieldWidths.getPersonFullNameWidth() + padding);
+                                        iplF.setFieldWidth(fieldWidths.getPersonFullNameWidth() + padding);
                                         break;
                                     case personFirstNameColumn: // person first name
-                                        text.setWrappingWidth(fieldWidths.getPersonFirstNameWidth() + padding);
+                                        iplF.setFieldWidth(fieldWidths.getPersonFirstNameWidth() + padding);
                                         break;
                                     case personLastNameColumn: // person last name
-                                        text.setWrappingWidth(fieldWidths.getPersonLastNameWidth() + padding);
+                                        iplF.setFieldWidth(fieldWidths.getPersonLastNameWidth() + padding);
                                         break;
                                     default:
                                     // handle error.
@@ -155,9 +154,7 @@ public class InputCSVStage extends FlexiStage {
         HBox box = new HBox();
         box.setSpacing(spacing);
         for (int col = 0; col < line.length(); col++) {
-            Text fieldText = new Text(line.field(col));
-            // set style based on error status.
-            box.getChildren().add(fieldText);
+            box.getChildren().add(new IPLField(line.field(col)));
         }
         return box;
     }
