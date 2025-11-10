@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
  */
 public class InputCSVStage extends FlexiStage {
     private InputCSV csv;
+    private IPLFieldWidths fieldWidths;
 
     /**
      * InputCSVStage constructor.
@@ -23,6 +24,7 @@ public class InputCSVStage extends FlexiStage {
      */
     public InputCSVStage(InputCSV csv) {
         this.csv = csv;
+        fieldWidths = new IPLFieldWidths();
         VBox lineBox = createLineBox();
         ScrollPane sPane = new ScrollPane();
         sPane.setContent(lineBox);
@@ -41,68 +43,18 @@ public class InputCSVStage extends FlexiStage {
         for (CSVLine line : lines) {
             switch (line) {
                 case ImageAndPersonLine ipl:
-                    HBox lineHBox = createLineHBox(ipl);
-                    box.getChildren().add(lineHBox);
+                    IPLine ipLine = new IPLine(ipl, fieldWidths);
+                    box.getChildren().add(ipLine);
                     break;
                 default:
                 // handle error.
             }
         }
-        IPLFieldWidths fieldWidths = setMaxFieldWidths(box);
-        setFieldWidths(padding, box, fieldWidths);
+        setFieldWidths(padding, box);
         return box;
     }
 
-    private IPLFieldWidths setMaxFieldWidths(VBox box) {
-        // Used in switch cases to identify columns.
-        // Cases must be constants, so can't use IPLColumn.ordinal().
-        final int imageColumn = 0;              // same as IPLColumn.IMAGE_FILE_NAME.ordinal();
-        final int titleColumn = 1;              // same as IPLColumn.IMAGE_TITLE.ordinal();
-        final int personFullNameColumn = 2;     // same as IPLColumn.PERSON_FULL_NAME.ordinal();
-        final int personFirstNameColumn = 3;    // same as IPLColumn.PERSON_FIRST_NAME.ordinal();
-        final int personLastNameColumn = 4;     // same as IPLColumn.PERSON_LAST_NAME.ordinal();
-
-        IPLFieldWidths fieldWidths = new IPLFieldWidths();
-        for (Node line : box.getChildren()) {
-            switch (line) {
-                case HBox hbox:
-                    for (Node field : hbox.getChildren()) {
-                        switch (field) {
-                            case IPLField text:
-                                int col = hbox.getChildren().indexOf(field);
-                                switch (col) {
-                                    case imageColumn: // image
-                                        fieldWidths.setMaxImageFileNameWidth(text.getFieldWidth());
-                                        break;
-                                    case titleColumn: // title
-                                        fieldWidths.setMaxImageTitleWidth(text.getFieldWidth());
-                                        break;
-                                    case personFullNameColumn: // person full name
-                                        fieldWidths.setMaxPersonFullNameWidth(text.getFieldWidth());
-                                        break;
-                                    case personFirstNameColumn: // person first name
-                                        fieldWidths.setMaxPersonFirstNameWidth(text.getFieldWidth());
-                                        break;
-                                    case personLastNameColumn: // person last name
-                                        fieldWidths.setMaxPersonLastNameWidth(text.getFieldWidth());
-                                        break;
-                                    default:
-                                    // handle error.
-                                }
-                                break;
-                            default:
-                            // handle error.
-                        }
-                    }
-                    break;
-                default:
-                // handle error.
-            }
-        }
-        return fieldWidths;
-    }
-
-    private void setFieldWidths(final int padding, VBox box, IPLFieldWidths fieldWidths) {
+    private void setFieldWidths(final int padding, VBox box) {
         // Used in switch cases to identify columns.
         // Cases must be constants, so can't use IPLColumn.ordinal().
         final int imageColumn = 0;              // same as IPLColumn.IMAGE_FILE_NAME.ordinal();
@@ -147,15 +99,5 @@ public class InputCSVStage extends FlexiStage {
                 // handle error.
             }
         }
-    }
-
-    private HBox createLineHBox(ImageAndPersonLine line) {
-        final int spacing = 5;
-        HBox box = new HBox();
-        box.setSpacing(spacing);
-        for (int col = 0; col < line.length(); col++) {
-            box.getChildren().add(new IPLField(line.field(col)));
-        }
-        return box;
     }
 }
