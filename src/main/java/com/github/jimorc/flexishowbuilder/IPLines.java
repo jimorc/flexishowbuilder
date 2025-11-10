@@ -9,24 +9,25 @@ import javafx.scene.layout.VBox;
 public class IPLines extends VBox {
     private static final Insets PADDING = new Insets(6.0);
     private static final int SPACING = 5;
+    private CSVLine[] csvLines;
 
     /**
      * Constructor.
-     * @param csv the InputCSV to display.
+     * @param lines the CSV lines to display.
      * @param fieldWidths the IPLFieldWidths object to update.
      */
-    public IPLines(InputCSV csv, IPLFieldWidths fieldWidths) {
+    public IPLines(CSVLine[] lines, IPLFieldWidths fieldWidths) {
         super();
         setSpacing(SPACING);
         setPadding(PADDING);
-        CSVLine[] csvLines = csv.getLines();
-        IPLine header = new IPLine(csvLines[0], fieldWidths);
+        csvLines = lines;
+        IPLine header = new IPLine(csvLines[0], fieldWidths, this, 0);
         header.clearBackgrounds();
         header.setHeaderStyle();
         getChildren().add(header);
-        for (int row = 1; row < csv.getLines().length; row++) {
-            CSVLine csvLine = csv.getLine(row);
-            IPLine ipLine = new IPLine(csvLine, fieldWidths);
+        for (int row = 1; row < csvLines.length; row++) {
+            CSVLine csvLine = csvLines[row];
+            IPLine ipLine = new IPLine(csvLine, fieldWidths, this, row);
             getChildren().add(ipLine);
         }
         for (int i = 0; i < getChildren().size(); i++) {

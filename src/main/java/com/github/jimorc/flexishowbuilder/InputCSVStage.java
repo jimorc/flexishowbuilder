@@ -19,7 +19,7 @@ public class InputCSVStage extends FlexiStage {
      */
     public InputCSVStage(InputCSV csv) {
         fieldWidths = new IPLFieldWidths();
-        IPLines linesBox = new IPLines(csv, fieldWidths);
+        IPLines linesBox = new IPLines(csv.getLines(), fieldWidths);
         ScrollPane sPane = new ScrollPane();
         sPane.setContent(linesBox);
         Scene scene = new Scene(sPane);
