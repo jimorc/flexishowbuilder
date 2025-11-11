@@ -105,7 +105,7 @@ public class InputCSVTests {
     void testInsertAt() {
         final int line1 = 1;
         final int line2 = 2;
-        final int line3 = 3;
+        final int line4 = 4;
         InputCSV csv = null;
         try {
             File f = new File("testing/data/test.csv");
@@ -124,7 +124,7 @@ public class InputCSVTests {
             assertEquals(numLines + 1, csv.getNumberOfLines());
             assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line1)).getImageFileName());
             assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
-            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line4)).getImageFileName());
         } catch (CSVException e) {
             fail("CSVException: " + e.getMessage());
         }
@@ -132,10 +132,10 @@ public class InputCSVTests {
 
     @Test
     void testInsertAtBeginning() {
-        final int numLines = 4;
+        final int numLines = 5;
         final int line0 = 0;
         final int line2 = 2;
-        final int line3 = 3;
+        final int line4 = 4;
         InputCSV csv = null;
         try {
             File f = new File("testing/data/test.csv");
@@ -154,7 +154,7 @@ public class InputCSVTests {
             assertEquals(numLines, csv.getNumberOfLines());
             assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line0)).getImageFileName());
             assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
-            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line4)).getImageFileName());
         } catch (CSVException e) {
             fail("CSVException: " + e.getMessage());
         }
@@ -162,10 +162,10 @@ public class InputCSVTests {
 
     @Test
     void testInsertAtEnd() {
-        final int numLines = 4;
+        final int numLines = 5;
         final int line1 = 1;
-        final int line2 = 2;
         final int line3 = 3;
+        final int line4 = 4;
         InputCSV csv = null;
         try {
             File f = new File("testing/data/test.csv");
@@ -179,11 +179,11 @@ public class InputCSVTests {
         try {
             HeaderFields hf = new HeaderFields(header);
             CSVLine newLine = new ImageAndPersonLine("image4.jpg,Image Three,Bob Brown,Bob,Brown", hf);
-            csv.insertAt(line3, newLine);
+            csv.insertAt(line4, newLine);
             assertEquals(numLines, csv.getNumberOfLines());
             assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line1)).getImageFileName());
-            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
-            assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+            assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line4)).getImageFileName());
         } catch (CSVException e) {
             fail("CSVException: " + e.getMessage());
         }
@@ -226,10 +226,10 @@ public class InputCSVTests {
 
     @Test
     void testAppend() {
-        final int numLines = 4;
+        final int numLines = 5;
         final int line1 = 1;
-        final int line2 = 2;
         final int line3 = 3;
+        final int line4 = 4;
         InputCSV csv = null;
         try {
             File f = new File("testing/data/test.csv");
@@ -246,8 +246,8 @@ public class InputCSVTests {
             csv.append(newLine);
             assertEquals(numLines, csv.getNumberOfLines());
             assertEquals("image1.jpg", ((ImageAndPersonLine) csv.getLine(line1)).getImageFileName());
-            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line2)).getImageFileName());
-            assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+            assertEquals("image2.jpg", ((ImageAndPersonLine) csv.getLine(line3)).getImageFileName());
+            assertEquals("image4.jpg", ((ImageAndPersonLine) csv.getLine(line4)).getImageFileName());
         } catch (CSVException e) {
             fail("CSVException: " + e.getMessage());
         }

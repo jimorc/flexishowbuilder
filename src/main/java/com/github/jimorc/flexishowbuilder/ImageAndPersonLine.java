@@ -214,6 +214,17 @@ public class ImageAndPersonLine extends CSVLine {
     }
 
     /**
+     * Returns a tooltip stating that the line is empty.
+     * @return a tooltip for an empty line.
+     */
+    public Tooltip getLineEmptyTooltip() {
+        Tooltip tt = new Tooltip("The line is empty.\n"
+            + "It can be deleted using the context menu.");
+        tt.setShowDuration(Duration.seconds(TOOLTIP_SHOW_DURATION_SECONDS));
+        return tt;
+    }
+
+    /**
      * Returns a String representation of the object.
      * @return a String representation of the object.
      * @throws ArrayIndexOutOfBoundsException if the object does not

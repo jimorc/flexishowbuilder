@@ -1,5 +1,7 @@
 package com.github.jimorc.flexishowbuilder;
 
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -17,14 +19,16 @@ public class IPLine extends HBox {
     private final int personLastNameColumn = 4;     // same as IPLColumn.PERSON_LAST_NAME.ordinal();
 
     private CSVLine line;
+    private ContextMenu contextMenu;
 
     /**
      * Constructor.
      * @param line the CSVLine to display.
      */
-    public IPLine(CSVLine line, IPLFieldWidths fieldWidths) {
+    public IPLine(CSVLine line, IPLFieldWidths fieldWidths, IPLines lines, int lineNumber) {
         super();
         this.line = line;
+        contextMenu = new ContextMenu();
         final int spacing = 5;
         setSpacing(spacing);
         for (int col = 0; col < this.line.length(); col++) {
@@ -35,18 +39,14 @@ public class IPLine extends HBox {
                     fieldWidths.setMaxImageFileNameWidth(ipF.getFieldWidth());
                     switch (line) {
                         case ImageAndPersonLine iapl:
-                            if (iapl.getImageNotJpeg()) {
-                                ipF.setBackgroundColor(Color.YELLOW);
-                                Tooltip.install(ipF, iapl.getImageNotJpegTooltip());
-                            } else if (iapl.getImageFileNotFound()) {
-                                ipF.setBackgroundColor(Color.ORANGE);
-                                Tooltip.install(ipF, iapl.getImageNotFoundTooltip());
-                            } else {
-                                ipF.setBackgroundColor(Color.TRANSPARENT);
-                            }
+                            handleImageAndPersonLine(ipF, iapl, lines, lineNumber);
                             break;
                         default:
                             break;
+                    }
+                    if (contextMenu.getItems().size() > 0) {
+                        ipF.setOnContextMenuRequested(e ->
+                            contextMenu.show(ipF, e.getScreenX(), e.getScreenY()));
                     }
                     break;
                 case titleColumn:
@@ -65,6 +65,27 @@ public class IPLine extends HBox {
                     // handle more than 5 columns
                     break;
             }
+        }
+    }
+
+    private void handleImageAndPersonLine(IPLField ipF, ImageAndPersonLine iapl,
+            IPLines lines, int lineNumber) {
+        if (iapl.getLineEmpty()) {
+            ipF.setBackgroundColor(Color.RED);
+            Tooltip.install(ipF, iapl.getLineEmptyTooltip());
+            MenuItem deleteLineItem = new MenuItem("Delete Empty Line");
+            deleteLineItem.setOnAction(e -> {
+                lines.deleteLine(lineNumber);
+            });
+            contextMenu.getItems().add(deleteLineItem);
+        } else if (iapl.getImageNotJpeg()) {
+            ipF.setBackgroundColor(Color.YELLOW);
+            Tooltip.install(ipF, iapl.getImageNotJpegTooltip());
+        } else if (iapl.getImageFileNotFound()) {
+            ipF.setBackgroundColor(Color.ORANGE);
+            Tooltip.install(ipF, iapl.getImageNotFoundTooltip());
+        } else {
+            ipF.setBackgroundColor(Color.TRANSPARENT);
         }
     }
 
