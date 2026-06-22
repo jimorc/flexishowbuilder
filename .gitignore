@@ -32,3 +32,6 @@ replay_pid*
 # Windows only files
 # test.jpg not deleted in TitleImageTests because it is being used by VSCode when running test
 test.jpg
+
+# Ignore all .vscode files
+.vscode/*
