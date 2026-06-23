@@ -97,6 +97,7 @@ public class TitleAndSortStage extends FlexiStage {
             leftMargin);
         VBox sizeBox = createSizeBox(labelFont, sizeInsets);
         TitledPane startEndPane = createStartEndSlidesPane(labelFont, tLabelInsets, vBoxInsets);
+        TitledPane sortPane = createSortSlidesPane(labelFont, tLabelInsets, vBoxInsets);
         Label sortLabel = createSortLabel(labelFont, vBoxInsets);
         sortGroup = new ToggleGroup();
         createNoneButton(vBoxInsets);
@@ -108,7 +109,7 @@ public class TitleAndSortStage extends FlexiStage {
         HBox buttonBox = createButtonBox(buttonTopMargin, buttonRightMargin, buttonBottomMargin, buttonLeftMargin);
 
         VBox vbox = new VBox(spacing);
-        vbox.getChildren().addAll(sizeBox, startEndPane, sortLabel,
+        vbox.getChildren().addAll(sizeBox, startEndPane, sortPane, sortLabel,
             noneButton, alphaFullButton, alphaLastFirstButton, alphaFullRevButton,
             alphaLastFirstRevButton, buttonBox);
         return vbox;
@@ -203,6 +204,22 @@ public class TitleAndSortStage extends FlexiStage {
         });
         return button;
     }
+
+    private TitledPane createSortSlidesPane(final Font labelFont,
+        final Insets labelInsets, final Insets boxInsets) {
+        TitledPane sortPane = new TitledPane();
+        Label paneLabel = new Label("Sort Slides");
+        paneLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px");
+        sortPane.setGraphic(paneLabel);
+        VBox box = new VBox(spacing);
+        sortPane.setContent(box);
+        sortPane.setCollapsible(false);
+        // must call here to enable/disable widgets correctly when first displayed.
+//        saveStartEndSliderButtonAction(null);
+        return sortPane;
+    
+    }
+
 
     private HBox createButtonBox(final int buttonTopMargin, final int buttonRightMargin, final int buttonBottomMargin,
             final int buttonLeftMargin) {
