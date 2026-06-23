@@ -118,13 +118,9 @@ public class TitleAndSortStage extends FlexiStage {
             final Insets labelInsets, final Insets boxInsets) {
         HBox startEndCheck = createCreateStartEndSlidesBox();
         Label startLabel = createStartEndLabel("Start Image Text", labelFont, labelInsets);
-        String defaultStartTitle = defaultData.getStartTitle();
-        startTitleArea = createTextArea("Start", defaultStartTitle, boxInsets);
-        HBox startTitleBox = createTextBox(startTitleArea, boxInsets);
+        HBox startTitleBox = createStartTextBox(boxInsets);
         Label endLabel = createStartEndLabel("End Image Text", labelFont, labelInsets);
-        String defaultEndTitle = defaultData.getEndTitle();
-        endTitleArea = createTextArea("End", defaultEndTitle, boxInsets);
-        HBox endTitleBox = createTextBox(endTitleArea, boxInsets);
+        HBox endTitleBox = createEndTextBox(boxInsets);
         VBox box = new VBox(startEndCheck, startLabel, startTitleBox, endLabel, endTitleBox);
         VBox.setMargin(startEndCheck, labelInsets);
         TitledPane startEndPane = new TitledPane();
@@ -231,7 +227,7 @@ public class TitleAndSortStage extends FlexiStage {
         return gen;
     }
 
-    private Label createStartEndLabel(String text, final Font labelFont, final Insets insets) {
+    private Label createStartEndLabel(final String text, final Font labelFont, final Insets insets) {
         Label startLabel = new Label(text);
         startLabel.setFont(labelFont);
         VBox.setMargin(startLabel, insets);
@@ -304,7 +300,47 @@ public class TitleAndSortStage extends FlexiStage {
         VBox.setMargin(alphaFullRevButton, insets);
     }
 
-    private TextArea createTextArea(String startEnd, String defaultText, Insets insets) {
+    private HBox createStartTextBox(final Insets insets) {
+        Button saveButton = new Button("Save as Default");
+        saveButton.setOnAction(_ -> {
+            String text = startTitleArea.getText();
+            defaultData.setStartTitle(text);
+            defaultData.saveDefaults();
+            saveButton.setDisable(true);
+        });
+        saveButton.setDisable(true);
+        String defaultStartTitle = defaultData.getStartTitle();
+        startTitleArea = createTextArea("Start", defaultStartTitle, insets);
+        startTitleArea.setOnKeyTyped(_ -> {
+            String defaultTitleText = defaultData.getStartTitle();
+            String text = startTitleArea.getText();
+            saveButton.setDisable(text.equals(defaultTitleText));
+        });
+
+        return createTextBox(startTitleArea, saveButton, insets);
+    }
+
+        private HBox createEndTextBox(Insets insets) {
+        Button saveButton = new Button("Save as Default");
+        saveButton.setOnAction(_ -> {
+            String text = endTitleArea.getText();
+            defaultData.setEndTitle(text);
+            defaultData.saveDefaults();
+            saveButton.setDisable(true);
+        });
+        saveButton.setDisable(true);
+        String defaultEndTitle = defaultData.getEndTitle();
+        endTitleArea = createTextArea("End", defaultEndTitle, insets);
+        endTitleArea.setOnKeyTyped(_ -> {
+            String defaultTitleText = defaultData.getEndTitle();
+            String text = endTitleArea.getText();
+            saveButton.setDisable(text.equals(defaultTitleText));
+        });
+
+        return createTextBox(endTitleArea, saveButton, insets);
+    }
+
+    private TextArea createTextArea(final String startEnd, final String defaultText, final Insets insets) {
         final int prefColumnCount = 50;
         final int prefRowCount = 2;
         TextArea textArea = new TextArea();
@@ -317,23 +353,12 @@ public class TitleAndSortStage extends FlexiStage {
         sb.append(" slide. Two or three lines of text is recommended.");
         Tooltip tTooltip = new Tooltip(sb.toString());
         textArea.setTooltip(tTooltip);
+
         VBox.setMargin(textArea, insets);
         return textArea;
     }
 
-    private HBox createTextBox(TextArea tArea, Insets insets) {
-        Button saveButton = new Button("Save as Default");
-        saveButton.setOnAction(_ -> {
-            String text = tArea.getText();
-            if (startTitleArea == tArea) {
-                defaultData.setStartTitle(text);
-            } else {
-                defaultData.setEndTitle(text);
-            }
-            defaultData.saveDefaults();
-            saveButton.setDisable(true);
-        });
-        saveButton.setDisable(true);
+    private HBox createTextBox(final TextArea tArea, final Button saveButton, final Insets insets) {
         HBox box = new HBox(spacing);
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);

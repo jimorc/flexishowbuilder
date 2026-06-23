@@ -193,6 +193,9 @@ public class DefaultData {
         // Make sure all data exists
         this.getSlideSize();
         this.getCreateStartEndSlides();
+        this.getStartTitle();
+        this.getEndTitle();
+        
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(filePath);
