@@ -5,28 +5,49 @@ package com.github.jimorc.trilliumshowfx;
 */
 public enum SortOrder {
     /**
-     * DontSort denotes no sorting of InputCSV lines. The order of lines is as they appear in the CSV file.
+     * Don't sort - use the image order in the CSV file.
      */
-    DontSort,
+    DontSort("Don't Sort", "Do not sort - use the order in the CSV file."),
     /**
-     * AsIs denotes sorting in the order than full names first appear in CSV file.
+     * As Is - sort by person in the order they first appear in the CSV file.
      */
-    AsIs,
+    AsIs("As Is",
+        "No sorting - use the order in the CSV file. All images for each person are grouped together."),
     /**
-     * AlphabeticalByFullName denotes sorting in alphabetical order by full name.
+     * Alphabetical by Full Name.
      */
-    AlphabeticalByFullName,
+    AlphabeticalByFullName("Alphabetical by Full Name",
+        "Sort in alphabetical order by full name."),
     /**
-     * AlphabeticalByLastNameThenFirstName denotes sorting in alphabetical order by last name then first name.
+     * Alphabetical by Last Name then First Name.
      */
-    AlphabeticalByLastNameThenFirstName,
+    AlphabeticalByLastNameThenFirstName("Alphabetical by Last Name then First Name",
+        "Sort in alphabetical order by last name then first name."),
     /**
-     * AlphabeticalByFullNameReverse denotes sorting in reverse alphabetical order by full name.
+     * Alphabetical by Full Name (Reverse).
      */
-    AlphabeticalByFullNameReverse,
+    AlphabeticalByFullNameReverse("Alphabetical by Full Name (Reverse)",
+        "Sort in reverse alphabetical order by full name."),
     /**
-     * AlphabeticalByLastNameThenFirstNameReverse denotes sorting in reverse alphabetical order by last
-     * name then first name.
+     * Alphabetical by Last Name then First Name (Reverse).
      */
-    AlphabeticalByLastNameThenFirstNameReverse
+    AlphabeticalByLastNameThenFirstNameReverse("Alphabetical by Last Name then First Name (Reverse)",
+        "Sort in reverse alphabetical order by last name then first name.");
+
+    private String buttonLabel;
+    private String tooltipText;
+
+    SortOrder(String label, String tooltipText) {
+        this.buttonLabel = label;
+        this.tooltipText = tooltipText;
+    }
+
+    public String getButtonLabel() {
+        return buttonLabel;
+    }
+
+    public String getTooltipText() {
+        return tooltipText;
+    }
 }
+
