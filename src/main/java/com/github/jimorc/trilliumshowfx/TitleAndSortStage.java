@@ -201,14 +201,15 @@ public class TitleAndSortStage extends FlexiStage {
         sortPane.setCollapsible(false);
         Label sortLabel = createSortLabel(labelFont, boxInsets);
         sortGroup = new ToggleGroup();
+        RadioButton dontSortButton = createDontSortButton(boxInsets);
         RadioButton noneButton = createNoneButton(boxInsets);
         RadioButton alphaFullButton = createAlphaFullButton(boxInsets);
         RadioButton alphaLastFirstButton = createAlphaLastFirstButton(boxInsets);
         RadioButton alphaFullRevButton = createAlphaFullRevButton(boxInsets);
         RadioButton alphaLastFirstRevButton = createAlphaLastFirstRevButton(boxInsets);
         VBox sortBox = new VBox(spacing);
-        sortBox.getChildren().addAll(sortLabel, noneButton, alphaFullButton, alphaLastFirstButton,
-            alphaFullRevButton, alphaLastFirstRevButton);
+        sortBox.getChildren().addAll(sortLabel, dontSortButton, noneButton, alphaFullButton,
+            alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton);
         VBox.setMargin(sortBox, boxInsets);
         sortPane.setContent(sortBox);
         return sortPane;
@@ -249,6 +250,18 @@ public class TitleAndSortStage extends FlexiStage {
         sortLabel.setFont(labelFont);
         VBox.setMargin(sortLabel, insets);
         return sortLabel;
+    }
+
+    private RadioButton createDontSortButton(Insets insets) {
+        RadioButton dontSortButton = createRadioButton("Don't Sort", sortGroup, SortOrder.DontSort);
+        Tooltip dontSortTooltip = new Tooltip("Do not sort - use the order in the CSV file.\n");
+        dontSortButton.setTooltip(dontSortTooltip);
+        dontSortButton.setOnAction(_ -> {
+            sortOrder = SortOrder.DontSort;
+        });
+        dontSortButton.setSelected(true);
+        VBox.setMargin(dontSortButton, insets);
+        return dontSortButton;
     }
 
     private RadioButton createNoneButton(Insets insets) {

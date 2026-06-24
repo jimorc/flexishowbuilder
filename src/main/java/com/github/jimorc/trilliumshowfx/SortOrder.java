@@ -5,6 +5,10 @@ package com.github.jimorc.trilliumshowfx;
 */
 public enum SortOrder {
     /**
+     * DontSort denotes no sorting of InputCSV lines. The order of lines is as they appear in the CSV file.
+     */
+    DontSort,
+    /**
      * AsIs denotes sorting in the order than full names first appear in CSV file.
      */
     AsIs,

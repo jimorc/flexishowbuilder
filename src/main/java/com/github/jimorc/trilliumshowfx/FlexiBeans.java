@@ -128,6 +128,9 @@ public class FlexiBeans {
         Map<String, FlexiBeans> beanMap = generateBeanMap();
         List<String> fullNames = generateFullNamesList();
         switch (order) {
+            case DontSort:
+                // No sorting needed, just return
+                break;
             case AsIs:
                 sortBeans(beanMap, fullNames);
                 break;
