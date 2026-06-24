@@ -37,11 +37,6 @@ public class TitleAndSortStage extends FlexiStage {
     private TextArea startTitleArea;
     private TextArea endTitleArea;
     private ToggleGroup sortGroup;
-    private RadioButton noneButton;
-    private RadioButton alphaFullButton;
-    private RadioButton alphaLastFirstButton;
-    private RadioButton alphaFullRevButton;
-    private RadioButton alphaLastFirstRevButton;
     private DefaultData defaultData;
 
     /**
@@ -98,20 +93,10 @@ public class TitleAndSortStage extends FlexiStage {
         VBox sizeBox = createSizeBox(labelFont, sizeInsets);
         TitledPane startEndPane = createStartEndSlidesPane(labelFont, tLabelInsets, vBoxInsets);
         TitledPane sortPane = createSortSlidesPane(labelFont, tLabelInsets, vBoxInsets);
-        Label sortLabel = createSortLabel(labelFont, vBoxInsets);
-        sortGroup = new ToggleGroup();
-        createNoneButton(vBoxInsets);
-        createAlphaFullButton(vBoxInsets);
-        createAlphaLastFirstButton(vBoxInsets);
-        createAlphaFullRevButton(vBoxInsets);
-        createAlphaLastFirstRevButton(vBoxInsets);
-
         HBox buttonBox = createButtonBox(buttonTopMargin, buttonRightMargin, buttonBottomMargin, buttonLeftMargin);
 
         VBox vbox = new VBox(spacing);
-        vbox.getChildren().addAll(sizeBox, startEndPane, sortPane, sortLabel,
-            noneButton, alphaFullButton, alphaLastFirstButton, alphaFullRevButton,
-            alphaLastFirstRevButton, buttonBox);
+        vbox.getChildren().addAll(sizeBox, startEndPane, sortPane, buttonBox);
         return vbox;
     }
 
@@ -214,15 +199,23 @@ public class TitleAndSortStage extends FlexiStage {
         VBox box = new VBox(spacing);
         sortPane.setContent(box);
         sortPane.setCollapsible(false);
-        // must call here to enable/disable widgets correctly when first displayed.
-//        saveStartEndSliderButtonAction(null);
+        Label sortLabel = createSortLabel(labelFont, boxInsets);
+        sortGroup = new ToggleGroup();
+        RadioButton noneButton = createNoneButton(boxInsets);
+        RadioButton alphaFullButton = createAlphaFullButton(boxInsets);
+        RadioButton alphaLastFirstButton = createAlphaLastFirstButton(boxInsets);
+        RadioButton alphaFullRevButton = createAlphaFullRevButton(boxInsets);
+        RadioButton alphaLastFirstRevButton = createAlphaLastFirstRevButton(boxInsets);
+        VBox sortBox = new VBox(spacing);
+        sortBox.getChildren().addAll(sortLabel, noneButton, alphaFullButton, alphaLastFirstButton,
+            alphaFullRevButton, alphaLastFirstRevButton);
+        VBox.setMargin(sortBox, boxInsets);
+        sortPane.setContent(sortBox);
         return sortPane;
-    
     }
 
-
-    private HBox createButtonBox(final int buttonTopMargin, final int buttonRightMargin, final int buttonBottomMargin,
-            final int buttonLeftMargin) {
+    private HBox createButtonBox(final int buttonTopMargin, final int buttonRightMargin,
+            final int buttonBottomMargin, final int buttonLeftMargin) {
         QuitButton quit = new QuitButton();
         Button gen = createGenButton();
         HBox buttonBox = new HBox(spacing);
@@ -258,8 +251,8 @@ public class TitleAndSortStage extends FlexiStage {
         return sortLabel;
     }
 
-    private void createNoneButton(Insets insets) {
-        noneButton = createRadioButton("As Is", sortGroup, SortOrder.AsIs);
+    private RadioButton createNoneButton(Insets insets) {
+        RadioButton noneButton = createRadioButton("As Is", sortGroup, SortOrder.AsIs);
         Tooltip noneTooltip = new Tooltip("No sorting - use the order in the CSV file.\n"
             + "All images for each person are grouped together.");
         noneButton.setTooltip(noneTooltip);
@@ -268,10 +261,12 @@ public class TitleAndSortStage extends FlexiStage {
         });
         noneButton.setSelected(true);
         VBox.setMargin(noneButton, insets);
+        return noneButton;
     }
 
-    private void createAlphaFullButton(Insets insets) {
-        alphaFullButton = createRadioButton("Alphabetical by Full Name", sortGroup, SortOrder.AlphabeticalByFullName);
+    private RadioButton createAlphaFullButton(Insets insets) {
+        RadioButton alphaFullButton = createRadioButton("Alphabetical by Full Name", sortGroup,
+            SortOrder.AlphabeticalByFullName);
         alphaFullButton.setOnAction(_ -> {
             sortOrder = SortOrder.AlphabeticalByFullName;
         });
@@ -279,10 +274,11 @@ public class TitleAndSortStage extends FlexiStage {
             + "name).\nAll images for each person are grouped together.");
         alphaFullButton.setTooltip(alphaFullTooltip);
         VBox.setMargin(alphaFullButton, insets);
+        return alphaFullButton;
     }
 
-    private void createAlphaLastFirstRevButton(Insets insets) {
-        alphaLastFirstRevButton = createRadioButton("Alphabetical by Last Name then First Name Reverse",
+    private RadioButton createAlphaLastFirstRevButton(Insets insets) {
+        RadioButton alphaLastFirstRevButton = createRadioButton("Alphabetical by Last Name then First Name Reverse",
             sortGroup, SortOrder.AlphabeticalByLastNameThenFirstNameReverse);
         alphaLastFirstRevButton.setOnAction(_ -> {
             sortOrder = SortOrder.AlphabeticalByLastNameThenFirstNameReverse;
@@ -291,10 +287,11 @@ public class TitleAndSortStage extends FlexiStage {
             + "in reverse order.\nAll images for each person are grouped together.");
         alphaLastFirstRevButton.setTooltip(alphaLastFirstRevTooltip);
         VBox.setMargin(alphaLastFirstRevButton, insets);
+        return alphaLastFirstRevButton;
     }
 
-    private void createAlphaLastFirstButton(Insets insets) {
-        alphaLastFirstButton = createRadioButton("Alphabetical by Last Name then First Name",
+    private RadioButton createAlphaLastFirstButton(Insets insets) {
+        RadioButton alphaLastFirstButton = createRadioButton("Alphabetical by Last Name then First Name",
             sortGroup, SortOrder.AlphabeticalByLastNameThenFirstName);
         alphaLastFirstButton.setOnAction(_ -> {
             sortOrder = SortOrder.AlphabeticalByLastNameThenFirstName;
@@ -303,10 +300,11 @@ public class TitleAndSortStage extends FlexiStage {
             + "All images for each person are grouped together.");
         alphaLastFirstButton.setTooltip(alphaLastFirstTooltip);
         VBox.setMargin(alphaLastFirstButton, insets);
+        return alphaLastFirstButton;
     }
 
-    private void createAlphaFullRevButton(Insets insets) {
-        alphaFullRevButton = createRadioButton("Alphabetical by Full Name Reverse",
+    private RadioButton createAlphaFullRevButton(Insets insets) {
+        RadioButton alphaFullRevButton = createRadioButton("Alphabetical by Full Name Reverse",
             sortGroup, SortOrder.AlphabeticalByFullNameReverse);
         alphaFullRevButton.setOnAction(_ -> {
             sortOrder = SortOrder.AlphabeticalByFullNameReverse;
@@ -315,6 +313,7 @@ public class TitleAndSortStage extends FlexiStage {
             + "name) in reverse order.\nAll images for each person are grouped together.");
         alphaFullRevButton.setTooltip(alphaFullRevTooltip);
         VBox.setMargin(alphaFullRevButton, insets);
+        return alphaFullRevButton;
     }
 
     private HBox createStartTextBox(final Insets insets) {
@@ -337,7 +336,7 @@ public class TitleAndSortStage extends FlexiStage {
         return createTextBox(startTitleArea, saveButton, insets);
     }
 
-        private HBox createEndTextBox(Insets insets) {
+    private HBox createEndTextBox(Insets insets) {
         Button saveButton = new Button("Save as Default");
         saveButton.setOnAction(_ -> {
             String text = endTitleArea.getText();
