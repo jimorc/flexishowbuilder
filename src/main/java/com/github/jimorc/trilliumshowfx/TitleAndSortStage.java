@@ -14,6 +14,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -198,26 +199,39 @@ public class TitleAndSortStage extends FlexiStage {
         paneLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px");
         sortPane.setGraphic(paneLabel);
         VBox box = new VBox(spacing);
+        BorderPane sortOrderPane = createSortOrderPane(boxInsets);
+        box.getChildren().add(sortOrderPane);
         sortPane.setContent(box);
         sortPane.setCollapsible(false);
-        Label sortLabel = createSortLabel(labelFont, boxInsets);
-        sortGroup = new ToggleGroup();
-        RadioButton dontSortButton = createSortRadioButton(SortOrder.DontSort, boxInsets);
-        RadioButton noneButton = createSortRadioButton(SortOrder.AsIs, boxInsets);
-        RadioButton alphaFullButton = createSortRadioButton(SortOrder.AlphabeticalByFullName, boxInsets);
-        RadioButton alphaLastFirstButton = createSortRadioButton(
-            SortOrder.AlphabeticalByLastNameThenFirstName, boxInsets);
-        RadioButton alphaFullRevButton = createSortRadioButton(
-            SortOrder.AlphabeticalByFullNameReverse, boxInsets);
-        RadioButton alphaLastFirstRevButton = createSortRadioButton(
-            SortOrder.AlphabeticalByLastNameThenFirstNameReverse, boxInsets);
-        VBox sortBox = new VBox(spacing);
-        sortBox.getChildren().addAll(sortLabel, dontSortButton, noneButton, alphaFullButton,
-                alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton);
-        VBox.setMargin(sortBox, boxInsets);
-        sortPane.setContent(sortBox);
         return sortPane;
     }
+
+    private BorderPane createSortOrderPane(final Insets insets) {
+        sortGroup = new ToggleGroup();
+        RadioButton dontSortButton = createSortRadioButton(SortOrder.DontSort, insets);
+        RadioButton noneButton = createSortRadioButton(SortOrder.AsIs, insets);
+        RadioButton alphaFullButton = createSortRadioButton(SortOrder.AlphabeticalByFullName, insets);
+        RadioButton alphaLastFirstButton = createSortRadioButton(
+            SortOrder.AlphabeticalByLastNameThenFirstName, insets);
+        RadioButton alphaFullRevButton = createSortRadioButton(
+            SortOrder.AlphabeticalByFullNameReverse, insets);
+        RadioButton alphaLastFirstRevButton = createSortRadioButton(
+            SortOrder.AlphabeticalByLastNameThenFirstNameReverse, insets);
+        VBox sortBox = new VBox(spacing);
+        sortBox.getChildren().addAll(dontSortButton, noneButton, alphaFullButton,
+                alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton);
+        VBox.setMargin(sortBox, insets);
+        Button saveSortButton = new Button("Save Sort Order as Default");
+        saveSortButton.setOnAction(_ -> {
+            SortOrder order = (SortOrder) sortGroup.getSelectedToggle().getUserData();
+            defaultData.setSortOrder(order);
+            defaultData.saveDefaults();
+            saveSortButton.setDisable(true);
+        });
+        VBox saveBox = new VBox(saveSortButton);
+        saveBox.setAlignment(Pos.CENTER_RIGHT);
+        return new BorderPane(null, null, saveBox, null,sortBox);
+    }   
 
     private HBox createButtonBox(final int buttonTopMargin, final int buttonRightMargin,
             final int buttonBottomMargin, final int buttonLeftMargin) {
@@ -249,12 +263,6 @@ public class TitleAndSortStage extends FlexiStage {
         return startLabel;
     }
 
-    private Label createSortLabel(final Font labelFont, final Insets insets) {
-        Label sortLabel = new Label("Sort Order");
-        sortLabel.setFont(labelFont);
-        VBox.setMargin(sortLabel, insets);
-        return sortLabel;
-    }
 
     private RadioButton createSortRadioButton(final SortOrder order, final Insets insets) {
         RadioButton button = new RadioButton(order.getButtonLabel());
@@ -266,6 +274,7 @@ public class TitleAndSortStage extends FlexiStage {
             sortOrder = order;
 
         });
+        button.setSelected(order == defaultData.getSortOrder());
         VBox.setMargin(button, insets);
         return button;
     }

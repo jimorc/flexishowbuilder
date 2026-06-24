@@ -172,6 +172,34 @@ public class DefaultData {
     }
 
     /**
+     * 
+     */
+    public SortOrder getSortOrder() {
+        String sortOrderStr = jsonObject.optString("sortOrder", "DontSort");
+        SortOrder sortOrder = SortOrder.DontSort;
+        try {
+            sortOrder = SortOrder.valueOf(sortOrderStr);
+        } catch (IllegalArgumentException e) {
+            // If the value is not a valid enum, default to DontSort
+            sortOrder = SortOrder.DontSort;
+            jsonObject.put("sortOrder", "DontSort");
+            if (filePath != null) {
+                saveDefaults();
+            }
+        }
+        return sortOrder;
+    }
+
+    /**
+     * Set the sort order in the defaults.
+     * You should call `saveDefaults()` after calling this method.
+     * @param sortOrder The SortOrder to set.
+     */
+    public void setSortOrder(SortOrder sortOrder) {
+        jsonObject.put("sortOrder", sortOrder.name());
+    }
+
+    /**
      * Save the current defaults back to the JSON file.
      */
     public void saveDefaults() {
