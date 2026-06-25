@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javax.swing.filechooser.FileSystemView;
@@ -29,7 +30,9 @@ import org.tinylog.Logger;
  * order.
  */
 public class TitleAndSortStage extends FlexiStage {
+    private final int personSortLabelHeight = 60;
     private final int spacing = 10;
+
     private SortOrder sortOrder = SortOrder.AsIs;
     private SizeTextField widthField;
     private SizeTextField heightField;
@@ -40,6 +43,7 @@ public class TitleAndSortStage extends FlexiStage {
     private TextArea endTitleArea;
     private ToggleGroup sortGroup;
     private Button saveSortButton;
+    private Label personSortLabel;
     private DefaultData defaultData;
 
     /**
@@ -95,13 +99,26 @@ public class TitleAndSortStage extends FlexiStage {
         Insets sizeInsets = new Insets(sizeLabelMarginTop, rightMargin, sizeLabelMarginBottom,
                 leftMargin);
         VBox sizeBox = createSizeBox(labelFont, sizeInsets);
+        HBox personSortBox = createPersonSortBox(tLabelInsets);
+
         TitledPane startEndPane = createStartEndSlidesPane(labelFont, tLabelInsets, vBoxInsets);
         TitledPane sortPane = createSortSlidesPane(labelFont, tLabelInsets, vBoxInsets);
         HBox buttonBox = createButtonBox(buttonTopMargin, buttonRightMargin, buttonBottomMargin, buttonLeftMargin);
 
         VBox vbox = new VBox(spacing);
-        vbox.getChildren().addAll(sizeBox, startEndPane, sortPane, buttonBox);
+        vbox.getChildren().addAll(sizeBox, startEndPane, sortPane, personSortBox, buttonBox);
         return vbox;
+    }
+
+    private HBox createPersonSortBox(final Insets insets) {
+        personSortLabel = new Label("Sort Order for Person Slides");
+        personSortLabel.setTextFill(Color.color(0, 0, 1));
+        // setPrefHeight is needed to keep the label from changing size when the sort order changes.
+        personSortLabel.setPrefHeight(personSortLabelHeight);
+        HBox box = new HBox();
+        HBox.setMargin(personSortLabel, insets);
+        box.getChildren().addAll(personSortLabel);
+        return box;
     }
 
     private TitledPane createStartEndSlidesPane(final Font labelFont,
@@ -274,9 +291,12 @@ public class TitleAndSortStage extends FlexiStage {
         button.setOnAction(_ -> {
             sortOrder = order;
             saveSortButton.setDisable(sortOrder == defaultData.getSortOrder());
-
+            personSortLabel.setText(order.getSortOrderLabel());
         });
         button.setSelected(order == defaultData.getSortOrder());
+        if (order == defaultData.getSortOrder()) {
+            personSortLabel.setText(order.getSortOrderLabel());
+        }
         VBox.setMargin(button, insets);
         return button;
     }
