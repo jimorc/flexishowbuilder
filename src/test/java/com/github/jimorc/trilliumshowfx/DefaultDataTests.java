@@ -19,7 +19,9 @@ public class DefaultDataTests {
         final int width = 1920;
         final int height = 1080;
         String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
-            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\" }";
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\" }";
+
         DefaultData data = new DefaultData(jsonContent);
         SlideSize slideSize = data.getSlideSize();
         assertEquals(width, slideSize.getWidth());
@@ -27,6 +29,7 @@ public class DefaultDataTests {
         assertTrue(data.getCreateStartEndSlides());
         assertEquals("start", data.getStartTitle());
         assertEquals("end", data.getEndTitle());
+        assertEquals(SortOrder.AlphabeticalByFullNameReverse, data.getSortOrder());
     }
 
     @Test
@@ -41,6 +44,7 @@ public class DefaultDataTests {
         assertTrue(data.getCreateStartEndSlides());
         assertEquals("start title", data.getStartTitle());
         assertEquals("end title", data.getEndTitle());
+        assertEquals(SortOrder.DontSort, data.getSortOrder());
     }
 
     @Test
@@ -73,6 +77,7 @@ public class DefaultDataTests {
         assertTrue(data.getCreateStartEndSlides());
         assertEquals("", data.getStartTitle());
         assertEquals("", data.getEndTitle());
+        assertEquals(SortOrder.DontSort, data.getSortOrder());
     }
 
     @Test
@@ -84,6 +89,8 @@ public class DefaultDataTests {
         data.getCreateStartEndSlides();
         data.getStartTitle();
         data.getEndTitle();
+        data.getSortOrder();
+        data.getGeneratePersonSlides();
         try (BufferedReader jsonFileReader = new BufferedReader(
                 new FileReader(jsonFile.getAbsolutePath()))) {
             String line;
@@ -96,6 +103,8 @@ public class DefaultDataTests {
             assertTrue(fileContent.contains("\"slide_size\":{\"width\":1400,\"height\":1050}"));
             assertTrue(fileContent.contains("\"startTitle\":\"\""));
             assertTrue(fileContent.contains("\"endTitle\":\"\""));
+            assertTrue(fileContent.contains("\"sortOrder\":\"DontSort\""));
+            assertTrue(fileContent.contains("\"generatePersonSlides\":\"true\""));
         } catch (IOException e) {
             fail(e.getCause().toString());
         }
