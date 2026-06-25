@@ -176,8 +176,9 @@ public class DefaultData {
      * @return The default SortOrder, or DontSort if not set or invalid.
      */
     public SortOrder getSortOrder() {
-        String sortOrderStr = jsonObject.optString("sortOrder", "DontSort");
         SortOrder sortOrder = SortOrder.DontSort;
+        String sortOrderStr = jsonObject.optString("sortOrder", "XXX");
+        sortOrder = SortOrder.DontSort;
         try {
             sortOrder = SortOrder.valueOf(sortOrderStr);
         } catch (IllegalArgumentException e) {
@@ -198,6 +199,33 @@ public class DefaultData {
      */
     public void setSortOrder(SortOrder sortOrder) {
         jsonObject.put("sortOrder", sortOrder.name());
+    }
+
+    /**
+     * Get the generatePersonSlides value from the defaults.
+     * @return true if generatePersonSlides value is "true", or value does not exist in the defaults.
+     * False otherwise.
+     */
+    public boolean getGeneratePersonSlides() {
+        String genPersonSlides = jsonObject.optString("generatePersonSlides", "XXX");
+        if (!"XXX".equals(genPersonSlides)) {
+            return genPersonSlides.equals("true") ? true : false;
+        } else {
+            jsonObject.put("generatePersonSlides", "true");
+            if (filePath != null) {
+                saveDefaults();
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Set the generatePersonSlides value in the defaults.
+     * You should call `saveDefaults()` after calling this method.
+     * @param set true to set value to "true". Otherwise value is set to "false".
+     */
+    public void setGeneratePersonSlides(boolean set) {
+        jsonObject.put("generatePersonSlides", set ? "true" : "false");
     }
 
     /**

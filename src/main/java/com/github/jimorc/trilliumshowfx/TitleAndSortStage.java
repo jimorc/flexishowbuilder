@@ -44,6 +44,7 @@ public class TitleAndSortStage extends FlexiStage {
     private ToggleGroup sortGroup;
     private Button saveSortButton;
     private Label personSortLabel;
+    private CheckBox generatePersonSlidesCheckBox;
     private DefaultData defaultData;
 
     /**
@@ -100,14 +101,39 @@ public class TitleAndSortStage extends FlexiStage {
                 leftMargin);
         VBox sizeBox = createSizeBox(labelFont, sizeInsets);
         HBox personSortBox = createPersonSortBox(tLabelInsets);
+        TitledPane genPersonSlidesBox = createGenPersonSlidesPane("Generate Person Slides", labelFont, tLabelInsets);
 
         TitledPane startEndPane = createStartEndSlidesPane(labelFont, tLabelInsets, vBoxInsets);
         TitledPane sortPane = createSortSlidesPane(labelFont, tLabelInsets, vBoxInsets);
         HBox buttonBox = createButtonBox(buttonTopMargin, buttonRightMargin, buttonBottomMargin, buttonLeftMargin);
 
         VBox vbox = new VBox(spacing);
-        vbox.getChildren().addAll(sizeBox, startEndPane, sortPane, personSortBox, buttonBox);
+        vbox.getChildren().addAll(sizeBox, startEndPane, sortPane, personSortBox, genPersonSlidesBox, buttonBox);
         return vbox;
+    }
+
+    private TitledPane createGenPersonSlidesPane(final String text, final Font labelFont, final Insets insets) {
+        Button saveButton = new Button("Save as Default");
+        saveButton.setOnAction(_ -> {
+            defaultData.setGeneratePersonSlides(generatePersonSlidesCheckBox.isSelected());
+            defaultData.saveDefaults();
+            saveButton.setDisable(true);
+        });
+        saveButton.setDisable(true);
+        generatePersonSlidesCheckBox = new CheckBox(text);
+        generatePersonSlidesCheckBox.setSelected(defaultData.getGeneratePersonSlides());
+        generatePersonSlidesCheckBox.setOnAction(_ -> {
+            saveButton.setDisable(generatePersonSlidesCheckBox.isSelected() == defaultData.getGeneratePersonSlides());
+        });
+        BorderPane bPane = new BorderPane(null, null, saveButton, null, generatePersonSlidesCheckBox);
+        TitledPane pane = new TitledPane();
+        Label paneLabel = new Label("Start and End Slides");
+        paneLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px");
+        pane.setGraphic(paneLabel);
+        pane.setContent(bPane);
+        pane.setCollapsible(false);
+        return pane;
+
     }
 
     private HBox createPersonSortBox(final Insets insets) {
