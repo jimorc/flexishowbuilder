@@ -1,9 +1,1 @@
-{
-    "slide_size": {
-        "width": 1024,
-        "height": 768
-    },
-    "createStartEndSlides": true,
-    "startTitle": "start title",
-    "endTitle": "end title"
-}
+{"createStartEndSlides":true,"endTitle":"end title","generatePersonSlides":"true","sortOrder":"DontSort","startTitle":"start title","slide_size":{"width":1024,"height":768}}

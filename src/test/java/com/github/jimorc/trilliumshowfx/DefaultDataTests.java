@@ -45,6 +45,7 @@ public class DefaultDataTests {
         assertEquals("start title", data.getStartTitle());
         assertEquals("end title", data.getEndTitle());
         assertEquals(SortOrder.DontSort, data.getSortOrder());
+        assertTrue(data.getGeneratePersonSlides());
     }
 
     @Test
