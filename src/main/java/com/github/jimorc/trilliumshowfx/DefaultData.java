@@ -172,7 +172,8 @@ public class DefaultData {
     }
 
     /**
-     * 
+     * Get the sort order from the defaults.
+     * @return The default SortOrder, or DontSort if not set or invalid.
      */
     public SortOrder getSortOrder() {
         String sortOrderStr = jsonObject.optString("sortOrder", "DontSort");
