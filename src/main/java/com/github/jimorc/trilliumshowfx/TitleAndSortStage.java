@@ -267,8 +267,9 @@ public class TitleAndSortStage extends FlexiStage {
     }
 
     private FlexiButton createGenButton() {
-        FlexiButton gen = new FlexiButton("Create title and person slides");
-        gen.setDefaultButton(true);
+        FlexiButton gen = new FlexiButton("Sort Slides / Create Slides");
+        Tooltip tooltip = new Tooltip("Sort slides, create start, end slides, and person slides if selected");
+        gen.setTooltip(tooltip);
         gen.setOnAction(_ -> {
             this.close();
         });
