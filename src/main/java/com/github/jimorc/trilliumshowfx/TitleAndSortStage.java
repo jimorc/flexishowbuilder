@@ -39,6 +39,7 @@ public class TitleAndSortStage extends FlexiStage {
     private TextArea startTitleArea;
     private TextArea endTitleArea;
     private ToggleGroup sortGroup;
+    private Button saveSortButton;
     private DefaultData defaultData;
 
     /**
@@ -221,7 +222,8 @@ public class TitleAndSortStage extends FlexiStage {
         sortBox.getChildren().addAll(dontSortButton, noneButton, alphaFullButton,
                 alphaLastFirstButton, alphaFullRevButton, alphaLastFirstRevButton);
         VBox.setMargin(sortBox, insets);
-        Button saveSortButton = new Button("Save Sort Order as Default");
+        saveSortButton = new Button("Save Sort Order as Default");
+        saveSortButton.setDisable(true);
         saveSortButton.setOnAction(_ -> {
             SortOrder order = (SortOrder) sortGroup.getSelectedToggle().getUserData();
             defaultData.setSortOrder(order);
@@ -230,8 +232,8 @@ public class TitleAndSortStage extends FlexiStage {
         });
         VBox saveBox = new VBox(saveSortButton);
         saveBox.setAlignment(Pos.CENTER_RIGHT);
-        return new BorderPane(null, null, saveBox, null,sortBox);
-    }   
+        return new BorderPane(null, null, saveBox, null, sortBox);
+    }
 
     private HBox createButtonBox(final int buttonTopMargin, final int buttonRightMargin,
             final int buttonBottomMargin, final int buttonLeftMargin) {
@@ -263,7 +265,6 @@ public class TitleAndSortStage extends FlexiStage {
         return startLabel;
     }
 
-
     private RadioButton createSortRadioButton(final SortOrder order, final Insets insets) {
         RadioButton button = new RadioButton(order.getButtonLabel());
         button.setToggleGroup(sortGroup);
@@ -272,6 +273,7 @@ public class TitleAndSortStage extends FlexiStage {
         button.setTooltip(tooltip);
         button.setOnAction(_ -> {
             sortOrder = order;
+            saveSortButton.setDisable(sortOrder == defaultData.getSortOrder());
 
         });
         button.setSelected(order == defaultData.getSortOrder());
