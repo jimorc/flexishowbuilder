@@ -46,6 +46,7 @@ public class TitleAndSortStage extends FlexiStage {
     private Button saveSortButton;
     private Label personSortLabel;
     private CheckBox generatePersonSlidesCheckBox;
+    private HBox personSlidesBox;
     private RadioButton dontSortButton;
     private RadioButton noneButton;
     private DefaultData defaultData;
@@ -268,12 +269,15 @@ public class TitleAndSortStage extends FlexiStage {
         generatePersonSlidesCheckBox = new CheckBox("Generate Person Slides");
         generatePersonSlidesCheckBox.setSelected(defaultData.getGeneratePersonSlides());
         generatePersonSlidesCheckBox.setOnAction(_ -> {
-            savePersonButton.setDisable(generatePersonSlidesCheckBox.isSelected() == defaultData.getGeneratePersonSlides());
+            savePersonButton.setDisable(
+                generatePersonSlidesCheckBox.isSelected() == defaultData.getGeneratePersonSlides());
         });
+        Tooltip tooltip = new Tooltip("Check this to generate slides for each person.\n");
+        generatePersonSlidesCheckBox.setTooltip(tooltip);
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         HBox.setMargin(generatePersonSlidesCheckBox, insets);
-        HBox personSlidesBox = new HBox(generatePersonSlidesCheckBox, spacer, savePersonButton);
+        personSlidesBox = new HBox(generatePersonSlidesCheckBox, spacer, savePersonButton);
         Separator separator = new Separator();
         VBox pBox = new VBox(spacing);
         pBox.getChildren().addAll(personSlidesBox, separator);
@@ -321,6 +325,14 @@ public class TitleAndSortStage extends FlexiStage {
         button.setOnAction(_ -> {
             sortOrder = order;
             saveSortButton.setDisable(sortOrder == defaultData.getSortOrder());
+            if (sortOrder == SortOrder.DontSort) {
+                generatePersonSlidesCheckBox.setSelected(false);
+                personSlidesBox.setDisable(true);
+                personSortLabel.setText("Person slides will not be sorted");
+            } else {
+                personSlidesBox.setDisable(false);
+                personSortLabel.setText(order.getSortOrderLabel());
+            }
             personSortLabel.setText(order.getSortOrderLabel());
         });
         button.setSelected(order == defaultData.getSortOrder());
