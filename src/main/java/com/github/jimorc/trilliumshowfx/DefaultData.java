@@ -209,7 +209,7 @@ public class DefaultData {
     public boolean getGeneratePersonSlides() {
         String genPersonSlides = jsonObject.optString("generatePersonSlides", "XXX");
         if (!"XXX".equals(genPersonSlides)) {
-            return genPersonSlides.equals("true") ? true : false;
+            return ("true".equals(genPersonSlides)) ? true : false;
         } else {
             jsonObject.put("generatePersonSlides", "true");
             if (filePath != null) {
