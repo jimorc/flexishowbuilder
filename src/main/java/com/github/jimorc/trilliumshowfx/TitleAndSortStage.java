@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
@@ -45,6 +46,8 @@ public class TitleAndSortStage extends FlexiStage {
     private Button saveSortButton;
     private Label personSortLabel;
     private CheckBox generatePersonSlidesCheckBox;
+    private RadioButton dontSortButton;
+    private RadioButton noneButton;
     private DefaultData defaultData;
 
     /**
@@ -101,39 +104,14 @@ public class TitleAndSortStage extends FlexiStage {
                 leftMargin);
         VBox sizeBox = createSizeBox(labelFont, sizeInsets);
         HBox personSortBox = createPersonSortBox(tLabelInsets);
-        TitledPane genPersonSlidesBox = createGenPersonSlidesPane("Generate Person Slides", labelFont, tLabelInsets);
 
         TitledPane startEndPane = createStartEndSlidesPane(labelFont, tLabelInsets, vBoxInsets);
-        TitledPane sortPane = createSortSlidesPane(labelFont, tLabelInsets, vBoxInsets);
+        TitledPane sortPane = createPersonSlidesSortOrderPane(labelFont, tLabelInsets, vBoxInsets);
         HBox buttonBox = createButtonBox(buttonTopMargin, buttonRightMargin, buttonBottomMargin, buttonLeftMargin);
 
         VBox vbox = new VBox(spacing);
-        vbox.getChildren().addAll(sizeBox, startEndPane, sortPane, personSortBox, genPersonSlidesBox, buttonBox);
+        vbox.getChildren().addAll(sizeBox, startEndPane, sortPane, personSortBox, buttonBox);
         return vbox;
-    }
-
-    private TitledPane createGenPersonSlidesPane(final String text, final Font labelFont, final Insets insets) {
-        Button saveButton = new Button("Save as Default");
-        saveButton.setOnAction(_ -> {
-            defaultData.setGeneratePersonSlides(generatePersonSlidesCheckBox.isSelected());
-            defaultData.saveDefaults();
-            saveButton.setDisable(true);
-        });
-        saveButton.setDisable(true);
-        generatePersonSlidesCheckBox = new CheckBox(text);
-        generatePersonSlidesCheckBox.setSelected(defaultData.getGeneratePersonSlides());
-        generatePersonSlidesCheckBox.setOnAction(_ -> {
-            saveButton.setDisable(generatePersonSlidesCheckBox.isSelected() == defaultData.getGeneratePersonSlides());
-        });
-        BorderPane bPane = new BorderPane(null, null, saveButton, null, generatePersonSlidesCheckBox);
-        TitledPane pane = new TitledPane();
-        Label paneLabel = new Label("Start and End Slides");
-        paneLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px");
-        pane.setGraphic(paneLabel);
-        pane.setContent(bPane);
-        pane.setCollapsible(false);
-        return pane;
-
     }
 
     private HBox createPersonSortBox(final Insets insets) {
@@ -236,10 +214,10 @@ public class TitleAndSortStage extends FlexiStage {
         return button;
     }
 
-    private TitledPane createSortSlidesPane(final Font labelFont,
+    private TitledPane createPersonSlidesSortOrderPane(final Font labelFont,
             final Insets labelInsets, final Insets boxInsets) {
         TitledPane sortPane = new TitledPane();
-        Label paneLabel = new Label("Sort Slides");
+        Label paneLabel = new Label("Person Slides and Sort Order");
         paneLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px");
         sortPane.setGraphic(paneLabel);
         VBox box = new VBox(spacing);
@@ -251,9 +229,10 @@ public class TitleAndSortStage extends FlexiStage {
     }
 
     private BorderPane createSortOrderPane(final Insets insets) {
+        VBox pBox = createGenPersonSlidesBox(insets);
         sortGroup = new ToggleGroup();
-        RadioButton dontSortButton = createSortRadioButton(SortOrder.DontSort, insets);
-        RadioButton noneButton = createSortRadioButton(SortOrder.AsIs, insets);
+        dontSortButton = createSortRadioButton(SortOrder.DontSort, insets);
+        noneButton = createSortRadioButton(SortOrder.AsIs, insets);
         RadioButton alphaFullButton = createSortRadioButton(SortOrder.AlphabeticalByFullName, insets);
         RadioButton alphaLastFirstButton = createSortRadioButton(
             SortOrder.AlphabeticalByLastNameThenFirstName, insets);
@@ -275,7 +254,31 @@ public class TitleAndSortStage extends FlexiStage {
         });
         VBox saveBox = new VBox(saveSortButton);
         saveBox.setAlignment(Pos.CENTER_RIGHT);
-        return new BorderPane(null, null, saveBox, null, sortBox);
+        return new BorderPane(null, pBox, saveBox, null, sortBox);
+    }
+
+    private VBox createGenPersonSlidesBox(final Insets insets) {
+        Button savePersonButton = new Button("Save as Default Choice");
+        savePersonButton.setOnAction(_ -> {
+            defaultData.setGeneratePersonSlides(generatePersonSlidesCheckBox.isSelected());
+            defaultData.saveDefaults();
+            savePersonButton.setDisable(true);
+        });
+        savePersonButton.setDisable(true);
+        generatePersonSlidesCheckBox = new CheckBox("Generate Person Slides");
+        generatePersonSlidesCheckBox.setSelected(defaultData.getGeneratePersonSlides());
+        generatePersonSlidesCheckBox.setOnAction(_ -> {
+            savePersonButton.setDisable(generatePersonSlidesCheckBox.isSelected() == defaultData.getGeneratePersonSlides());
+        });
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        HBox.setMargin(generatePersonSlidesCheckBox, insets);
+        HBox personSlidesBox = new HBox(generatePersonSlidesCheckBox, spacer, savePersonButton);
+        Separator separator = new Separator();
+        VBox pBox = new VBox(spacing);
+        pBox.getChildren().addAll(personSlidesBox, separator);
+        generatePersonSlidesCheckBox.setAlignment(Pos.CENTER_LEFT);
+        return pBox;
     }
 
     private HBox createButtonBox(final int buttonTopMargin, final int buttonRightMargin,
