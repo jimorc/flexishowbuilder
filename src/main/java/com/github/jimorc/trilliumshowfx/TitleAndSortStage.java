@@ -50,6 +50,8 @@ public class TitleAndSortStage extends FlexiStage {
     private RadioButton dontSortButton;
     private RadioButton noneButton;
     private DefaultData defaultData;
+    private boolean dontSortSet;
+    private boolean genPSlides;
 
     /**
      * Constructor.
@@ -267,7 +269,6 @@ public class TitleAndSortStage extends FlexiStage {
         });
         savePersonButton.setDisable(true);
         generatePersonSlidesCheckBox = new CheckBox("Generate Person Slides");
-        generatePersonSlidesCheckBox.setSelected(defaultData.getGeneratePersonSlides());
         generatePersonSlidesCheckBox.setOnAction(_ -> {
             savePersonButton.setDisable(
                 generatePersonSlidesCheckBox.isSelected() == defaultData.getGeneratePersonSlides());
@@ -282,6 +283,14 @@ public class TitleAndSortStage extends FlexiStage {
         VBox pBox = new VBox(spacing);
         pBox.getChildren().addAll(personSlidesBox, separator);
         generatePersonSlidesCheckBox.setAlignment(Pos.CENTER_LEFT);
+        genPSlides = defaultData.getGeneratePersonSlides();
+        if (defaultData.getSortOrder() == SortOrder.DontSort) {
+            dontSortSet = true;
+            generatePersonSlidesCheckBox.setSelected(false);
+            personSlidesBox.setDisable(true);
+        } else {
+            generatePersonSlidesCheckBox.setSelected(defaultData.getGeneratePersonSlides());
+        }
         return pBox;
     }
 
@@ -326,10 +335,16 @@ public class TitleAndSortStage extends FlexiStage {
             sortOrder = order;
             saveSortButton.setDisable(sortOrder == defaultData.getSortOrder());
             if (sortOrder == SortOrder.DontSort) {
+                dontSortSet = true;
+                genPSlides = generatePersonSlidesCheckBox.isSelected();
                 generatePersonSlidesCheckBox.setSelected(false);
                 personSlidesBox.setDisable(true);
                 personSortLabel.setText("Person slides will not be sorted");
             } else {
+                if (dontSortSet) {
+                    generatePersonSlidesCheckBox.setSelected(genPSlides);
+                    dontSortSet = false;
+                }
                 personSlidesBox.setDisable(false);
                 personSortLabel.setText(order.getSortOrderLabel());
             }
