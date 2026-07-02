@@ -34,7 +34,7 @@ public class TitleAndSortStage extends FlexiStage {
     private final int personSortLabelHeight = 60;
     private final int spacing = 10;
 
-    private SortOrder sortOrder = SortOrder.AsIs;
+    private SortOrder sortOrder = SortOrder.DontSort;
     private SizeTextField widthField;
     private SizeTextField heightField;
     private Button saveSizesButton;
@@ -83,7 +83,9 @@ public class TitleAndSortStage extends FlexiStage {
         TitleAndSortData data = new TitleAndSortData(slideSize,
                 createStartEndCheckBox.isSelected(),
                 startTitleArea.getText(),
-                endTitleArea.getText(), sortOrder);
+                endTitleArea.getText(),
+                (SortOrder) sortGroup.getSelectedToggle().getUserData(),
+                generatePersonSlidesCheckBox.isSelected());
         return data;
     }
 

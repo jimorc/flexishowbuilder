@@ -122,21 +122,25 @@ public class BuilderGUI extends Application {
                 out.appendBean(titleBean);
             }
             csv.getBeans().sort(data.getOrder());
-            ArrayList<String> fullNames = csv.getBeans().getSortedFullNames();
-            for (String name : fullNames) {
-                Person person = csv.getPerson(name);
-                String fName = name.replaceAll(" ", "_");
-                String fileName = dir + "/" + fName + ".jpg";
-                String personTitle = "";
-                personTitle = person.getFullName();
-                TitleImage.generateTitleImage(data.getSlideSize(), personTitle, fileName);
-                FlexiBean personTitleBean = new FlexiBean();
-                personTitleBean.setFilename(fName + ".jpg");
-                out.appendBean(personTitleBean);
-                for (FlexiBean bean: csv.getPersonBeans(name).getBeans()) {
+            if (data.getGeneratePersonSlides() && (data.getOrder() != SortOrder.DontSort)) {
+                ArrayList<String> fullNames = csv.getBeans().getSortedFullNames();
+                for (String name : fullNames) {
+                    Person person = csv.getPerson(name);
+                    String fName = name.replaceAll(" ", "_");
+                    String fileName = dir + "/" + fName + ".jpg";
+                    String personTitle = "";
+                    personTitle = person.getFullName();
+                    TitleImage.generateTitleImage(data.getSlideSize(), personTitle, fileName);
+                    FlexiBean personTitleBean = new FlexiBean();
+                    personTitleBean.setFilename(fName + ".jpg");
+                    out.appendBean(personTitleBean);
+                    for (FlexiBean bean: csv.getPersonBeans(name).getBeans()) {
+                        out.appendBean(bean);
+                    }
+                }
+            } else {
+                for (FlexiBean bean: csv.getBeans().getBeans()) {
                     out.appendBean(bean);
-                    Logger.debug(BuilderGUI.buildLogMessage(
-                        "Appended bean for ", name, ": ", bean.toString()));
                 }
             }
             if (data.getCreateStartEndSlides()) {

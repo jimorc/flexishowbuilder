@@ -8,7 +8,8 @@ public class TitleAndSortData {
     private final boolean createStartEndSlides;
     private final String startTitle;
     private final String endTitle;
-    private SortOrder order;
+    private final SortOrder order;
+    private final boolean generatePersonSlides;
 
     /**
      * Constructor.
@@ -16,13 +17,15 @@ public class TitleAndSortData {
      * @param order sort order
      * @param lastNameAsInitial display last name as initial?
      */
-    TitleAndSortData(SlideSize slideSize, boolean createStartEndSlides,
-            String startTitle, String endTitle, SortOrder order) {
+    TitleAndSortData(final SlideSize slideSize, final boolean createStartEndSlides,
+            final String startTitle, final String endTitle, final SortOrder order,
+            final boolean generatePersonSlides) {
         this.slideSize = slideSize;
         this.createStartEndSlides = createStartEndSlides;
         this.startTitle = startTitle;
         this.endTitle = endTitle;
         this.order = order;
+        this.generatePersonSlides = generatePersonSlides;
     }
 
     public SlideSize getSlideSize() {
@@ -44,6 +47,9 @@ public class TitleAndSortData {
     public SortOrder getOrder() {
         return order;
     }
+    public boolean getGeneratePersonSlides() {
+        return generatePersonSlides;
+    }
 
     @Override
     public String toString() {
@@ -57,6 +63,7 @@ public class TitleAndSortData {
         sb.append("\n    start title: " + startTitle);
         sb.append("\n    end title:" + endTitle);
         sb.append("\n    sortOrder: " + order);
+        sb.append("\n    generate person slides: " + (generatePersonSlides ? "true" : "false"));
         return sb.toString();
     }
 }
