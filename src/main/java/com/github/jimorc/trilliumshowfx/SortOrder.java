@@ -13,7 +13,7 @@ public enum SortOrder {
     /**
      * As Is - sort by person in the order they first appear in the CSV file.
      */
-    AsIs("As Is",
+    CurrentPersonOrder("Current Person Order",
         "No sorting - use the order in the CSV file. All images for each person are grouped together.",
         "Slides will be sorted by person in the order they first appear in the CSV file.\n"
         + "All images for each person are grouped together"),

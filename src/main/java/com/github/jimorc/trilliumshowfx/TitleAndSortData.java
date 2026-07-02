@@ -47,6 +47,7 @@ public class TitleAndSortData {
     public SortOrder getOrder() {
         return order;
     }
+
     public boolean getGeneratePersonSlides() {
         return generatePersonSlides;
     }

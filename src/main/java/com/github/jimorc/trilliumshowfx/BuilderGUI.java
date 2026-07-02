@@ -122,7 +122,7 @@ public class BuilderGUI extends Application {
                 out.appendBean(titleBean);
             }
             csv.getBeans().sort(data.getOrder());
-            if (data.getGeneratePersonSlides() && (data.getOrder() != SortOrder.DontSort)) {
+            if (data.getGeneratePersonSlides() && data.getOrder() != SortOrder.DontSort) {
                 ArrayList<String> fullNames = csv.getBeans().getSortedFullNames();
                 for (String name : fullNames) {
                     Person person = csv.getPerson(name);

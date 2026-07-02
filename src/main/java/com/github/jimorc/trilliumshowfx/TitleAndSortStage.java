@@ -237,7 +237,7 @@ public class TitleAndSortStage extends FlexiStage {
         VBox pBox = createGenPersonSlidesBox(insets);
         sortGroup = new ToggleGroup();
         dontSortButton = createSortRadioButton(SortOrder.DontSort, insets);
-        noneButton = createSortRadioButton(SortOrder.AsIs, insets);
+        noneButton = createSortRadioButton(SortOrder.CurrentPersonOrder, insets);
         RadioButton alphaFullButton = createSortRadioButton(SortOrder.AlphabeticalByFullName, insets);
         RadioButton alphaLastFirstButton = createSortRadioButton(
             SortOrder.AlphabeticalByLastNameThenFirstName, insets);

@@ -131,7 +131,7 @@ public class FlexiBeans {
             case DontSort:
                 // No sorting needed, just return
                 break;
-            case AsIs:
+            case CurrentPersonOrder:
                 sortBeans(beanMap, fullNames);
                 break;
             case AlphabeticalByFullName:

@@ -284,7 +284,7 @@ public class FlexiBeansTests {
         } catch (BadHeaderException e) {
             fail("BadHeaderException thrown: " + e.getMessage());
         }
-        flexiBeans.sort(SortOrder.AsIs);
+        flexiBeans.sort(SortOrder.CurrentPersonOrder);
         List<FlexiBean> beans = flexiBeans.getBeans();
         assertEquals(smith2 + 1, beans.size());
         assertEquals("image1.jpg", beans.get(doe1).getFilename());
