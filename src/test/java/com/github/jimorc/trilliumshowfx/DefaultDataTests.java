@@ -120,4 +120,46 @@ public class DefaultDataTests {
             jsonFile.delete();
         }
     }
+
+    @Test
+    public void testGetSortSlidesByTitleNumberNoValue() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\" }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertFalse(data.getSortSlidesByTitleNumber());
+    }
+
+    @Test
+    void testGetSortSlidesByTitleNumberTrue() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": true }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertTrue(data.getSortSlidesByTitleNumber());
+    }
+
+    @Test
+    void testGetSortSlidesByTitleNumberFalse() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertFalse(data.getSortSlidesByTitleNumber());
+    }
+
+    @Test
+    void testSetSortSlidesByTitleNumber() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertFalse(data.getSortSlidesByTitleNumber());
+        data.setSortSlidesByTitleNumber(true);
+        assertTrue(data.getSortSlidesByTitleNumber());
+    }
 }

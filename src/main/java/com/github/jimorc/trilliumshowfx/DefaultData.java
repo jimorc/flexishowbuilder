@@ -229,6 +229,33 @@ public class DefaultData {
     }
 
     /**
+     * Get the sortSlidesByTitleNumber value from the defaults.
+     * @return true if sortSlidesByTitleNumber value is "true".
+     * False if value is false, or nonexistent.
+     */
+    public boolean getSortSlidesByTitleNumber() {
+        String sortByTitleNumber = jsonObject.optString("sortSlidesByTitleNumber", "XXX");
+        if (!"XXX".equals(sortByTitleNumber)) {
+            return ("true".equals(sortByTitleNumber)) ? true : false;
+        } else {
+            jsonObject.put("sortSlidesByTitleNumber", "false");
+            if (filePath != null) {
+                saveDefaults();
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Set the sortSlidesByTitleNumber value in the defaults.
+     * You should call `saveDefaults()` after calling this method.
+     * @param set true to set value to "true". Otherwise value is set to "false".
+     */
+    public void setSortSlidesByTitleNumber(boolean set) {
+        jsonObject.put("sortSlidesByTitleNumber", set ? "true" : "false");
+    }
+
+    /**
      * Save the current defaults back to the JSON file.
      */
     public void saveDefaults() {
