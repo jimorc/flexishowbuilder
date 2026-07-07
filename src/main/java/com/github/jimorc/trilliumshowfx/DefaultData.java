@@ -211,7 +211,7 @@ public class DefaultData {
         if (!"XXX".equals(genPersonSlides)) {
             return ("true".equals(genPersonSlides)) ? true : false;
         } else {
-            jsonObject.put("generatePersonSlides", "true");
+            jsonObject.put("generatePersonSlides", "false");
             if (filePath != null) {
                 saveDefaults();
             }
