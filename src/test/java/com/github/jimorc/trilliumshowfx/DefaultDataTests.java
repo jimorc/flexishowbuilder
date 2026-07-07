@@ -152,7 +152,17 @@ public class DefaultDataTests {
     }
 
     @Test
-    void testSetSortSlidesByTitleNumber() {
+    void testGetSortSlidesByTitleNumberInvalid() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": \"invalid\" }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertFalse(data.getSortSlidesByTitleNumber());
+    }
+
+    @Test
+    void testSetSortSlidesByTitleNumberInvalid() {
         String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
             + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
             + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
