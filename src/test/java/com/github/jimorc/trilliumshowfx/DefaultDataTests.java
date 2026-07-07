@@ -237,6 +237,38 @@ public class DefaultDataTests {
     }
 
     @Test
+    void testGetStartTitleValid() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"false\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertEquals("start", data.getStartTitle());
+    }
+
+    @Test
+    void testGetStartTitleNone() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"false\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertEquals("", data.getStartTitle());
+    }
+
+    @Test
+    void testSetStartTitle() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"false\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertEquals("start", data.getStartTitle());
+        data.setStartTitle("newStart");
+        assertEquals("newStart", data.getStartTitle());
+    }
+
+    @Test
     public void testGetSortSlidesByTitleNumberNoValue() {
         String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
             + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
