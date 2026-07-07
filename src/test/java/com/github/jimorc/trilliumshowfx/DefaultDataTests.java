@@ -122,6 +122,69 @@ public class DefaultDataTests {
     }
 
     @Test
+    public void testGetSlideSizeNoValue() {
+        String jsonContent = "{ "
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\" }";
+        DefaultData data = new DefaultData(jsonContent);
+        SlideSize slideSize = data.getSlideSize();
+        assertEquals(SlideSize.DEFAULT_WIDTH, slideSize.getWidth());
+        assertEquals(SlideSize.DEFAULT_HEIGHT, slideSize.getHeight());
+
+    }
+
+    @Test
+    void testGetSlideSizeValid() {
+        final int width = 1920;
+        final int height = 1080;
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": true }";
+        DefaultData data = new DefaultData(jsonContent);
+        SlideSize slideSize = data.getSlideSize();
+        assertEquals(width, slideSize.getWidth());
+        assertEquals(height, slideSize.getHeight());
+    }
+
+    @Test
+    void testGetSlideSizeTooSmall() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 42, \"height\": 19 },"
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": \"invalid\" }";
+        DefaultData data = new DefaultData(jsonContent);
+        SlideSize slideSize = data.getSlideSize();
+        assertEquals(SlideSize.DEFAULT_WIDTH, slideSize.getWidth());
+        assertEquals(SlideSize.DEFAULT_HEIGHT, slideSize.getHeight());
+    }
+
+    @Test
+    void testGetSlideSizeTooLarge() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 10222, \"height\": 10000 },"
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": \"invalid\" }";
+        DefaultData data = new DefaultData(jsonContent);
+        SlideSize slideSize = data.getSlideSize();
+        assertEquals(SlideSize.DEFAULT_WIDTH, slideSize.getWidth());
+        assertEquals(SlideSize.DEFAULT_HEIGHT, slideSize.getHeight());
+    }
+
+    @Test
+    void testGetSlideSizeInvalid() {
+        String jsonContent = "{ \"slide_size\": { \"width\": \"fred\", \"height\": \"wally\" }"
+            + ", \"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": true }";
+        DefaultData data = new DefaultData(jsonContent);
+        SlideSize slideSize = data.getSlideSize();
+        assertEquals(SlideSize.DEFAULT_WIDTH, slideSize.getWidth());
+        assertEquals(SlideSize.DEFAULT_HEIGHT, slideSize.getHeight());
+    }
+
+    @Test
     public void testGetSortSlidesByTitleNumberNoValue() {
         String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
             + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
@@ -162,7 +225,7 @@ public class DefaultDataTests {
     }
 
     @Test
-    void testSetSortSlidesByTitleNumberInvalid() {
+    void testSetSortSlidesByTitleNumber() {
         String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
             + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
             + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""

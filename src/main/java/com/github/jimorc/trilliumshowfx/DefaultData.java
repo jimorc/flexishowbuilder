@@ -70,8 +70,14 @@ public class DefaultData {
         JSONObject ssObj = jsonObject.optJSONObject("slide_size");
         SlideSize slideSize = null;
         if (ssObj != null) {
-            int width = ssObj.getInt("width");
-            int height = ssObj.getInt("height");
+            int width = ssObj.optInt("width");
+            if (width < SlideSize.MIN_SIZE || width > SlideSize.MAX_SIZE) {
+                width = SlideSize.DEFAULT_WIDTH;
+            }
+            int height = ssObj.optInt("height");
+            if (height < SlideSize.MIN_SIZE || height > SlideSize.MAX_SIZE) {
+                height = SlideSize.DEFAULT_HEIGHT;
+            }
             slideSize = new SlideSize(width, height);
         } else {
             slideSize = new SlideSize();
