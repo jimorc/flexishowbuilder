@@ -81,11 +81,12 @@ public class TitleAndSortStage extends FlexiStage {
         int slideHeight = Integer.parseInt(heightField.getText());
         SlideSize slideSize = new SlideSize(slideWidth, slideHeight);
         TitleAndSortData data = new TitleAndSortData(slideSize,
-                createStartEndCheckBox.isSelected(),
-                startTitleArea.getText(),
-                endTitleArea.getText(),
-                (SortOrder) sortGroup.getSelectedToggle().getUserData(),
-                generatePersonSlidesCheckBox.isSelected());
+            createStartEndCheckBox.isSelected(),
+            startTitleArea.getText(),
+            endTitleArea.getText(),
+            (SortOrder) sortGroup.getSelectedToggle().getUserData(),
+            generatePersonSlidesCheckBox.isSelected(),
+            false);  // sortSlidesByTitleNumber is not implemented ye
         return data;
     }
 
