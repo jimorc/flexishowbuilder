@@ -185,6 +185,58 @@ public class DefaultDataTests {
     }
 
     @Test
+    public void testGetCreateStartEndSlidesNoValue() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 }"
+            + ", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\" }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertTrue(data.getCreateStartEndSlides());
+    }
+
+    @Test
+    void testGetCreateStartEndSlidesTrue() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": true }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertTrue(data.getCreateStartEndSlides());
+    }
+
+    @Test
+    void testGetCreateStartEndSlidesFalse() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"false\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertFalse(data.getCreateStartEndSlides());
+    }
+
+    @Test
+    void testGetCreateStartEndSlidesInvalid() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"invalid\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": \"invalid\" }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertFalse(data.getCreateStartEndSlides());
+    }
+
+    @Test
+    void testSetCreateStartEndSlides() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"false\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertFalse(data.getCreateStartEndSlides());
+        data.setCreateStartEndSlides(true);
+        assertTrue(data.getCreateStartEndSlides());
+    }
+
+    @Test
     public void testGetSortSlidesByTitleNumberNoValue() {
         String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
             + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
