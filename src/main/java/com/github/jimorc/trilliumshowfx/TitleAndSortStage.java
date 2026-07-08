@@ -89,7 +89,7 @@ public class TitleAndSortStage extends FlexiStage {
             endTitleArea.getText(),
             (SortOrder) sortGroup.getSelectedToggle().getUserData(),
             generatePersonSlidesCheckBox.isSelected(),
-            false);  // sortSlidesByTitleNumber is not implemented ye
+            sortSlidesByTitleNumberCheckBox.isSelected());
         return data;
     }
 

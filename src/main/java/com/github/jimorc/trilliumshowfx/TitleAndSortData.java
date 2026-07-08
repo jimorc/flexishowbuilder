@@ -14,9 +14,13 @@ public class TitleAndSortData {
 
     /**
      * Constructor.
-     * @param title contents of the title input
-     * @param order sort order
-     * @param lastNameAsInitial display last name as initial?
+     * @param slideSize the slide size
+     * @param createStartEndSlides whether to create start and end slides
+     * @param startTitle the start title
+     * @param endTitle the end title
+     * @param order the sort order
+     * @param generatePersonSlides whether to generate person slides
+     * @param sortSlidesByTitleNumber whether to sort slides by title number
      */
     TitleAndSortData(final SlideSize slideSize, final boolean createStartEndSlides,
             final String startTitle, final String endTitle, final SortOrder order,
