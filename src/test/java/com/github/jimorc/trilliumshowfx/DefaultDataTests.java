@@ -22,7 +22,8 @@ public class DefaultDataTests {
         String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
             + "\"createStartEndSlides\": \"true\", \"startTitle\": \"start\", \"endTitle\": \"end\""
             + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
-            + ", \"generatePersonSlides\": \"true\" }";
+            + ", \"generatePersonSlides\": \"true\""
+            + ", \"sortSlidesByTitleNumber\": true }";
 
         DefaultData data = new DefaultData(jsonContent);
         SlideSize slideSize = data.getSlideSize();
@@ -33,6 +34,7 @@ public class DefaultDataTests {
         assertEquals("end", data.getEndTitle());
         assertEquals(SortOrder.AlphabeticalByFullNameReverse, data.getSortOrder());
         assertTrue(data.getGeneratePersonSlides());
+        assertTrue(data.getSortSlidesByTitleNumber());
     }
 
     @Test
@@ -49,6 +51,7 @@ public class DefaultDataTests {
         assertEquals("end title", data.getEndTitle());
         assertEquals(SortOrder.DontSort, data.getSortOrder());
         assertFalse(data.getGeneratePersonSlides());
+        assertFalse(data.getSortSlidesByTitleNumber());
     }
 
     @Test
@@ -67,6 +70,7 @@ public class DefaultDataTests {
         assertFalse(data.getGeneratePersonSlides());
         assertEquals(SortOrder.DontSort, data.getSortOrder());
         assertFalse(data.getGeneratePersonSlides());
+        assertFalse(data.getSortSlidesByTitleNumber());
         if (jsonFile.exists()) {
             jsonFile.delete();
         }
@@ -86,6 +90,7 @@ public class DefaultDataTests {
         assertEquals("", data.getEndTitle());
         assertEquals(SortOrder.DontSort, data.getSortOrder());
         assertFalse(data.getGeneratePersonSlides());
+        assertFalse(data.getSortSlidesByTitleNumber());
     }
 
     @Test
@@ -99,6 +104,7 @@ public class DefaultDataTests {
         data.getEndTitle();
         data.getSortOrder();
         data.getGeneratePersonSlides();
+        data.getSortSlidesByTitleNumber();
         try (BufferedReader jsonFileReader = new BufferedReader(
                 new FileReader(jsonFile.getAbsolutePath()))) {
             String line;
@@ -113,6 +119,7 @@ public class DefaultDataTests {
             assertTrue(fileContent.contains("\"endTitle\":\"\""));
             assertTrue(fileContent.contains("\"sortOrder\":\"DontSort\""));
             assertTrue(fileContent.contains("\"generatePersonSlides\":\"false\""));
+            assertTrue(fileContent.contains("\"sortSlidesByTitleNumber\":\"false\""));
         } catch (IOException e) {
             fail(e.getCause().toString());
         }
