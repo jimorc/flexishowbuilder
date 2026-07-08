@@ -263,9 +263,41 @@ public class DefaultDataTests {
             + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
             + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
         DefaultData data = new DefaultData(jsonContent);
-        assertEquals("start", data.getStartTitle());
-        data.setStartTitle("newStart");
-        assertEquals("newStart", data.getStartTitle());
+        assertFalse(data.getCreateStartEndSlides());
+        data.setCreateStartEndSlides(true);
+        assertTrue(data.getCreateStartEndSlides());
+    }
+
+    @Test
+    void testGetEndTitleValid() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"false\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertEquals("end", data.getEndTitle());
+    }
+
+    @Test
+    void testGetEndTitleNone() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"false\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertEquals("", data.getEndTitle());
+    }
+
+    @Test
+    void testSetEndTitle() {
+        String jsonContent = "{ \"slide_size\": { \"width\": 1920, \"height\": 1080 },"
+            + "\"createStartEndSlides\": \"false\", \"startTitle\": \"start\", \"endTitle\": \"end\""
+            + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
+            + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
+        DefaultData data = new DefaultData(jsonContent);
+        assertEquals("end", data.getEndTitle());
+        data.setEndTitle("newEnd");
+        assertEquals("newEnd", data.getEndTitle());
     }
 
     @Test
