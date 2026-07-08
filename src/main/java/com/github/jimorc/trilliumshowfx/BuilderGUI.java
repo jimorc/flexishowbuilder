@@ -134,7 +134,11 @@ public class BuilderGUI extends Application {
                     FlexiBean personTitleBean = new FlexiBean();
                     personTitleBean.setFilename(fName + ".jpg");
                     out.appendBean(personTitleBean);
-                    for (FlexiBean bean: csv.getPersonBeans(name).getBeans()) {
+                    FlexiBeans beans = csv.getPersonBeans(name);
+                    if (data.getSortSlidesByTitleNumber()) {
+                        beans = beans.sortByTitleNumber(beans);
+                    }
+                    for (FlexiBean bean: beans.getBeans()) {
                         out.appendBean(bean);
                     }
                 }

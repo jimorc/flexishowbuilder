@@ -187,6 +187,16 @@ public class FlexiBeans {
         beans = sortedBeans;
     }
 
+    /**
+     * Sort the FlexiBean objects for a specific person by title number.
+     * @param beansToSort the FlexiBeans object containing the FlexiBean objects to sort.
+     * @return the sorted FlexiBeans object.
+     */
+    public FlexiBeans sortByTitleNumber(FlexiBeans beansToSort) {
+        Logger.trace("In FlexiBeans.sortByTitleNumber");
+        return beansToSort; // Placeholder for actual sorting logic, to be implemented.
+    }
+
     // Need to suppress checkstyle IllegalCatch here because
     // openCSV CsvToBean.parse() may throw RuntimeException.
     // We need to catch that and re-throw as CSVException or BadHeaderException.
