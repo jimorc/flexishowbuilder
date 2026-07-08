@@ -52,6 +52,9 @@ public class TitleAndSortStage extends FlexiStage {
     private DefaultData defaultData;
     private boolean dontSortSet;
     private boolean genPSlides;
+    private boolean sortSlidesByTitleNumber;
+    private CheckBox sortSlidesByTitleNumberCheckBox;
+    private HBox sortSlidesByTitleNumberBox;
 
     /**
      * Constructor.
@@ -236,6 +239,8 @@ public class TitleAndSortStage extends FlexiStage {
 
     private BorderPane createSortOrderPane(final Insets insets) {
         VBox pBox = createGenPersonSlidesBox(insets);
+        VBox sBox = createSortSlidesByTitleNumberBox(insets);
+        pBox.getChildren().add(sBox);
         sortGroup = new ToggleGroup();
         dontSortButton = createSortRadioButton(SortOrder.DontSort, insets);
         noneButton = createSortRadioButton(SortOrder.CurrentPersonOrder, insets);
@@ -282,9 +287,12 @@ public class TitleAndSortStage extends FlexiStage {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         HBox.setMargin(generatePersonSlidesCheckBox, insets);
         personSlidesBox = new HBox(generatePersonSlidesCheckBox, spacer, savePersonButton);
-        Separator separator = new Separator();
+        // Following line commented out because the personSlidesBox will be moved elsewhere in
+        // future, and another separator is added later.
+        // Separator separator = new Separator();
         VBox pBox = new VBox(spacing);
-        pBox.getChildren().addAll(personSlidesBox, separator);
+        // See comment above about the separator.
+        pBox.getChildren().addAll(personSlidesBox); //, separator);
         generatePersonSlidesCheckBox.setAlignment(Pos.CENTER_LEFT);
         genPSlides = defaultData.getGeneratePersonSlides();
         if (defaultData.getSortOrder() == SortOrder.DontSort) {
@@ -293,6 +301,40 @@ public class TitleAndSortStage extends FlexiStage {
             personSlidesBox.setDisable(true);
         } else {
             generatePersonSlidesCheckBox.setSelected(defaultData.getGeneratePersonSlides());
+        }
+        return pBox;
+    }
+
+    private VBox createSortSlidesByTitleNumberBox(final Insets insets) {
+        Button saveByNumberButton = new Button("Save as Default Choice");
+        saveByNumberButton.setOnAction(_ -> {
+            defaultData.setSortSlidesByTitleNumber(sortSlidesByTitleNumberCheckBox.isSelected());
+            defaultData.saveDefaults();
+            saveByNumberButton.setDisable(true);
+        });
+        saveByNumberButton.setDisable(true);
+        sortSlidesByTitleNumberCheckBox = new CheckBox("Sort Each Person's Slides by Title Number");
+        sortSlidesByTitleNumberCheckBox.setOnAction(_ -> {
+            saveByNumberButton.setDisable(
+                sortSlidesByTitleNumberCheckBox.isSelected() == defaultData.getSortSlidesByTitleNumber());
+        });
+        Tooltip tooltip = new Tooltip("Check this to sort each person's slides by title number.\n");
+        sortSlidesByTitleNumberCheckBox.setTooltip(tooltip);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        HBox.setMargin(sortSlidesByTitleNumberCheckBox, insets);
+        sortSlidesByTitleNumberBox = new HBox(sortSlidesByTitleNumberCheckBox, spacer, saveByNumberButton);
+        Separator separator = new Separator();
+        VBox pBox = new VBox(spacing);
+        pBox.getChildren().addAll(sortSlidesByTitleNumberBox, separator);
+        sortSlidesByTitleNumberCheckBox.setAlignment(Pos.CENTER_LEFT);
+        sortSlidesByTitleNumber = defaultData.getSortSlidesByTitleNumber();
+        if (defaultData.getSortOrder() == SortOrder.DontSort) {
+            dontSortSet = true;
+            sortSlidesByTitleNumberCheckBox.setSelected(false);
+            sortSlidesByTitleNumberBox.setDisable(true);
+        } else {
+            sortSlidesByTitleNumberCheckBox.setSelected(defaultData.getGeneratePersonSlides());
         }
         return pBox;
     }
@@ -340,15 +382,21 @@ public class TitleAndSortStage extends FlexiStage {
             if (sortOrder == SortOrder.DontSort) {
                 dontSortSet = true;
                 genPSlides = generatePersonSlidesCheckBox.isSelected();
+                sortSlidesByTitleNumber = sortSlidesByTitleNumberCheckBox.isSelected();
                 generatePersonSlidesCheckBox.setSelected(false);
+                sortSlidesByTitleNumberBox.setDisable(true);
+                sortSlidesByTitleNumberCheckBox.setSelected(false);
                 personSlidesBox.setDisable(true);
+
                 personSortLabel.setText("Person slides will not be sorted");
             } else {
                 if (dontSortSet) {
                     generatePersonSlidesCheckBox.setSelected(genPSlides);
+                    sortSlidesByTitleNumberCheckBox.setSelected(sortSlidesByTitleNumber);
                     dontSortSet = false;
                 }
                 personSlidesBox.setDisable(false);
+                sortSlidesByTitleNumberBox.setDisable(false);
                 personSortLabel.setText(order.getSortOrderLabel());
             }
             personSortLabel.setText(order.getSortOrderLabel());
