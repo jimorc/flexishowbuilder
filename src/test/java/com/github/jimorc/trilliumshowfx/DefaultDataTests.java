@@ -263,9 +263,9 @@ public class DefaultDataTests {
             + ", \"sortOrder\": \"AlphabeticalByFullNameReverse\""
             + ", \"generatePersonSlides\": \"true\", \"sortSlidesByTitleNumber\": false }";
         DefaultData data = new DefaultData(jsonContent);
-        assertFalse(data.getCreateStartEndSlides());
-        data.setCreateStartEndSlides(true);
-        assertTrue(data.getCreateStartEndSlides());
+        assertEquals("start", data.getStartTitle());
+        data.setStartTitle("newStart");
+        assertEquals("newStart", data.getStartTitle());
     }
 
     @Test
